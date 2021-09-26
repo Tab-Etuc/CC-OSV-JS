@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const ttt = require('../../models/simply-djs/src/ttt')
+const ttt = require('../../models/ttt')
 module.exports = {
     name: "ttt",
     description: "遊玩一局井字遊戲。",
