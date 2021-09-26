@@ -92,9 +92,9 @@ module.exports = {
                         role2 = guild.roles.cache.find(
                             r => r.id === '891233331096723476'
                         )
-                        await user.roles.add(role2)
-                        await wait(1000);
                         await user.roles.add(role)
+                        await wait(5000);
+                        await user.roles.add(role2)
                         
                         return user.send(`您已成功進入我國國境。\n\`\`\`您現在的身分是平民\`\`\``)
                     }
