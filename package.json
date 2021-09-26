@@ -1,0 +1,59 @@
+{
+	"name": "cc-osv",
+	"version": "2.0.0",
+	"description": "CC-OSV Bot",
+	"main": "./Source/index.js",
+	"scripts": {
+		"test": "nodemon ./Source/index.js",
+		"start": "node ./Source/index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/InsiderJanggo/azunyan.git"
+	},
+	"keywords": [
+		"multipurpose-bot",
+		"discord-bot",
+		"discord",
+		"nodejs",
+		"insider",
+		"cc-osv"
+	],
+	"author": "CC_",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/InsiderJanggo/azunyan/issues"
+	},
+	"homepage": "https://github.com/InsiderJanggo/azunyan#readme",
+	"dependencies": {
+		"@discord-player/extractor": "^3.0.2",
+		"@discordjs/builders": "^0.6.0",
+		"@discordjs/rest": "0.1.0-canary.0",
+		"canvas": "^2.8.0",
+		"chalk": "^4.1.2",
+		"discord-player": "^5.1.0",
+		"discord.js": "^13.1.0",
+		"dotenv": "^8.2.0",
+		"glob": "^7.1.7",
+		"mathjs": "^9.4.5",
+		"module-alias": "^2.2.2",
+		"moment": "^2.29.1",
+		"moment-duration-format": "^2.3.2",
+		"moment-timezone": "^0.5.33",
+		"mongoose": "^6.0.5",
+		"node-fetch": "^3.0.0",
+		"os": "^0.1.2",
+		"util": "^0.12.4",
+		"weky": "^3.1.8"
+	},
+	"_moduleAliases": {
+		"@root": ".",
+		"@website": "./website",
+		"@models": "./models",
+		"@handlers": "./handlers",
+		"@events": "./events"
+	},
+	"devDependencies": {
+		"@types/node": "^16.7.1"
+	}
+}
