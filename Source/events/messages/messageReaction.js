@@ -1,4 +1,3 @@
-const wait = require('util').promisify(setTimeout);
 module.exports = {
     name: "raw",
     async execute(bot, packet) {
@@ -87,13 +86,12 @@ module.exports = {
                         guild = await bot.guilds.fetch(packet.d.guild_id)
                         user = await guild.members.cache.get(packet.d.user_id);
                         role = guild.roles.cache.find(
-                            r => r.id === '863629520719839242'
+                            r => r.id === '834430171171258417'
                         )
                         role2 = guild.roles.cache.find(
                             r => r.id === '891233331096723476'
                         )
                         await user.roles.add(role)
-                        await wait(5000);
                         await user.roles.add(role2)
                         
                         return user.send(`您已成功進入我國國境。\n\`\`\`您現在的身分是平民\`\`\``)
