@@ -3,6 +3,9 @@
 	"version": "3.0.0",
 	"description": "CC-OSV Bot",
 	"main": "./Source/index.js",
+	"engines": {
+		"node": "^16.7.1"
+	},
 	"scripts": {
 		"test": "nodemon ./Source/index.js",
 		"start": "node ./Source/index.js"
@@ -48,8 +51,5 @@
 		"@models": "./Source/models",
 		"@handlers": "./Source/handlers",
 		"@events": "./Source/events"
-	},
-	"devDependencies": {
-		"@types/node": "^16.7.1"
 	}
 }
