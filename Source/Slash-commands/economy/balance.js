@@ -15,7 +15,7 @@ module.exports = {
         const user = await bot.mongo.fetchUser(bot, member.id);
         const embed = new MessageEmbed()
             .setTitle(`${member.user.username}'s Balance`)
-            .setThumbnail(member.user.displayAvatarURL({ format: 'png', size: 256, dynamic: true }))
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
             .setDescription(`💳**Wallet**: ${user.coinsInWallet.toLocaleString()}\n🏦**Bank**: ${user.coinsInBank.toLocaleString()}/${user.bankSpace.toLocaleString()}\n🌐**Total Net Worth**: ${(user.coinsInWallet + user.coinsInBank).toLocaleString()}`)
             .setColor('RANDOM');
         interaction.reply({embeds:[embed]});

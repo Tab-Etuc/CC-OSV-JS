@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const embedPages = require('../../models/simply-djs/src/embedPages')
+const embedPages = require('../../models/embedPages')
 module.exports = {
     name: "shop",
     description: "前往市廛，採購琳瑯滿目的商品。",
