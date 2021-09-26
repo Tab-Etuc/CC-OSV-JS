@@ -10,12 +10,20 @@ module.exports = {
             858140566268411924: {
                 '837971561725952020Emoji': '837971561725952020',
                 '861185706336845834Emoji': '861185706336845834',
+                '🌻Emoji': '🌻',
+                '🆙Emoji': '🆙',
+                '🌻(Message_On_Add)': '您已獲得進入墓園之通行證。',
+                '🆙(Message_On_Add)': '您已獲得進入練等專區之通行證。',
                 '837971561725952020(Message_On_Add)': '您已獲得進入紅燈區之通行證。',
                 '861185706336845834(Message_On_Add)': '您已獲得進入CC-OSV待辦事項區之通行證。',
                 '837971561725952020(Message_On_Remove)': '您已被禁止進入紅燈區。',
                 '861185706336845834(Message_On_Remove)': '您已被禁止進入CC-OSV待辦事項區',
+                '🌻(Message_On_Remove)': '您已被禁止進入墓園。',
+                '🆙(Message_On_Remove)': '您已被禁止進入練等專區。',
                 '837971561725952020(role)': '837975201915994153',
                 '861185706336845834(role)': '863639159461773322',
+                '🌻(role)': '863628692802240522',
+                '🆙(role)': '863629520719839242',
             },
 
             847029838546993163: {
@@ -71,48 +79,67 @@ module.exports = {
                 '847026710842179585(role)': '846317429466595348',
             },
         }
-        if (['MESSAGE_REACTION_ADD'].includes(packet.t)) {
-            if (parseInt(packet.d.message_id) in data) {
-
-                if (packet.d.emoji.id.toString() + 'Emoji' in data[parseInt(packet.d.message_id)]) {
-                    guild = await bot.guilds.fetch(packet.d.guild_id)
-                    user = await guild.members.cache.get(packet.d.user_id);
-                    role = guild.roles.cache.find(
-                        r => r.id === data[
-                            parseInt(packet.d.message_id)
-                        ][packet.d.emoji.id.toString() + '(role)'
-                        ])
-
-                    await user.roles.add(role)
-                    await user.send(data[
-                        parseInt(packet.d.message_id)
-                    ][
-                        packet.d.emoji.id.toString() + '(Message_On_Add)'
-                    ])
+        try {
+            if (['MESSAGE_REACTION_ADD'].includes(packet.t)) {
+                if (parseInt(packet.d.message_id.toString()) === '858160262606880818') {
+                    if (packet.d.emoji.id.toString() === '858154997640331274') {
+                        guild = await bot.guilds.fetch(packet.d.guild_id)
+                        user = await guild.members.cache.get(packet.d.user_id);
+                        role = guild.roles.cache.find(
+                            r => r.id === '863629520719839242'
+                        )
+                        role2 = guild.roles.cache.find(
+                            r => r.id === '891233331096723476'
+                        )
+                        await user.roles.add(role)
+                        await user.roles.add(role2)
+                        await user.send(`您已成功進入我國國境。\n\`\`\`您現在的身分是平民\`\`\``)
+                    }
                 }
+                if (parseInt(packet.d.message_id) in data) {
 
-            }
-        }else if (['MESSAGE_REACTION_REMOVE'].includes(packet.t)) {
-            if (parseInt(packet.d.message_id) in data) {
+                    if (packet.d.emoji.id.toString() + 'Emoji' ? packet.d.emoji.id.toString() + 'Emoji' : packet.d.emoji + 'Emoji' in data[parseInt(packet.d.message_id)]) {
+                        guild = await bot.guilds.fetch(packet.d.guild_id)
+                        user = await guild.members.cache.get(packet.d.user_id);
+                        role = guild.roles.cache.find(
+                            r => r.id === data[
+                                parseInt(packet.d.message_id)
+                            ][packet.d.emoji.id.toString() + '(role)' ? packet.d.emoji.id.toString() + '(role)' : packet.d.emoji.toString() + '(role)'
+                            ])
 
-                if (packet.d.emoji.id.toString() + 'Emoji' in data[parseInt(packet.d.message_id)]) {
-                    guild = await bot.guilds.fetch(packet.d.guild_id)
-                    user = await guild.members.cache.get(packet.d.user_id);
-                    role = guild.roles.cache.find(
-                        r => r.id === data[
+                        await user.roles.add(role)
+                        await user.send(data[
                             parseInt(packet.d.message_id)
-                        ][packet.d.emoji.id.toString() + '(role)'
+                        ][
+                            packet.d.emoji.id.toString() + '(Message_On_Add)' ? packet.d.emoji.id.toString() + '(Message_On_Add)' : packet.d.emoji + '(Message_On_Add)'
                         ])
+                    }
 
-                    await user.roles.remove(role)
-                    await user.send(data[
-                        parseInt(packet.d.message_id)
-                    ][
-                        packet.d.emoji.id.toString() + '(Message_On_Remove)'
-                    ])
                 }
+            } else if (['MESSAGE_REACTION_REMOVE'].includes(packet.t)) {
+                if (parseInt(packet.d.message_id) in data) {
 
+                    if (packet.d.emoji.id.toString() + 'Emoji' ? packet.d.emoji.id.toString() + 'Emoji' : packet.d.emoji.toString() + 'Emoji' in data[parseInt(packet.d.message_id)]) {
+                        guild = await bot.guilds.fetch(packet.d.guild_id)
+                        user = await guild.members.cache.get(packet.d.user_id);
+                        role = guild.roles.cache.find(
+                            r => r.id === data[
+                                parseInt(packet.d.message_id)
+                            ][packet.d.emoji.id.toString() + '(role)' ? packet.d.emoji.id.toString() + '(role)' : packet.d.emoji.toString() + '(role)'
+                            ])
+
+                        await user.roles.remove(role)
+                        await user.send(data[
+                            parseInt(packet.d.message_id)
+                        ][
+                            packet.d.emoji.id.toString() + '(Message_On_Remove)' ? packet.d.emoji.id.toString() + '(Message_On_Remove)' : packet.d.emoji + '(Message_On_Remove)'
+                        ])
+                    }
+
+                }
             }
+        } catch {
+            console.log(`123`)
         }
     }
 }
