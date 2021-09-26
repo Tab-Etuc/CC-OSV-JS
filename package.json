@@ -1,6 +1,6 @@
 {
 	"name": "cc-osv",
-	"version": "2.0.0",
+	"version": "3.0.0",
 	"description": "CC-OSV Bot",
 	"main": "./Source/index.js",
 	"scripts": {
@@ -9,7 +9,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/InsiderJanggo/azunyan.git"
+		"url": "git+https://github.com/Tab-Etuc/CC-OSV-JS.git"
 	},
 	"keywords": [
 		"multipurpose-bot",
@@ -21,10 +21,6 @@
 	],
 	"author": "CC_",
 	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/InsiderJanggo/azunyan/issues"
-	},
-	"homepage": "https://github.com/InsiderJanggo/azunyan#readme",
 	"dependencies": {
 		"@discord-player/extractor": "^3.0.2",
 		"@discordjs/builders": "^0.6.0",
@@ -49,9 +45,9 @@
 	"_moduleAliases": {
 		"@root": ".",
 		"@website": "./website",
-		"@models": "./models",
-		"@handlers": "./handlers",
-		"@events": "./events"
+		"@models": "./Source/models",
+		"@handlers": "./Source/handlers",
+		"@events": "./Source/events"
 	},
 	"devDependencies": {
 		"@types/node": "^16.7.1"
