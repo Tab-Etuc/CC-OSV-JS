@@ -2,7 +2,7 @@ const Prizes = require("../../models/Prizes.js");
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-    name: "prizeList",
+    name: "prizelist",
     description: "展示您在升等時會得到的身分組。",
     category: "實用",
     async execute(bot, interaction) {
