@@ -1,7 +1,7 @@
 module.exports = {
     name: "purge",
     description: "清除指定數量的訊息。",
-    category: "utility",
+    category: "實用",
     subCommands: ["<數量>**\n欲清除之訊息數量。"],
     options: [{
         name: "數量",

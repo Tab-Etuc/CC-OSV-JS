@@ -1,4 +1,4 @@
-const calculator = require('../../models/simply-djs/src/calc')
+const calculator = require('../../models/calc')
 module.exports = {
     name: "calculator",
     description: "一個以按鈕作為操作介面的計算機。",

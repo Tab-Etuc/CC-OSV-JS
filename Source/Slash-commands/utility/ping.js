@@ -1,8 +1,8 @@
 
 module.exports = {
   name: "ping",
-  description: "show the bot response speed",
-  category: "utility",
+  description: "展示bot的延遲",
+  category: "實用",
   async execute(bot, interaction) {
     const embed1 = bot.say.rootEmbed(interaction)
       .setDescription("Pinging...");

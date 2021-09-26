@@ -4,8 +4,8 @@ const { MessageActionRow, MessageSelectMenu, MessageButton, MessageEmbed } = req
 module.exports = {
   name: "help",
   description: "顯示CC-OSV之指令幫助頁面。",
-  category: "資訊",
-  subCommands: ["<指令>**\n顯示該指令之幫助頁面。"],
+  category: "實用",
+  subCommands: ["<指令>**\n顯示該指令之幫助頁面。\n<類別>**\n顯示該類別的所有指令。"],
   options: [{
     name: "指令",
     type: "STRING",
@@ -37,6 +37,8 @@ module.exports = {
   async execute(bot, interaction) {
     await interaction.deferReply()
     const arg = interaction.options.getString("指令", false);
+    const timeout = 120000
+    var timeForStart = Date.now();
     if (arg) {
 
       const cmd = bot.commands.get(arg);
@@ -115,7 +117,7 @@ module.exports = {
         return interaction.editReply({
           ephemeral: false,
           embeds: [embed],
-          components: [row_button, row],
+          components: [row, row_button],
           allowedMentions:
             { repliedUser: false }
         });
@@ -168,7 +170,7 @@ module.exports = {
         return interaction.editReply({
           ephemeral: true,
           embeds: [embed],
-          components: [row_button, row],
+          components: [row, row_button],
           allowedMentions:
             { repliedUser: false }
         });
@@ -177,7 +179,7 @@ module.exports = {
           .setColor('#0099ff')
           .setAuthor('CC-OSV　幫助頁面', bot.user.displayAvatarURL())
           .setTitle('實用類別：')
-          .setDescription('\n>>> `/botinfo` - 123\n`/calculator` - 按鈕計算機。\n `help` - 幫助頁面\n`/ping` - 顯示bot延遲。\n`/uptime` - 顯示bot上線時間。')
+          .setDescription('\n>>> `/botinfo` - 123\n`/calculator` - 按鈕計算機。\n `help` - 幫助頁面\n`/ping` - 顯示bot延遲。\n`purge` - 清除指定數量訊息。\n`/uptime` - 展示bot上線多久了。')
           .setTimestamp()
           .setFooter(interaction.user?.tag, interaction.user?.displayAvatarURL({ dynamic: true }));
         const row = new MessageActionRow()
@@ -221,7 +223,7 @@ module.exports = {
         return interaction.editReply({
           ephemeral: true,
           embeds: [embed],
-          components: [row_button, row],
+          components: [row, row_button],
           allowedMentions:
             { repliedUser: false }
         });
@@ -284,9 +286,11 @@ module.exports = {
     });
 
 
-    const filter = i => i.customId === 'help_select_menu'
-    const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
-    collector.on('collect', async i => {
+    bot.on('interactionCreate', async i => {
+      if (!i.isSelectMenu()) return;
+      if (Date.now() - timeForStart >= timeout) {
+        return i.message.edit(`指令已超時！`);
+      }
       if (i.customId === 'help_select_menu') {
         if (i.values[0] === 'help_fun_option') {
           const embed = new MessageEmbed()
@@ -333,13 +337,13 @@ module.exports = {
                 .setLabel('教學')
                 .setStyle('PRIMARY')
             )
-          await i.update({ embeds: [embed], components: [row, row_button] });
+          await i.update({ embeds: [embed], components: [row_button, row] });
         } else if (i.values[0] === 'help_utility_option') {
           const embed = new MessageEmbed()
             .setColor('#0099ff')
             .setAuthor('CC-OSV　幫助頁面', bot.user.displayAvatarURL())
             .setTitle('實用類別：')
-            .setDescription('\n>>> `/botinfo` - 123\n`/calculator` - 按鈕計算機。\n `help` - 幫助頁面\n`/ping` - 顯示bot延遲。\n`/uptime` - 顯示bot上線時間。')
+            .setDescription('\n>>> `/botinfo` - 123\n`/calculator` - 按鈕計算機。\n `help` - 幫助頁面\n`/ping` - 顯示bot延遲。\n`purge` - 清除指定數量訊息。\n`/uptime` - 顯示bot上線時間。')
             .setTimestamp()
             .setFooter(i.user?.tag, i.user?.displayAvatarURL({ dynamic: true }));
           const row = new MessageActionRow()
@@ -379,7 +383,7 @@ module.exports = {
                 .setLabel('教學')
                 .setStyle('PRIMARY')
             )
-          await i.update({ embeds: [embed], components: [row, row_button] });
+          await i.update({ embeds: [embed], components: [row_button, row] });
         } else if (i.values[0] === 'help_music_option') {
           const embed = new MessageEmbed()
             .setColor('#0099ff')
@@ -425,71 +429,74 @@ module.exports = {
                 .setLabel('教學')
                 .setStyle('PRIMARY')
             )
-          await i.update({ embeds: [embed], components: [row, row_button] });
+          await i.update({ embeds: [embed], components: [row_button, row] });
         }
       }
     });
 
 
+    bot.on('interactionCreate', async b => {
 
-    const filter2 = i => i.customId === 'help_前導介面'
-    const collector2 = interaction.channel.createMessageComponentCollector({ filter2, time: 30000 });
-    collector2.on('collect', async i => {
-      if (i.customId === 'help_前導介面') {
+      if (!b.isButton()) return;
+      if (Date.now() - timeForStart >= timeout) {
+        return b.message.edit(`指令已超時！`);
+
+      }
+      if (b.customId === 'help_前導介面') {
         const embed = new MessageEmbed()
-        .setColor('#0099ff')
-        .setAuthor('CC-OSV　幫助頁面', bot.user.displayAvatarURL())
-        .setTitle('此為前導介面')
-        .setDescription('總計指令數：**23**\n__***請點擊下方指令欄，選取指令類別***__\n\n備註：輸入指令時，請善用**Tab**鍵\n\n\n上次更新內容：\n\n`-` 🟢 新增 音樂機器人系統 🎶\n`-` 🟢 新增 伐木、挖礦、釣魚、農耕等賺錢管道\n`-` 🟢 新增 按鈕式計算機、井字遊戲...')
-        .setThumbnail(bot.user.displayAvatarURL())
-        .setTimestamp()
-        .setFooter(i.user?.tag, i.user?.displayAvatarURL({ dynamic: true }));
-  
-      const row = new MessageActionRow()
-        .addComponents(
-          new MessageSelectMenu()
-            .setCustomId('help_select_menu')
-            .setPlaceholder('請選擇一個類別')
-            .addOptions([
-              {
-                label: '樂趣類別',
-                description: '關於樂趣類別的相關指令',
-                value: 'help_fun_option',
-                emoji: '<:__:886488876200394802>',
-              },
-              {
-                label: '實用類別',
-                description: '關於實用類別的相關指令',
-                value: 'help_utility_option',
-                emoji: '<:__:853189224865464320>',
-              },
-              {
-                label: '音樂類別',
-                description: '關於音樂類別的相關指令',
-                value: 'help_music_option',
-                emoji: '<a:cdv3:888730337109233674>',
-              },
-            ])
-        )
-  
-      const row_button = new MessageActionRow()
-        .addComponents(
-          new MessageButton()
-            .setCustomId('help_前導介面')
-            .setLabel('前導介面')
-            .setStyle('PRIMARY')
-            .setDisabled(true),
-          new MessageButton()
-            .setCustomId('help_教學')
-            .setLabel('教學')
-            .setStyle('PRIMARY')
-        )
-  
-      await i.message.edit({
-        embeds: [embed],
-        components: [row_button, row],
-        ephemeral: false
-      });
+          .setColor('#0099ff')
+          .setAuthor('CC-OSV　幫助頁面', bot.user.displayAvatarURL())
+          .setTitle('此為前導介面')
+          .setDescription('總計指令數：**23**\n__***請點擊下方指令欄，選取指令類別***__\n\n備註：輸入指令時，請善用**Tab**鍵\n\n\n上次更新內容：\n\n`-` 🟢 新增 音樂機器人系統 🎶\n`-` 🟢 新增 伐木、挖礦、釣魚、農耕等賺錢管道\n`-` 🟢 新增 按鈕式計算機、井字遊戲...')
+          .setThumbnail(bot.user.displayAvatarURL())
+          .setTimestamp()
+          .setFooter(i.user?.tag, i.user?.displayAvatarURL({ dynamic: true }));
+
+        const row = new MessageActionRow()
+          .addComponents(
+            new MessageSelectMenu()
+              .setCustomId('help_select_menu')
+              .setPlaceholder('請選擇一個類別')
+              .addOptions([
+                {
+                  label: '樂趣類別',
+                  description: '關於樂趣類別的相關指令',
+                  value: 'help_fun_option',
+                  emoji: '<:__:886488876200394802>',
+                },
+                {
+                  label: '實用類別',
+                  description: '關於實用類別的相關指令',
+                  value: 'help_utility_option',
+                  emoji: '<:__:853189224865464320>',
+                },
+                {
+                  label: '音樂類別',
+                  description: '關於音樂類別的相關指令',
+                  value: 'help_music_option',
+                  emoji: '<a:cdv3:888730337109233674>',
+                },
+              ])
+          )
+
+        const row_button = new MessageActionRow()
+          .addComponents(
+            new MessageButton()
+              .setCustomId('help_前導介面')
+              .setLabel('前導介面')
+              .setStyle('PRIMARY')
+              .setDisabled(true),
+            new MessageButton()
+              .setCustomId('help_教學')
+              .setLabel('教學')
+              .setStyle('PRIMARY')
+          )
+
+        await i.update({
+          embeds: [embed],
+          components: [row_button, row],
+          ephemeral: false
+        });
       }
     });
 

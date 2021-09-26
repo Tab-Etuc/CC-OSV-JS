@@ -4,8 +4,8 @@ const moment = require("moment");
 
 module.exports = {
   name: "botinfo",
-  description: "Shows info about the bot",
-  category: "utility",
+  description: "展示bot資訊",
+  category: "實用",
   async execute(bot, interaction) {
     const util = bot.utils;
     const uptime = moment.duration(bot.uptime)
