@@ -21,7 +21,8 @@ module.exports = {
         if (!levelData) {
             let newLevel = new Levels({
                 guildId: message.guild.id,
-                userId: message.author.id
+                userId: message.author.id,
+                userName: message.author.name
             }).save();
         } else {
             let addedXp = Math.floor(Math.random() * (5 - 1) + 1);
@@ -31,11 +32,14 @@ module.exports = {
                 if (data.xp >= data.xpToLevel) {
                     levelData.xp = 0;
                     levelData.level++;
-                    levelData.xpToLevel += data.level * 100;
+                    levelData.xpToLevel = data.level * 100;
                     levelData.save().then(async _data => {
-                        let embed = new Discord.MessageEmbed().setColor("#a8e1fa").setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true })).setThumbnail(message.guild.iconURL({ dynamic: true }));
-                        embed.setDescription(`恭喜 <@${message.author.id}> 升級\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ\n你現在是等級${levelData.level}\n繼續聊天可解鎖更多等級身份\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ`)
-                        message.channel.send(embed);
+                        let embed = new Discord.MessageEmbed()
+                            .setColor("#a8e1fa")
+                            .setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true }))
+                            .setThumbnail(message.guild.iconURL({ dynamic: true }))
+                            .setDescription(`恭喜 <@${message.author.id}> 升級\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ\n你現在是等級 **${levelData.level}**\n繼續聊天可解鎖更多等級身份\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ`);
+                        message.reply({ embeds: [embed] });
                         if (rankData && rankData.levelPrizes.find(x => x.level == _data.level)) {
                             rankData.levelPrizes.filter(x => x.level == _data.level).forEach(x => {
                                 message.member.roles.add(x.role).catch(e => { });
@@ -69,15 +73,8 @@ module.exports = {
 
         msg = bot.utils.toSBC(msg)
         if ('cl3i' in msg.toLowerCase() || 'c襖喔' in msg.toLowerCase()) {
-
-            msg = msg.replace(/\b(cl3i|c襖喔)\b/g, function($0, $1) {
-                return {
-                    "cl3i": "好喔"
-                    , "c襖喔": "好喔"
-                    
-                }[$1];
-            });
-            
+            msg = msg.toLowerCase()
+            msg = msg.replace(/cl3i|c襖喔/g, '好喔');
         }
         if (msg === message.content) return;
 
