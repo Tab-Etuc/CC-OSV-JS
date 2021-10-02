@@ -1,5 +1,5 @@
 module.exports = {
-  name: "replay",
+  name: "重新播放",
   description: "重播當前的歌曲。",
   category: "音樂",
   execute(bot, interaction) {

@@ -1,5 +1,5 @@
 module.exports = {
-  name: "shuffle",
+  name: "洗牌",
   description: "將播放列中的播放順序重新排列。",
   category: "音樂",
   execute(bot, interaction) {

@@ -1,5 +1,5 @@
 module.exports = {
-  name: "resume",
+  name: "取消暫停",
   description: "取消當前暫停的歌曲。",
   category: "音樂",
   execute(bot, interaction) {

@@ -1,5 +1,5 @@
 module.exports = {
-  name: "skip",
+  name: "跳過",
   description: "跳過當前播放的歌曲。",
   category: "音樂",
   execute(bot, interaction) {

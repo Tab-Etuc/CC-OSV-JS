@@ -1,5 +1,5 @@
 module.exports = {
-  name: "mute",
+  name: "禁音",
   description: "將音樂靜音。",
   category: "音樂",
   execute(bot, interaction) {

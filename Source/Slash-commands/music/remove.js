@@ -1,5 +1,5 @@
 module.exports = {
-  name: "remove",
+  name: "移除",
   description: "從播放列中移除歌曲。",
   usage: "<播放列列數>",
   category: "音樂",
@@ -10,7 +10,7 @@ module.exports = {
     required: true
   }],
   async execute(bot, interaction) {
-    const sNum = interaction.options.getNumber("index", true);
+    const sNum = interaction.options.getNumber("列數", true);
 
     const queue = bot.player.getQueue(interaction.guild.id);
 

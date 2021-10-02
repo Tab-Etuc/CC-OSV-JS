@@ -1,7 +1,7 @@
 const { QueueRepeatMode } = require("discord-player");
 
 module.exports = {
-  name: "loop",
+  name: "循環",
   description: "顯示當前設置之重複播放模式。",
   category: "音樂",
   subCommands: ["播放列**\n重複播放列表中的歌曲。", "循環**\n重複當前播放歌曲。", "關閉**\n將重複播放模式關閉。"],

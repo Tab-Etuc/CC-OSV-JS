@@ -1,5 +1,5 @@
 module.exports = {
-  name: "jump",
+  name: "跳過",
   description: "跳到播放列中的某一首歌。",
   category: "音樂",
   usage: "<曲目於播放列中的列數>",

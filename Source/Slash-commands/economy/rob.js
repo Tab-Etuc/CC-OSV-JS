@@ -1,5 +1,5 @@
 module.exports = {
-    name: "rob",
+    name: "搶劫",
     description: "試圖搶某人的錢。",
     category: "經濟",
     options: [{

@@ -1,5 +1,5 @@
 module.exports = {
-  name: "queue",
+  name: "播放列",
   description: "顯示播放列。",
   category: "音樂",
   subCommands: ["<頁數>**\n顯示該頁數之播放列"],

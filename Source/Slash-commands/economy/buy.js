@@ -1,6 +1,6 @@
 const itemss = require('../../utils/items');
 module.exports = {
-    name: "buy",
+    name: "購買",
     description: "購買市廛上的商品。",
     category: "經濟",
     options: [{

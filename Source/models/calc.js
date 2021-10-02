@@ -78,7 +78,7 @@ async function calculator(interaction, options = []) {
               embeds: [emb1],
               components: row
             })
-          }catch (e) {
+          } catch (e) {
             return
           }
         })
@@ -93,9 +93,7 @@ async function calculator(interaction, options = []) {
         createCollector(txt, result)
       }
       setTimeout(async () => {
-        emb1.setDescription("Your Time for using the calculator ran out (10 minutes)")
-        emb1.setColor(0xc90000)
-        await msg.edit({ embeds: [emb1], components: [] })
+        await msg.edit({ components: [] })
       }, time)
 
     })
@@ -216,9 +214,7 @@ async function calculator(interaction, options = []) {
         createCollector(txt, result)
       }
       setTimeout(async () => {
-        emb1.setDescription("Your Time for using the calculator ran out (10 minutes)")
-        emb1.setColor(0xc90000)
-        await msg.edit({ embeds: [emb1], components: [] })
+        await msg.edit({ components: [] })
       }, time)
 
     })

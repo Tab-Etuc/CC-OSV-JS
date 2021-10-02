@@ -24,7 +24,7 @@ async function tictactoe(message, options = []) {
                 .setCustomId('acceptttt')
 
             let decline = new Discord.MessageButton()
-                .setLabel('拒絕')
+                .setLabel('婉拒')
                 .setStyle('DANGER')
                 .setCustomId('declinettt')
 

@@ -1,5 +1,5 @@
 module.exports = {
-  name: "volume",
+  name: "音量",
   description: "顯示當前的音量。",
   category: "音樂",
   subCommands: ["<1-200>**\n更改機器人的音量。"],
@@ -10,7 +10,7 @@ module.exports = {
     required: false
   }],
   execute(bot, interaction) {
-    const newVol = interaction.options.getNumber("amount", false);
+    const newVol = interaction.options.getNumber("音量", false);
 
     const queue = bot.player.getQueue(interaction.guild.id);
 
@@ -22,7 +22,7 @@ module.exports = {
     if (!newVol) {
       const embed = bot.say.rootEmbed(interaction)
         .setDescription(`音量現在是 \`${queue.volume}%\`。`)
-        .setFooter(`使用 \`\/volume <1-200>\` 以更改音量。`);
+        .setFooter(`使用 \`\/音量 <1-200>\` 以更改音量。`);
 
       return interaction.reply({ ephemeral: true, embeds: [embed], allowedMentions: { repliedUser: false } }).catch(console.error);
     }

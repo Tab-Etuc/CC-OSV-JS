@@ -1,5 +1,5 @@
 module.exports = {
-  name: "back",
+  name: "返回",
   description: "返回上一首歌。",
   category: "音樂",
   execute(bot, interaction) {

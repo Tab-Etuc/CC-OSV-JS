@@ -7,15 +7,9 @@ module.exports = {
     name: "rank",
     description: "顯示您的聊天等級。",
     category: "實用",
-    options: [{
-        name: "玩家",
-        type: "USER",
-        description: "您欲查看之玩家。",
-        required: false
-    }],
     async execute(bot, interaction) {
 
-        const member = interaction.options.getUser("玩家", false) || interaction.member
+        const member =  interaction.member
 
         let levelData = await Levels.findOne({
             guildId: interaction.guild.id,
@@ -62,21 +56,13 @@ module.exports = {
         // context.font = '28px sans-serif';
         // context.fillStyle = '#ffffff';
         // context.fillText('Profile', canvas.width / 2.5, canvas.height / 3.5);
-        function getNicknames(userArr, guild) {
-            let playerNicks = [];
-            for (var i = 0; i < userArr.length; i++) {
-                playerNicks.push(guild.member(userArr[i]).displayName);
-            }
-            return playerNicks ? playerNicks : member.user.username;
-        }
         let testUser = interaction.guild.members.cache.get(member.id);
         let testUsers = [];
         testUsers.push(testUser);
-        let guild = interaction.guild;
 
-        context.font = applyText(canvas, `${getNicknames(testUsers, guild)}`);
+        context.font = applyText(canvas, `${member.nickname ? member.nickname : member.user.username}`);
         context.fillStyle = '#ffffff';
-        context.fillText(`${getNicknames(testUsers, guild)}`, canvas.width / 2.84, canvas.height / 2.3);
+        context.fillText(`${member.nickname ? member.nickname : member.user.username}`, canvas.width / 2.84, canvas.height / 2.3);
 
         context.font = applyText_eng(canvas, `Level ${levelData ? levelData.level : 1}`);
         context.fillStyle = '#ffffff';

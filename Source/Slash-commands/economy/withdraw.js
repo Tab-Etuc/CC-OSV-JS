@@ -1,5 +1,5 @@
 module.exports = {
-    name: "withdraw",
+    name: "提款",
     description: "從銀行取出現金。",
     category: "經濟",
     options: [{

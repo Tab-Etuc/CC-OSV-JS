@@ -13,6 +13,8 @@ module.exports = {
     if (!bot.utils.havePermissions(interaction))
       return bot.say.errorMessage(interaction, "我缺少播放權限...可以的話請自行判斷是否在不對的地方輸入了此指令");
 
+    await interaction.deferReply();
+
     const string = await interaction.options.getString("song", true);
 
     const guildQueue = bot.player.getQueue(interaction.guild.id);
@@ -34,7 +36,7 @@ module.exports = {
     if (channel?.full)
       return bot.say.warnMessage(interaction, "我無法加入該頻道，該頻道已達人數上限。");
 
-    let result = await bot.player.search(string, { requestedBy: interaction.user }).catch(() => {});
+    let result = await bot.player.search(string, { requestedBy: interaction.user }).catch(() => { });
     if (!result || !result.tracks.length)
       return bot.say.errorMessage(interaction, `沒有找到結果 \`${string}\`.`);
 

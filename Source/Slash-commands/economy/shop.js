@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const embedPages = require('../../models/embedPages')
 module.exports = {
-    name: "shop",
+    name: "商店",
     description: "前往市廛，採購琳瑯滿目的商品。",
     category: "經濟",
     async execute(bot, interaction) {

@@ -4,7 +4,7 @@ const economy = require('../../models/EconomyModel');
 const Levels = require("../../models/Levels.js");
 
 module.exports = {
-    name: "top",
+    name: "排行榜",
     description: "查看伺服器中的(等級/經濟)排行榜。",
     category: "實用",
     options: [

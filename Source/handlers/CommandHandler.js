@@ -30,6 +30,8 @@ module.exports = async function loadCommands(bot) {
 
     delete require.cache[require.resolve(`../../${file}`)];
 
+    
+
     bot.commands.set(command.name, command);
 
     // debug

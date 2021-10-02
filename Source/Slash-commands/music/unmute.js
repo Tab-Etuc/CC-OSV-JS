@@ -1,5 +1,5 @@
 module.exports = {
-  name: "unmute",
+  name: "解除靜音",
   description: "解除歌曲靜音。",
   category: "音樂",
   execute(bot, interaction) {

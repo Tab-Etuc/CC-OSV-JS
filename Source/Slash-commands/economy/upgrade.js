@@ -1,5 +1,5 @@
 module.exports = {
-    name: "upgrade",
+    name: "升級",
     description: "提升銀行存額或利息等階。",
     category: "經濟",
     options: [

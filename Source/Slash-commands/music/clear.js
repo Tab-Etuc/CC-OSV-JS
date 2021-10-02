@@ -1,5 +1,5 @@
 module.exports = {
-  name: "clear",
+  name: "清除",
   description: "清除當前播放列。(註：不會清除當前播放之曲目)",
   category: "音樂",
   execute(bot, interaction) {

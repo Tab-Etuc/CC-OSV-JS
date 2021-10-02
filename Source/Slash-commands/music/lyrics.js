@@ -2,7 +2,7 @@ const { Lyrics } = require("@discord-player/extractor");
 const lyricsClient = Lyrics.init();
 
 module.exports = {
-  name: "lyrics",
+  name: "歌詞",
   description: "獲取歌曲的歌詞。",
   category: "音樂",
   usage: "<歌曲名稱>",

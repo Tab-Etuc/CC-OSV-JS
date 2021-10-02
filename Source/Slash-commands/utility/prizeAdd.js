@@ -5,6 +5,7 @@ module.exports = {
     name: "prizeadd",
     description: "新增於玩家升等時所賦予之身分組。",
     category: "實用",
+    permission: "ADMINISTRATOR",
     options: [{
         name: "等級",
         type: "INTEGER",
@@ -18,16 +19,16 @@ module.exports = {
         required: true,
     }],
     async execute(bot, interaction) {
-        let level = interaction.options.Integer("等級", false);
+        let level = interaction.options.getInteger("等級", false);
 
-        let prizeData = await Prizes.findOne({ guildId: message.guild.id });
+        let prizeData = await Prizes.findOne({ guildId: interaction.guild.id });
         let role = interaction.options.getRole("身分組", false);
 
         let embed = new MessageEmbed()
             .setColor("RANDOM")
             .setAuthor(
-                interaction.author.username,
-                interaction.author.avatarURL({ dynamic: true })
+                interaction.member.user.username,
+                interaction.member.user.displayAvatarURL({ dynamic: true })
             );
 
         if (level < 0) return interaction.reply({
@@ -48,7 +49,7 @@ module.exports = {
                 interaction.reply({
                     embeds: [
                         embed.setDescription(
-                            `未成功執行此操作。\n\`\`\`${role} 身分組早已於 ${level} 等時添加。\`\`\``
+                            `未成功執行此操作。\n\`${role} 身分組早已於 ${level} 等時添加。\``
                         )
                     ]
                 });
@@ -58,7 +59,7 @@ module.exports = {
                 interaction.reply({
                     embeds: [
                         embed.setDescription(
-                            `成功執行。\n\`\`\`現在將於 ${level} 等時添加 ${role} 身分組。\`\`\``
+                            `成功執行。\n\`現在將於 ${level} 等時添加 ${role} 身分組。\``
                         )
                     ]
                 });

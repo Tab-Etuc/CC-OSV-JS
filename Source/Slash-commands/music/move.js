@@ -1,5 +1,5 @@
 module.exports = {
-  name: "move",
+  name: "移動",
   description: "將所選歌曲移動到播放列中您所提供的位置。",
   usage: "<從...> [到]",
   category: "音樂",

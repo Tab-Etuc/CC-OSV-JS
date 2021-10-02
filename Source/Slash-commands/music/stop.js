@@ -1,5 +1,5 @@
 module.exports = {
-  name: "stop",
+  name: "停止",
   description: "停止播放歌曲。",
   category: "音樂",
   execute(bot, interaction) {

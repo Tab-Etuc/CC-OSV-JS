@@ -34,17 +34,24 @@ module.exports = {
                     levelData.level++;
                     levelData.xpToLevel = data.level * 100;
                     levelData.save().then(async _data => {
-                        let embed = new Discord.MessageEmbed()
+                        const embed = new Discord.MessageEmbed()
                             .setColor("#a8e1fa")
                             .setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true }))
                             .setThumbnail(message.guild.iconURL({ dynamic: true }))
-                            .setDescription(`恭喜 <@${message.author.id}> 升級\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ\n你現在是等級 **${levelData.level}**\n繼續聊天可解鎖更多等級身份\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ`);
-                        message.reply({ embeds: [embed] });
-                        if (rankData && rankData.levelPrizes.find(x => x.level == _data.level)) {
-                            rankData.levelPrizes.filter(x => x.level == _data.level).forEach(x => {
-                                message.member.roles.add(x.role).catch(e => { });
-                            });
-                        };
+                            .setDescription(`恭喜 <@${message.author.id}> 升級\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ\n您現在是等級 **${levelData.level}**\n繼續聊天可解鎖更多等級身份\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ`);
+                        message.reply({ embeds: [embed] }).then((msg) => {
+                            if (rankData && rankData.levelPrizes.find(x => x.level == _data.level)) {
+                                rankData.levelPrizes.filter(x => x.level == _data.level).forEach(x => {
+                                    message.member.roles.add(x.role).catch(e => console.log(e));
+                                    const embed = new Discord.MessageEmbed()
+                                        .setColor("#a8e1fa")
+                                        .setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true }))
+                                        .setThumbnail(message.guild.iconURL({ dynamic: true }))
+                                        .setDescription(`恭喜 <@${message.author.id}> 升級\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ\n您現在是等級 **${levelData.level}**\n您剛解鎖了身分組：<@&${x.role}>\n繼續聊天可解鎖更多等級身份\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ`);
+                                    msg.edit({ embeds: [embed] })
+                                });
+                            }
+                        })
                     });
                 };
             })

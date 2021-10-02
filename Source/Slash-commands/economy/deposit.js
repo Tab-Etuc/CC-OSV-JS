@@ -1,5 +1,5 @@
 module.exports = {
-    name: "deposit",
+    name: "存款",
     description: "將您的現金存入銀行。",
     category: "經濟",
     options: [{

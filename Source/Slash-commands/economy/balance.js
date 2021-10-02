@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 module.exports = {
-    name: "balance",
+    name: "餘額",
     description: "查看您的餘額。",
     category: "經濟",
     options: [{

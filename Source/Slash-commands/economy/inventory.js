@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-    name: "inventory",
+    name: "背包",
     description: "查看您的背包。",
     category: "經濟",
     async execute(bot, interaction) {

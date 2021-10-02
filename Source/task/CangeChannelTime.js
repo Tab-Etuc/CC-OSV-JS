@@ -9,6 +9,7 @@ const data_date = [
 ]
 module.exports = async function ChangeTime(bot) {
     setInterval(() => {
+    try{
         for (i in data_time) {
             const time_hour = moment().tz("Asia/Taipei").format("HH");
             var channel_name = bot.channels.cache.get(data_time[i]).name
@@ -34,5 +35,7 @@ module.exports = async function ChangeTime(bot) {
                 bot.logger.log("EVENTS", `Bot: 已更換頻道日期。`);
             }
         }
-    }, 30000);
+    }catch (err){
+        console.log(err)
+    }}, 30000);
 };
