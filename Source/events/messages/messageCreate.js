@@ -6,6 +6,7 @@ const Discord = require("discord.js")
 module.exports = {
     name: "messageCreate",
     async execute(bot, message) {
+        try{
         if (message.author.bot || !message.guild) return;
 
         // chat level
@@ -58,12 +59,44 @@ module.exports = {
         }
 
 
+        let C_msg = message.content;
+        let NQN_msg = message.content;
 
-        // NQN
+
+
+        C_msg = C_msg.replace(/cl3i|c襖喔|CL3I|C襖喔|Cl3i|CL3i|cL3I|cl3I/g, '好喔');
+
         let substringArray = get_substrings_between(message.content, ":", ":");
-        let msg = message.content;
-        if (!substringArray.length) return;
 
+        if (!substringArray.length) {
+            if (C_msg === message.content) return;
+
+            let webhook = await message.channel.fetchWebhooks();
+            webhook = webhook.find(x => x.name === "NQN");
+
+            if (!webhook) {
+                webhook = await message.channel.createWebhook(`NQN`, {
+                    avatar: bot.user.displayAvatarURL({ dynamic: true })
+                });
+            }
+
+            await webhook.edit({
+                name: message.member.nickname ? message.member.nickname : message.author.username,
+                avatar: message.author.displayAvatarURL({ dynamic: true })
+            })
+
+            message.delete()
+
+            webhook.send(C_msg)
+
+            return await webhook.edit({
+                name: `NQN`,
+                avatar: bot.user.displayAvatarURL({ dynamic: true })
+            })
+        }
+
+
+        NQN_msg = C_msg.replace(/cl3i|c襖喔|CL3I|C襖喔|Cl3i|CL3i|cL3I|cl3I/g, '好喔');
 
         substringArray.forEach(m => {
             let emoji = bot.emojis.cache.find(x => x.name === m);
@@ -72,18 +105,14 @@ module.exports = {
                 var replace = `:${m}:`;
                 var rexreplace = new RegExp(replace, 'g');
 
-                if (emoji && !msg.split(" ").find(x => x === emoji.toString()) && !msg.includes(`<a${replace}${emoji.id}>`)) msg = msg.replace(rexreplace, emoji.toString());
+                if (emoji && !NQN_msg.split(" ").find(x => x === emoji.toString()) && !NQN_msg.includes(`<a${replace}${emoji.id}>`)) NQN_msg = NQN_msg.replace(rexreplace, emoji.toString());
             } else {
                 return
             }
         })
 
-        msg = bot.utils.toSBC(msg)
-        if ('cl3i' in msg.toLowerCase() || 'c襖喔' in msg.toLowerCase()) {
-            msg = msg.toLowerCase()
-            msg = msg.replace(/cl3i|c襖喔/g, '好喔');
-        }
-        if (msg === message.content) return;
+
+        if (NQN_msg === message.content) return;
 
         let webhook = await message.channel.fetchWebhooks();
         webhook = webhook.find(x => x.name === "NQN");
@@ -99,14 +128,17 @@ module.exports = {
             avatar: message.author.displayAvatarURL({ dynamic: true })
         })
 
-        message.delete().catch(m => { })
+        message.delete()
 
-        webhook.send(msg).catch(m => { });
+        webhook.send(NQN_msg)
 
         await webhook.edit({
             name: `NQN`,
             avatar: bot.user.displayAvatarURL({ dynamic: true })
         })
+    }catch {
+        
+    }
     }
 }
 
