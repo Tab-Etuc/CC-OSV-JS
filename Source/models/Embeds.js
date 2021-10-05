@@ -52,7 +52,7 @@ function infoMessage(interaction, text) {
     .setDescription(text)
     .setColor(interaction.guild.me.displayColor || "#00FFFF");
 
-  return interaction.editReply({ embeds: [embedI], allowedMentions: { repliedUser: false } }).catch(console.error);
+  return interaction.reply({ embeds: [embedI], allowedMentions: { repliedUser: false } }).catch(console.error);
 }
 
 /**
