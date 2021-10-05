@@ -27,6 +27,7 @@
 	"dependencies": {
 		"@discord-player/extractor": "^3.0.2",
 		"@discordjs/builders": "^0.6.0",
+		"@discord-player/downloader": "3.0.1",
 		"@discordjs/rest": "0.1.0-canary.0",
 		"canvas": "^2.8.0",
 		"chalk": "^4.1.2",
