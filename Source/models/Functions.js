@@ -328,6 +328,24 @@ function strpos(haystack, needle, offset) {
   var i = (haystack + '').indexOf(needle, (offset || 0));
   return i === -1 ? false : i;
 }
+
+
+function numberFormat(num) {
+  let numberFormats = [
+      { value: 1, symbol: "" },
+      { value: 1E3, symbol: "K" },
+      { value: 1E6, symbol: "M" },
+      { value: 1E9, symbol: "G" },
+      { value: 1E12, symbol: "T" },
+      { value: 1E15, symbol: "P" },
+      { value: 1E18, symbol: "E" }
+  ];
+  let i;
+  for (i = numberFormats.length - 1; i > 0; i--) {
+      if (num >= numberFormats[i].value) break;
+  };
+  return (num / numberFormats[i].value).toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + numberFormats[i].symbol;
+};
 module.exports = {
   getMember, 
   formatDate,
@@ -346,5 +364,6 @@ module.exports = {
   toDBC,
   toSBC,
   get_substrings_between,
-  strpos
+  strpos,
+  numberFormat
 };
