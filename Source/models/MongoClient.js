@@ -18,7 +18,7 @@ class Mongo {
         if (!user) {
             const newUser = new economy({
                 _id: userId,
-                name: someone.name,
+                name: someone.username,
                 items: []
             });
             newUser.save();
@@ -40,7 +40,7 @@ class Mongo {
         if (!user) {
             const newUser = new economy({
                 _id: userId,
-                name: someone.name,
+                name: someone.username,
                 items: []
             });
             newUser.save();
@@ -83,7 +83,7 @@ class Mongo {
         if (!user) {
             const newUser = new economy({
                 _id: userId,
-                name: someone.name,
+                name: someone.username,
                 items: [],
                 coinsInWallet: parseInt(amount)
             });

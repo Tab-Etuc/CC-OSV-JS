@@ -10,10 +10,11 @@ module.exports = {
     required: true
   }],
   async execute(bot, interaction) {
+    await interaction.deferReply();
+
     if (!bot.utils.havePermissions(interaction))
       return bot.say.errorMessage(interaction, "我缺少播放權限...可以的話請自行判斷是否在不對的地方輸入了此指令");
 
-    await interaction.deferReply();
 
     const string = await interaction.options.getString("song", true);
 

@@ -1,4 +1,5 @@
-const Discord = require('discord.js')
+const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js')
+
 module.exports = {
     name: "井字遊戲",
     description: "遊玩一局井字遊戲。",
@@ -20,23 +21,23 @@ module.exports = {
             foot = '©️ CC-OSV'
             
 
-            let acceptEmbed = new Discord.interactionEmbed()
+            let acceptEmbed = new MessageEmbed()
                 .setTitle(`等待 ${opponent.tag} 同意！`)
                 .setAuthor(interaction.user.tag, interaction.user.displayAvatarURL())
                 .setColor(0x075FFF)
                 .setFooter(foot)
 
-            let accept = new Discord.interactionButton()
+            let accept = new MessageButton()
                 .setLabel('同意')
                 .setStyle('SUCCESS')
                 .setCustomId('acceptttt')
 
-            let decline = new Discord.interactionButton()
+            let decline = new MessageButton()
                 .setLabel('婉拒')
                 .setStyle('DANGER')
                 .setCustomId('declinettt')
 
-            let accep = new Discord.interactionActionRow()
+            let accep = new MessageActionRow()
                 .addComponents([accept, decline])
             interaction.followUp({
                 content: '<@' + opponent.id + '>您收到了一個遊戲邀請！',
@@ -45,7 +46,7 @@ module.exports = {
             })
             let m = await interaction.fetchReply()
             let filter = (button) => button.user.id == opponent.id
-            const collector = m.createinteractionComponentCollector({ type: 'BUTTON', time: 30000, filter: filter })
+            const collector = m.createMessageComponentCollector({ type: 'BUTTON', time: 30000, filter: filter })
             collector.on('collect', async (button) => {
                 if (button.customId == 'declinettt') {
                     button.deferUpdate()
@@ -109,9 +110,9 @@ module.exports = {
                             disabled: false
                         }
                     }
-                    const { interactionActionRow, interactionButton } = require('discord.js');
+                    const { MessageActionRow, MessageButton } = require('discord.js');
 
-                    const xoemb = new Discord.interactionEmbed()
+                    const xoemb = new MessageEmbed()
                         .setTitle('井字遊戲')
                         .setDescription(`**如何遊玩？ ?**\n*等待您的回合，點擊按鈕以繪製您的符號。*`)
                         .setColor(0x075FFF)
@@ -150,63 +151,63 @@ module.exports = {
                         if (won["<:X_:863314044781723668>"] != false) {
                             if (Args.user == 0) return m.edit({ content: `<@!${fighters[1]}> (${x_emoji}) 贏了，真是場精彩的遊戲。`, components: [] }); else if (Args.user == 1) return m.edit({ content: `<@!${fighters[0]}> (${x_emoji}) 贏了，真是場精彩的遊戲。`, components: [] });
                         }
-                        let a1 = new interactionButton()
+                        let a1 = new MessageButton()
                             .setStyle(Args.a1.style)
                             .setEmoji(Args.a1.emoji)
                             .setCustomId('a1')
                             .setDisabled(Args.a1.disabled);
-                        let a2 = new interactionButton()
+                        let a2 = new MessageButton()
                             .setStyle(Args.a2.style)
                             .setEmoji(Args.a2.emoji)
                             .setCustomId('a2')
                             .setDisabled(Args.a2.disabled);
-                        let a3 = new interactionButton()
+                        let a3 = new MessageButton()
                             .setStyle(Args.a3.style)
                             .setEmoji(Args.a3.emoji)
                             .setCustomId('a3')
                             .setDisabled(Args.a3.disabled);
-                        let b1 = new interactionButton()
+                        let b1 = new MessageButton()
                             .setStyle(Args.b1.style)
                             .setEmoji(Args.b1.emoji)
                             .setCustomId('b1')
                             .setDisabled(Args.b1.disabled);
-                        let b2 = new interactionButton()
+                        let b2 = new MessageButton()
                             .setStyle(Args.b2.style)
                             .setEmoji(Args.b2.emoji)
                             .setCustomId('b2')
                             .setDisabled(Args.b2.disabled);
-                        let b3 = new interactionButton()
+                        let b3 = new MessageButton()
                             .setStyle(Args.b3.style)
                             .setEmoji(Args.b3.emoji)
                             .setCustomId('b3')
                             .setDisabled(Args.b3.disabled);
-                        let c1 = new interactionButton()
+                        let c1 = new MessageButton()
                             .setStyle(Args.c1.style)
                             .setEmoji(Args.c1.emoji)
                             .setCustomId('c1')
                             .setDisabled(Args.c1.disabled);
-                        let c2 = new interactionButton()
+                        let c2 = new MessageButton()
                             .setStyle(Args.c2.style)
                             .setEmoji(Args.c2.emoji)
                             .setCustomId('c2')
                             .setDisabled(Args.c2.disabled);
-                        let c3 = new interactionButton()
+                        let c3 = new MessageButton()
                             .setStyle(Args.c3.style)
                             .setEmoji(Args.c3.emoji)
                             .setCustomId('c3')
                             .setDisabled(Args.c3.disabled);
-                        let a = new interactionActionRow()
+                        let a = new MessageActionRow()
                             .addComponents([a1, a2, a3])
-                        let b = new interactionActionRow()
+                        let b = new MessageActionRow()
                             .addComponents([b1, b2, b3])
-                        let c = new interactionActionRow()
+                        let c = new MessageActionRow()
                             .addComponents([c1, c2, c3])
                         let buttons = { components: [a, b, c] }
 
                         m.edit({ content: `等待 | <@!${Args.userid}> | 您的符號是： ${Args.user == 0 ? `${o_emoji}` : `${x_emoji}`}`, components: [a, b, c] })
                         const filter = (button) => button.user.id === Args.userid;
 
-                        const collector = m.createinteractionComponentCollector({ filter, componentType: 'BUTTON', max: 1, time: 30000 });
+                        const collector = m.createMessageComponentCollector({ filter, componentType: 'BUTTON', max: 1, time: 30000 });
 
                         collector.on('collect', b => {
 
@@ -254,7 +255,7 @@ module.exports = {
 
             collector.on('end', (collected, reason) => {
                 if (reason == 'time') {
-                    let embed = new Discord.interactionEmbed()
+                    let embed = new MessageEmbed()
                         .setTitle('對方未在時間內接受邀請。')
                         .setAuthor(interaction.user.tag, interaction.user.displayAvatarURL())
                         .setColor(0xc90000)
@@ -266,7 +267,7 @@ module.exports = {
                     })
                 }
                 if (reason == 'decline') {
-                    let embed = new Discord.interactionEmbed()
+                    let embed = new MessageEmbed()
                         .setTitle("遊戲被拒絕了！")
                         .setAuthor(interaction.user.tag, interaction.user.displayAvatarURL())
                         .setColor(0xc90000)

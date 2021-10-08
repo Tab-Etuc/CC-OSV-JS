@@ -304,8 +304,32 @@ function toSBC(str){
   }
   return result;
 }
+
+function get_substrings_between(str, startDelimiter, endDelimiter) {
+  var contents = [];
+  var startDelimiterLength = startDelimiter.length;
+  var endDelimiterLength = endDelimiter.length;
+  var startFrom = contentStart = contentEnd = 0;
+
+  while (false !== (contentStart = strpos(str, startDelimiter, startFrom))) {
+      contentStart += startDelimiterLength;
+      contentEnd = strpos(str, endDelimiter, contentStart);
+      if (false === contentEnd) {
+          break;
+      }
+      contents.push(str.substr(contentStart, contentEnd - contentStart));
+      startFrom = contentEnd + endDelimiterLength;
+  }
+
+  return contents;
+}
+
+function strpos(haystack, needle, offset) {
+  var i = (haystack + '').indexOf(needle, (offset || 0));
+  return i === -1 ? false : i;
+}
 module.exports = {
-  getMember,
+  getMember, 
   formatDate,
   promptMessage,
   forHumans,
@@ -320,5 +344,7 @@ module.exports = {
   codeContent,
   canModifyQueue,
   toDBC,
-  toSBC
+  toSBC,
+  get_substrings_between,
+  strpos
 };

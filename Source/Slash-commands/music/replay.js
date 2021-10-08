@@ -2,7 +2,9 @@ module.exports = {
   name: "重新播放",
   description: "重播當前的歌曲。",
   category: "音樂",
-  execute(bot, interaction) {
+  async execute(bot, interaction) {
+    await interaction.deferReply();
+
     const queue = bot.player.getQueue(interaction.guild.id);
 
     if (!queue || !queue.playing)

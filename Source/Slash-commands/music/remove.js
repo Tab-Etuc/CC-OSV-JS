@@ -10,6 +10,8 @@ module.exports = {
     required: true
   }],
   async execute(bot, interaction) {
+    await interaction.deferReply();
+
     const sNum = interaction.options.getNumber("列數", true);
 
     const queue = bot.player.getQueue(interaction.guild.id);

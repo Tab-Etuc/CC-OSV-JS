@@ -2,7 +2,9 @@ module.exports = {
   name: "停止",
   description: "停止播放歌曲。",
   category: "音樂",
-  execute(bot, interaction) {
+  async execute(bot, interaction) {
+    await interaction.deferReply();
+
     const queue = bot.player.getQueue(interaction.guild.id);
 
     if (!queue || !queue.playing)

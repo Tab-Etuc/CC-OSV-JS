@@ -9,7 +9,9 @@ module.exports = {
     type: "NUMBER",
     required: false
   }],
-  execute(bot, interaction) {
+  async execute(bot, interaction) {
+    await interaction.deferReply();
+
     const newVol = interaction.options.getNumber("音量", false);
 
     const queue = bot.player.getQueue(interaction.guild.id);

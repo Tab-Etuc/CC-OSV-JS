@@ -52,7 +52,7 @@ function infoMessage(interaction, text) {
     .setDescription(text)
     .setColor(interaction.guild.me.displayColor || "#00FFFF");
 
-  return interaction.reply({ embeds: [embedI], allowedMentions: { repliedUser: false } }).catch(console.error);
+  return interaction.editReply({ embeds: [embedI], allowedMentions: { repliedUser: false } }).catch(console.error);
 }
 
 /**
@@ -73,7 +73,7 @@ function warnMessage(interaction, text) {
     .setDescription(text)
     .setColor("ORANGE");
 
-  return interaction.reply({ ephemeral: true, embeds: [embedW], allowedMentions: { repliedUser: false } }).catch(console.error);
+  return interaction.editReply({ ephemeral: true, embeds: [embedW], allowedMentions: { repliedUser: false } }).catch(console.error);
 }
 
 /**
@@ -94,7 +94,7 @@ function errorMessage(interaction, text) {
     .setDescription(text)
     .setColor("RED");
 
-  return interaction.reply({ ephemeral: true, embeds: [embedE], allowedMentions: { repliedUser: false } }).catch(console.error);
+  return interaction.editReply({ ephemeral: true, embeds: [embedE], allowedMentions: { repliedUser: false } }).catch(console.error);
 }
 
 /**

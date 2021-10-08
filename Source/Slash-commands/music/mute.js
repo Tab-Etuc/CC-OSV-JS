@@ -2,7 +2,9 @@ module.exports = {
   name: "禁音",
   description: "將音樂靜音。",
   category: "音樂",
-  execute(bot, interaction) {
+  async execute(bot, interaction) {
+    await interaction.deferReply();
+
     const queue = bot.player.getQueue(interaction.guild.id);
 
     if (!queue || !queue.playing)

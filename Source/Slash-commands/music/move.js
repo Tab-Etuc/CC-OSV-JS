@@ -18,6 +18,8 @@ module.exports = {
     }
   ],
   async execute(bot, interaction) {
+    await interaction.deferReply();
+
     const fr = await interaction.options.getNumber("from", true);
     let to = await interaction.options.getNumber("to") ?? 1;
     to = to - 1;

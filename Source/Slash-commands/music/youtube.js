@@ -6,6 +6,7 @@ module.exports = {
   category: "音樂",
   async execute(bot, interaction) {
     const channel = interaction.member?.voice?.channel;
+    await interaction.deferReply();
 
     if (!channel)
       return bot.say.warnMessage(interaction, "您必須先加入一個音樂頻道。");

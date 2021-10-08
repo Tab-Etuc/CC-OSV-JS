@@ -70,9 +70,9 @@ module.exports = {
 
             C_msg = C_msg.replace(/cl3i|c襖喔|CL3I|C襖喔|Cl3i|CL3i|cL3I|cl3I/g, '好喔');
 
-            let substringArray = get_substrings_between(message.content, ":", ":");
+            let substringArray = bot.utils.displayAvatarURLget_substrings_between(message.content, ":", ":");
 
-            if (!substringArray.length) {
+            if (!substringArray.length) {   // 如果不是 NQN 模式的處理
                 if (C_msg === message.content) return;
 
                 let webhook = await message.channel.fetchWebhooks();
@@ -146,27 +146,4 @@ module.exports = {
     }
 }
 
-function get_substrings_between(str, startDelimiter, endDelimiter) {
-    var contents = [];
-    var startDelimiterLength = startDelimiter.length;
-    var endDelimiterLength = endDelimiter.length;
-    var startFrom = contentStart = contentEnd = 0;
 
-    while (false !== (contentStart = strpos(str, startDelimiter, startFrom))) {
-        contentStart += startDelimiterLength;
-        contentEnd = strpos(str, endDelimiter, contentStart);
-        if (false === contentEnd) {
-            break;
-        }
-        contents.push(str.substr(contentStart, contentEnd - contentStart));
-        startFrom = contentEnd + endDelimiterLength;
-    }
-
-    return contents;
-}
-
-
-function strpos(haystack, needle, offset) {
-    var i = (haystack + '').indexOf(needle, (offset || 0));
-    return i === -1 ? false : i;
-}

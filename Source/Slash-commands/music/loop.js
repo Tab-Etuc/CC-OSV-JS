@@ -26,6 +26,8 @@ module.exports = {
      ]
   }],
   async execute(bot, interaction) {
+    await interaction.deferReply();
+
     const arg = interaction.options.getString("mode", false);
 
     const queue = bot.player.getQueue(interaction.guild.id);
@@ -48,8 +50,6 @@ module.exports = {
       .setDescription(`重複播放模式已更換至 \`${md}\`。`)
       .setFooter(`使用 \'\/loop <關閉|循環|播放列>\' 來改變重複播放模式。`);
 
-    if (!arg)
-      return interaction.reply({ ephemeral: true, embeds: [embed], allowedMentions: { repliedUser: false } }).catch(console.error);
 
     let mode;
     switch (arg) {
@@ -66,7 +66,7 @@ module.exports = {
         mode = "重複播放模式已更換至 **循環播放列**";
         break;
       default:
-        return interaction.reply({ ephemeral: true, embeds: [embed], allowedMentions: { repliedUser: false } }).catch(console.error);
+        return interaction.editReply({ ephemeral: true, embeds: [embed], allowedMentions: { repliedUser: false } }).catch(console.error);
     }
 
     return bot.say.infoMessage(interaction, `${mode}`);

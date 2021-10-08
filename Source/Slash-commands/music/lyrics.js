@@ -13,6 +13,8 @@ module.exports = {
     required: true
   }],
   async execute(bot, interaction) {
+    await interaction.deferReply();
+
     const songName = interaction.options.getString("query", true);
 
     const songNameFormated = songName

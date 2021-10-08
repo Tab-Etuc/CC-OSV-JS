@@ -9,7 +9,9 @@ module.exports = {
     type: "NUMBER",
     required: false
   }],
-  execute(bot, interaction) {
+  async execute(bot, interaction) {
+    await interaction.deferReply();
+    
     let page = interaction.options.getNumber("page", false) ?? 1;
 
     const queue = bot.player.getQueue(interaction.guild.id);
