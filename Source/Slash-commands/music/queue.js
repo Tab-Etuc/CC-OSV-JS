@@ -37,6 +37,6 @@ module.exports = {
       .setDescription(`${tracks.map((song, i) => `${start + (++i)} - [${song.title}](${song.url}) ~ [${song.requestedBy.toString()}]`).join("\n")}`)
       .setFooter(`Page ${page} of ${maxPages} | song ${start + 1} to ${end > queue.tracks.length ? `${queue.tracks.length}` : `${end}`} of ${queue.tracks.length}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
-    return interaction.reply({ ephemeral: true, embeds: [embed], allowedMentions: { repliedUser: false } }).catch(console.error);
+    return interaction.editReply({ ephemeral: true, embeds: [embed], allowedMentions: { repliedUser: false } }).catch(console.error);
   }
 };
