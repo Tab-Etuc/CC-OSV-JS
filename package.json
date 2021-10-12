@@ -25,9 +25,10 @@
 	"author": "CC_",
 	"license": "MIT",
 	"dependencies": {
+		"@discord-player/downloader": "3.0.1",
 		"@discord-player/extractor": "^3.0.2",
 		"@discordjs/builders": "^0.6.0",
-		"@discord-player/downloader": "3.0.1",
+		"@discordjs/opus": "^0.6.0",
 		"@discordjs/rest": "0.1.0-canary.0",
 		"canvas": "^2.8.0",
 		"chalk": "^4.1.2",
@@ -44,7 +45,7 @@
 		"node-fetch": "^3.0.0",
 		"os": "^0.1.2",
 		"util": "^0.12.4",
-		"weky": "^3.1.8"
+		"weky": "^2.0.9"
 	},
 	"_moduleAliases": {
 		"@root": ".",
