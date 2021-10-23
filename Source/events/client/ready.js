@@ -24,7 +24,7 @@ module.exports = {
     const userCount = formatNum(
       bot.guilds.cache.reduce((a, g) => a + g.memberCount, 0)
     )
-    bot.dashboard.load(bot);
+    
 
     const statuses = [
       {

@@ -4,7 +4,7 @@ require('moment-duration-format');
 
 const Client = require('./base/CC-OSV-Client'),
   bot = new Client();
-
+bot.dashboard.load(bot);
 require('./handlers/EventHandler')(bot);
 require(`./task/CangeChannelTime`)(bot);
 
