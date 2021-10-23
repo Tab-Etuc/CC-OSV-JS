@@ -89,3 +89,4 @@ module.exports.load = async client => {
     console.log('Atlanta Dashboard is listening on port ' + app.get('port'))
   })
 }
+
