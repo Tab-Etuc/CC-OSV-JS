@@ -3,15 +3,14 @@ const utils = require('./utils'),
 
 require('dotenv').config()
 
-
 module.exports.load = async client => {
   /* Init express app */
 
   const express = require('express'),
     session = require('express-session'),
-	MongoStore = require('connect-mongo'),
+    MongoStore = require('connect-mongo'),
     path = require('path'),
-    app = express();
+    app = express()
 
   /* Routers */
   const mainRouter = require('./routes/index'),
@@ -39,7 +38,7 @@ module.exports.load = async client => {
     .use(
       session({
         secret: process.env.DashboardeExpressSessionPassword,
-		store: MongoStore.create({ mongoUrl: process.env.MONGODB }),
+        store: MongoStore.create({ mongoUrl: process.env.MONGODB }),
         resave: false,
         saveUninitialized: false
       })
@@ -48,15 +47,9 @@ module.exports.load = async client => {
     .use(async function (req, res, next) {
       req.user = req.session.user
       req.client = client
-      req.locale = req.user
-        ? req.user.locale === 'fr'
-          ? 'fr-FR'
-          : 'en-US'
-        : 'en-US'
       if (req.user && req.url !== '/')
         req.userInfos = await utils.fetchUser(req.user, req.client)
       if (req.user) {
-        req.translate = req.client.translations.get(req.locale)
         req.printDate = date => req.client.printDate(date, null, req.locale)
       }
       next()
@@ -89,4 +82,3 @@ module.exports.load = async client => {
     console.log('Atlanta Dashboard is listening on port ' + app.get('port'))
   })
 }
-

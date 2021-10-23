@@ -147,7 +147,7 @@ class bot extends Client {
     await user.save()
     return user
   };
-
+  
   async findOrCreateUser({ id: userID }, isLean){
 		if(this.databaseCache.users.get(userID)){
 			return isLean ? this.databaseCache.users.get(userID).toJSON() : this.databaseCache.users.get(userID);
