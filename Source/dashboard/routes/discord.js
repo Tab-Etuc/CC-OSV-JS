@@ -9,7 +9,7 @@ require('dotenv').config()
 // Gets login page
 router.get("/login", async function(req, res) {
 	if(!req.user || !req.user.id || !req.user.guilds){
-		return res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${req.client.user.id}redirect_uri=${encodeURIComponent(process.env.DashboardBaseURL+"/api/callback")}&response_type=code&scope=identify%20guilds%20email`);
+		return res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${req.client.user.id}&redirect_uri=${encodeURIComponent(process.env.DashboardBaseURL+"/api/callback")}&response_type=code&scope=identify%20guilds%20email`);
 	}
 	res.redirect("/selector");
 });
