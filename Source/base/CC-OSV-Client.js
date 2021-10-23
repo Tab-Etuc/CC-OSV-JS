@@ -33,7 +33,18 @@ class bot extends Client {
     // this.states = {}; // Used for the dashboard
     // this.knownGuilds = [];
     this.dashboard = require("../dashboard/app");
+    this.guildsData = require("../base/Guild"); 
+		this.usersData = require("../base/User"); 
+    this.membersData = require("../base/Member");
     this.states = {}; // Used for the dashboard
+
+    this.databaseCache = {};
+		this.databaseCache.users = new Collection();
+		this.databaseCache.guilds = new Collection();
+		this.databaseCache.members = new Collection();
+
+		this.databaseCache.usersReminds = new Collection(); // members with active reminds
+		this.databaseCache.mutedUsers = new Collection(); // members who are currently muted
 
     this.queue = new Map()
     this.commands = new Collection()
