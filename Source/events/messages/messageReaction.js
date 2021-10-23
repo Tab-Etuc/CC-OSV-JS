@@ -1,5 +1,6 @@
 module.exports = {
     name: "raw",
+    once: false,
     async execute(bot, packet) {
         if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(packet.t)) return;
         const channel = bot.channels.cache.get(packet.d.channel_id);

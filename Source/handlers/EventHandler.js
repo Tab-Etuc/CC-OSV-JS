@@ -1,32 +1,37 @@
-const glob = require("glob");
+const glob = require('glob')
 
-module.exports = function loadEvents(bot) {
-  const eventFiles = glob.sync("./Source/events/**/*.js");
+module.exports = function loadEvents (bot) {
+  const eventFiles = glob.sync('./Source/events/**/*.js')
+  
 
-  eventFiles.forEach((file) => {
-    const event = require(`../../${file}`);
-    let type = "bot";
+  eventFiles.forEach(file => {
+    const event = require(`../../${file}`)
+    let type = 'bot'
 
     if (!event.execute) {
-      throw new TypeError(`[ERROR]: execute function is required for events! (${file})`);
+      throw new TypeError(
+        `[ERROR]: execute function is required for events! (${file})`
+      )
     }
 
     if (!event.name) {
-      throw new TypeError(`[ERROR]: name is required for events! (${file})`);
+      throw new TypeError(`[ERROR]: name is required for events! (${file})`)
     }
 
-    if (file.includes("player.")) {
-      bot.player.on(event.name, event.execute.bind(null, bot));
-
+    if (file.includes('player.')) {
+      bot.player.on(event.name, event.execute.bind(null, bot))
     } else if (event.once === true) {
-      bot.once(event.name, event.execute.bind(null, bot));
-    } else {
-      bot.on(event.name, event.execute.bind(null, bot));
+      bot.once(event.name, event.execute.bind(null, bot))
+    } else if (event.once === false) {
+      bot.on(event.name, event.execute.bind(null, bot))
     }
 
-    delete require.cache[require.resolve(`../../${file}`)];
+    delete require.cache[require.resolve(`../../${file}`)]
 
     // debug
-    bot.logger.log("events", `Loaded ${bot.utils.toCapitalize(type)}: ${event.name}`);
-  });
-};
+    bot.logger.log(
+      'events',
+      `Loaded ${bot.utils.toCapitalize(type)}: ${event.name}`
+    )
+  })
+}
