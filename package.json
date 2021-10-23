@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "nodemon ./Source/index.js",
-    "start": "node ./Source/index.js"
+    "start": "node ./Source/index.js",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
