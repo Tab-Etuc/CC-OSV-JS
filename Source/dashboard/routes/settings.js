@@ -7,7 +7,6 @@ const express = require("express"),
 router.get("/", CheckAuth, async function(req, res) {
 	res.render("settings", {
 		user: req.userInfos,
-		translate: req.translate,
 		printDate: req.printDate,
 		currentURL: `${process.env.DashboardBaseURL}/${req.originalUrl}`
 	});

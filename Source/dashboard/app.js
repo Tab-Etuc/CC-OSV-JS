@@ -63,7 +63,7 @@ module.exports.load = async client => {
     .use(CheckAuth, function (req, res) {
       res.status(404).render('404', {
         user: req.userInfos,
-        translate: req.translate,
+
         currentURL: `${req.protocol}://${req.get('host')}${req.originalUrl}`
       })
     })
@@ -72,7 +72,7 @@ module.exports.load = async client => {
       if (!req.user) return res.redirect('/')
       res.status(500).render('500', {
         user: req.userInfos,
-        translate: req.translate,
+
         currentURL: `${req.protocol}://${req.get('host')}${req.originalUrl}`
       })
     })
