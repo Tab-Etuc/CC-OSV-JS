@@ -8,8 +8,9 @@ module.exports.load = async client => {
 
   const express = require('express'),
     session = require('express-session'),
+	MongoStore = require('connect-mongo')(session),
     path = require('path'),
-    app = express()
+    app = express();
 
   /* Routers */
   const mainRouter = require('./routes/index'),
@@ -37,6 +38,7 @@ module.exports.load = async client => {
     .use(
       session({
         secret: process.env.DashboardeExpressSessionPassword,
+		store: MongoStore.create({ mongoUrl: process.env.MONGODB }),
         resave: false,
         saveUninitialized: false
       })
