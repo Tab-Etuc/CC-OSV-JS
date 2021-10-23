@@ -32,7 +32,7 @@ module.exports.load = async client => {
     // Set the ejs templates to ./views
     .set('views', path.join(__dirname, '/views'))
     // Set the dashboard port
-    .set('port', process.env.DashboardPort)
+    .set('port', process.env.DashboardPort || 3000)
     // Set the express session password and configuration
     .use(
       session({
