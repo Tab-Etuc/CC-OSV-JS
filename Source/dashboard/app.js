@@ -8,7 +8,7 @@ module.exports.load = async client => {
 
   const express = require('express'),
     session = require('express-session'),
-	MongoStore = require('connect-mongo')(session),
+	MongoStore = require('connect-mongo'),
     path = require('path'),
     app = express();
 
