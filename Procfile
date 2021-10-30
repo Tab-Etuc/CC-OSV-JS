@@ -1,2 +1,2 @@
 web: npm start -p $PORT
-worker: node ./Source/index.js
+worker: node ./src/index.js
