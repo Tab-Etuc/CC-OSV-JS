@@ -29,11 +29,11 @@ class bot extends Client {
   this.Lavasfy = new LavasfyClient(
     [
       {
-        id: this.botconfig.Lavalink.id,
-        host: this.botconfig.Lavalink.host,
-        port: this.botconfig.Lavalink.port,
-        password: this.botconfig.Lavalink.pass,
-        secure: this.botconfig.Lavalink.secure,
+        id: this.config.Lavalink.id,
+        host: this.config.Lavalink.host,
+        port: this.config.Lavalink.port,
+        password: this.config.Lavalink.pass,
+        secure: this.config.Lavalink.secure,
       },
     ]
   );
@@ -41,11 +41,11 @@ class bot extends Client {
   this.Manager = new Manager({
     nodes: [
       {
-        identifier: this.botconfig.Lavalink.id,
-        host: this.botconfig.Lavalink.host,
-        port: this.botconfig.Lavalink.port,
-        password: this.botconfig.Lavalink.pass,
-        secure: this.botconfig.Lavalink.secure,
+        identifier: this.config.Lavalink.id,
+        host: this.config.Lavalink.host,
+        port: this.config.Lavalink.port,
+        password: this.config.Lavalink.pass,
+        secure: this.config.Lavalink.secure,
       },
     ],
     send(id, payload) {
@@ -64,7 +64,7 @@ class bot extends Client {
     .on("trackStart", async (player, track) => {
       this.SongsPlayed++;
       let TrackStartedEmbed = new MessageEmbed()
-        .setAuthor(`正在播放 ♪`, this.botconfig.IconURL)
+        .setAuthor(`正在播放 ♪`, this.config.IconURL)
         .setThumbnail(player.queue.current.displayThumbnail())
         .setDescription(`[${track.title}](${track.uri})`)
         .addField("Requested by", `${track.requester}`, true)
@@ -75,7 +75,7 @@ class bot extends Client {
           })}\``,
           true
         )
-        .setColor(this.botconfig.EmbedColor);
+        .setColor(this.config.EmbedColor);
       //.setFooter("Started playing at");
       let NowPlaying = await this.channels.cache
         .get(player.textChannel)
@@ -87,11 +87,11 @@ class bot extends Client {
         console.log(player)
       }
       let QueueEmbed = new MessageEmbed()
-        .setAuthor("The queue has ended", this.botconfig.IconURL)
-        .setColor(this.botconfig.EmbedColor)
+        .setAuthor("The queue has ended", this.config.IconURL)
+        .setColor(this.config.EmbedColor)
         .setTimestamp();
       this.channels.cache.get(player.textChannel).send(QueueEmbed);
-      if (!this.botconfig["24/7"]) player.destroy();
+      if (!this.config["24/7"]) player.destroy();
     });
     require('./handlers/EventHandler')(this);
     require(`./task/CangeChannelTime`)(this);
@@ -182,11 +182,11 @@ class bot extends Client {
   };
   
   build() {
-    this.login(this.botconfig.Token);
+    this.login(this.config.Token);
   }
   sendTime(Channel, Error) {
     let embed = new MessageEmbed()
-      .setColor(this.botconfig.EmbedColor)
+      .setColor(this.config.EmbedColor)
       .setDescription(Error);
 
     Channel.send(embed);
