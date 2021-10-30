@@ -1,0 +1,22 @@
+{
+  "name": "dbd-dark-dashboard",
+  "version": "1.2.4",
+  "description": "Discord Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ddd"
+  ],
+  "author": "iMidnight",
+  "license": "ISC",
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "devDependencies": {},
+  "directories": {
+    "test": "test"
+  }
+}
+

@@ -3,5 +3,5 @@ color 0f
 
 title CC-OSV BOT
 echo Please wait......
-node ./Source/index.js
+node ./src/index.js
 pause
