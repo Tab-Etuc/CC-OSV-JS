@@ -101,8 +101,8 @@ class bot extends Client {
       this.channels.cache.get(player.textChannel).send(QueueEmbed);
       if (!this.config["24/7"]) player.destroy();
     });
-    require('./handlers/EventHandler')(this);
-    require(`./task/CangeChannelTime`)(this);
+    require('../handlers/EventHandler')(this);
+    require(`../task/CangeChannelTime`)(this);
     this.LoadMsgCommands();
 }
   fetchUser (bot, userId) {
