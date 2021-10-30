@@ -141,7 +141,7 @@ class bot extends Client {
       return newUser
     }
     user.bankSpace += parseInt(amount)
-    await user.save()
+    user.save()
     return user
   };
 
