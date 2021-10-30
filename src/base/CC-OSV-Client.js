@@ -27,6 +27,14 @@ class bot extends Client {
   
 
   this.Lavasfy = new LavasfyClient(
+    {
+      clientID: this.config.Spotify.ClientID,
+      clientSecret: this.config.Spotify.ClientSecret,
+      playlistPageLoadLimit: 3,
+      filterAudioOnlyResult: true,
+      autoResolve: true,
+      useSpotifyMetadata: true,
+    },
     [
       {
         id: this.config.Lavalink.id,
