@@ -2,7 +2,7 @@ const { Client, Collection } = require('discord.js')
 const { LavasfyClient } = require("lavasfy");
 const { Manager } = require("erela.js");
 const economy = require('../models/EconomyModel');
-
+const { readdirSync } = require("fs");
 
 require("discordjs-activity");
 require("./EpicPlayer");
