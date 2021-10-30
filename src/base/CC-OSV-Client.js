@@ -108,7 +108,7 @@ class bot extends Client {
   fetchUser (bot, userId) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    const user = await economy.findOne({ _id: userId })
+    const user = economy.findOne({ _id: userId })
     if (!user) {
       const newUser = new economy({
         _id: userId,
@@ -130,7 +130,7 @@ class bot extends Client {
   giveBankSpace (bot, userId, amount) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    let user = await economy.findOne({ _id: userId })
+    let user = economy.findOne({ _id: userId })
     if (!user) {
       const newUser = new economy({
         _id: userId,
@@ -153,7 +153,7 @@ class bot extends Client {
   createUser (bot, userId) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    const user = await economy.findOne({ _id: userId })
+    const user = economy.findOne({ _id: userId })
     if (!user) return false
     const newUser = new economy({
       _id: userId,
@@ -173,7 +173,7 @@ class bot extends Client {
   giveCoins (bot, userId, amount) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    let user = await economy.findOne({ _id: userId })
+    let user = economy.findOne({ _id: userId })
     if (!user) {
       const newUser = new economy({
         _id: userId,
@@ -185,7 +185,7 @@ class bot extends Client {
       return newUser
     }
     user.coinsInWallet += parseInt(amount)
-    await user.save()
+    user.save()
     return user
   };
   
