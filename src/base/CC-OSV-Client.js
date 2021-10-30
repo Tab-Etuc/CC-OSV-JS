@@ -3,6 +3,7 @@ const { LavasfyClient } = require("lavasfy");
 const { Manager } = require("erela.js");
 const economy = require('../models/EconomyModel');
 const { readdirSync } = require("fs");
+const { join } = require("path");
 
 require("discordjs-activity");
 require("./EpicPlayer");
