@@ -1,15 +1,25 @@
-const { MessageEmbed } = require("discord.js");
-const { TrackUtils } = require("erela.js");
+const { MessageEmbed } = require('discord.js')
+const { TrackUtils } = require('erela.js')
 
 module.exports = {
-  name: "skip",
-  description: "🎵跳過當前的曲目。",
-  usage: "",
+  name: 'skip',
+  description: '🎵跳過當前的曲目。',
+  usage: '',
   permissions: {
-    channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
-    member: [],
+    channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
+    member: []
   },
-  aliases: ["s", "next"],
+  aliases: ['s', 'next'],
+  options: [
+    {
+      name: '位置',
+      value: 'song',
+      type: 3,
+      required: true,
+      description: '您想跳過的曲目位置。'
+    }
+  ],
+
   /**
    *
    * @param {import("../structures/DiscordMusicBot")} bot
@@ -25,43 +35,42 @@ module.exports = {
      * @param {string[]} args
      * @param {*} param3
      */
-    async execute(bot, interaction, args, { GuildDB })  {
-      const guild = bot.guilds.cache.get(interaction.guild_id);
-      const member = guild.members.cache.get(interaction.member.user.id);
+    async execute (bot, interaction) {
+      await interaction.deferReply()
+      const guild = bot.guilds.cache.get(interaction.guild.id)
+      const member = guild.members.cache.get(interaction.member.user.id)
 
       if (!member.voice.channel)
-        return bot.sendTime(
+        return bot.say.errorMessage(
           interaction,
-          "❌ | **您必須先加入一個語音頻道！**"
-        );
+          '❌ | **您必須先加入一個語音頻道！**'
+        )
       if (
         guild.me.voice.channel &&
         !guild.me.voice.channel.equals(member.voice.channel)
       )
-        return bot.sendTime(
+        return bot.say.errorMessage(
           interaction,
-          ":x: | **您必須和我在相同的語音通道以使用此指令！**"
-        );
+          ':x: | **您必須和我在相同的語音通道以使用此指令！**'
+        )
 
-      const skipTo = interaction.data.options
-        ? interaction.data.options[0].value
-        : null;
+      const skipTo = await interaction.options.getString('位置', true)
 
-      let player = await bot.Manager.get(interaction.guild_id);
+      let player = await bot.manager.get(interaction.guild.id)
 
       if (!player)
-        return bot.sendTime(
+        return bot.say.errorMessage(
           interaction,
-          "❌ | **目前沒有播放任何音樂...**"
-        );
-      console.log(interaction.data);
+          '❌ | **目前沒有播放任何音樂...**'
+        )
+
       if (
         skipTo !== null &&
         (isNaN(skipTo) || skipTo < 1 || skipTo > player.queue.length)
       )
-        return bot.sendTime(interaction, "❌ | **無效的數字！**");
-      player.stop(skipTo);
-      bot.sendTime(interaction, "**已跳過!**");
-    },
-  },
-};
+        return bot.say.infoMessage(interaction, '❌ | **無效的數字！**')
+      player.stop(skipTo)
+      bot.say.infoMessage(interaction, '**已跳過!**')
+    }
+  }
+}
