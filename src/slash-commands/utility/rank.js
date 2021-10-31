@@ -3,7 +3,7 @@ const Levels = require("../../models/Levels.js");
 const { MessageAttachment } = require('discord.js');
 const Canvas = require('canvas');
 
-registerFont('../../assets/Fonts/GenJyuuGothicX-Medium.ttf', { family: 'GenJyuuGothicX' })
+Canvas.registerFont('../../assets/Fonts/GenJyuuGothicX-Medium.ttf', { family: 'GenJyuuGothicX' })
 module.exports = {
     name: "rank",
     description: "顯示您的聊天等級。",
