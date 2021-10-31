@@ -22,7 +22,7 @@ require('discordjs-activity')
 require('./EpicPlayer')
 
 // Creates CC-OSV-bot class
-class bot extends Client {
+class CCOSV extends Client {
   constructor (
     props = {
       intents: 32767,
@@ -43,6 +43,7 @@ class bot extends Client {
 
     this.getLavalink = getLavalink
     this.getChannel = getChannel
+    this.build();
   }
   fetchUser (bot, userId) {
     const someone = bot.users.cache.get(userId)
@@ -246,4 +247,4 @@ class bot extends Client {
   }
 }
 
-module.exports = bot
+module.exports = CCOSV;

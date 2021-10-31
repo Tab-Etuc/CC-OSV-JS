@@ -1,6 +1,6 @@
 ﻿require('moment-duration-format');
 
-const Client = require('./base/CC-OSV-Client');
-const bot = new Client();
+const CCOSV = require('./base/CC-OSV-Client');
+const bot = new CCOSV();
 
 module.exports = bot;
