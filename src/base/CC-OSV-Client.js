@@ -20,7 +20,7 @@ class bot extends Client {
     })
 
     this.msgCommands = new Collection()
-    this.ittCommands = new Collection()
+    this.slashCommands = new Collection()
     this.logger = require('./Logger')
     this.utils = require('../models/Functions')
     this.say = require('../models/Embeds')

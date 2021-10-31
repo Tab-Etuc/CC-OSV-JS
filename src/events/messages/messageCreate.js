@@ -20,8 +20,8 @@ module.exports = {
 
       //Searching a command
       const cmd =
-        bot.commands.get(command) ||
-        bot.commands.find(x => x.aliases && x.aliases.includes(command))
+        bot.msgCommands.get(command) ||
+        bot.msgCommands.find(x => x.aliases && x.aliases.includes(command))
       if (cmd) {
         let prefix = bot.config.DefaultPrefix
 

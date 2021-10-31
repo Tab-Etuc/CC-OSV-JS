@@ -26,7 +26,7 @@ module.exports = {
     if (!interaction.guildId) return;
 
     try {
-      const command = bot.commands.get(interaction.command?.name ?? "")
+      const command = bot.slashCommands.get(interaction.command?.name ?? "")
 
       if (!command) return;
       if (!interaction.commandId) return;
