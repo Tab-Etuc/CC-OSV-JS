@@ -27,10 +27,10 @@ class bot extends Client {
     this.config = require('../config')
     
     const bot = this;
-    bot.Lavasfy = new LavasfyClient(
+    this.Lavasfy = new LavasfyClient(
       {
-        clientID: bot.config.Spotify.ClientID,
-        clientSecret: bot.config.Spotify.ClientSecret,
+        clientID: this.config.Spotify.ClientID,
+        clientSecret: this.config.Spotify.ClientSecret,
         playlistPageLoadLimit: 3,
         filterAudioOnlyResult: true,
         autoResolve: true,
@@ -38,23 +38,23 @@ class bot extends Client {
       },
       [
         {
-          id: bot.config.Lavalink.id,
-          host: bot.config.Lavalink.host,
-          port: bot.config.Lavalink.port,
-          password: bot.config.Lavalink.pass,
-          secure: bot.config.Lavalink.secure
+          id: this.config.Lavalink.id,
+          host: this.config.Lavalink.host,
+          port: this.config.Lavalink.port,
+          password: this.config.Lavalink.pass,
+          secure: this.config.Lavalink.secure
         }
       ]
     )
 
-    bot.Manager = new Manager({
+    this.Manager = new Manager({
       nodes: [
         {
-          identifier: bot.config.Lavalink.id,
-          host: bot.config.Lavalink.host,
-          port: bot.config.Lavalink.port,
-          password: bot.config.Lavalink.pass,
-          secure: bot.config.Lavalink.secure
+          identifier: this.config.Lavalink.id,
+          host: this.config.Lavalink.host,
+          port: this.config.Lavalink.port,
+          password: this.config.Lavalink.pass,
+          secure: this.config.Lavalink.secure
         }
       ],
       send (id, payload) {
@@ -63,17 +63,17 @@ class bot extends Client {
       }
     })
       .on('nodeConnect', node =>
-        bot.log(`Lavalink: Node ${node.options.identifier} connected`)
+        this.log(`Lavalink: Node ${node.options.identifier} connected`)
       )
       .on('nodeError', (node, error) =>
-        bot.log(
+        this.log(
           `Lavalink: Node ${node.options.identifier} had an error: ${error.message}`
         )
       )
       .on('trackStart', async (player, track) => {
-        bot.SongsPlayed++
+        this.SongsPlayed++
         let TrackStartedEmbed = new MessageEmbed()
-          .setAuthor(`正在播放 ♪`, bot.config.IconURL)
+          .setAuthor(`正在播放 ♪`, this.config.IconURL)
           .setThumbnail(player.queue.current.displayThumbnail())
           .setDescription(`[${track.title}](${track.uri})`)
           .addField('Requested by', `${track.requester}`, true)
@@ -84,7 +84,7 @@ class bot extends Client {
             })}\``,
             true
           )
-          .setColor(bot.config.EmbedColor)
+          .setColor(this.config.EmbedColor)
         //.setFooter("Started playing at");
         let NowPlaying = await bot.channels.cache
           .get(player.textChannel)
@@ -96,11 +96,11 @@ class bot extends Client {
           console.log(player)
         }
         let QueueEmbed = new MessageEmbed()
-          .setAuthor('The queue has ended', bot.config.IconURL)
-          .setColor(bot.config.EmbedColor)
+          .setAuthor('The queue has ended', this.config.IconURL)
+          .setColor(this.config.EmbedColor)
           .setTimestamp()
         bot.channels.cache.get(player.textChannel).send(QueueEmbed)
-        if (!bot.config['24/7']) player.destroy()
+        if (!this.config['24/7']) player.destroy()
       })
     
   }

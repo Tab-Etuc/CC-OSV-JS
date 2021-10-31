@@ -50,7 +50,7 @@ module.exports = {
       )
     let CheckNode = bot.Manager.nodes.get(bot.config.Lavalink.id)
     if (!CheckNode || !CheckNode.connected) {
-      return bot.sendTime(interaction, '❌ | **Lavalink node not connected**')
+      return bot.say.errorMessage(interaction, '❌ | **Lavalink node not connected**')
     }
 
     let player = bot.Manager.create({
