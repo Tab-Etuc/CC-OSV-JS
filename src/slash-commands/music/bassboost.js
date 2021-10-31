@@ -55,11 +55,6 @@ module.exports = {
         interaction,
         ':x: | **您必須和我在相同的語音通道以使用此指令！**'
       )
-    if (!arg)
-      return bot.say.errorMessage(
-        interaction,
-        '**請指定一個效果等級 \n可用的等級:** `無`, `低`, `中`, `高`'
-      ) //if the user do not provide args [arguments]
 
     let level = '無'
     let cLevel = await interaction.options.getString('效果等級', true)

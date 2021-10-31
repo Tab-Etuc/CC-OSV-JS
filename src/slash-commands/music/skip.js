@@ -1,6 +1,3 @@
-const { MessageEmbed } = require('discord.js')
-const { TrackUtils } = require('erela.js')
-
 module.exports = {
   name: 'skip',
   description: '🎵跳過當前的曲目。',
@@ -15,8 +12,8 @@ module.exports = {
       name: '位置',
       value: 'song',
       type: 3,
-      required: true,
-      description: '您想跳過的曲目位置。'
+      required: false,
+      description: '您想跳到...位置。'
     }
   ],
 
@@ -27,14 +24,7 @@ module.exports = {
    * @param {string[]} args
    * @param {*} param3
    */
-  SlashCommand: {
-    /**
-     *
-     * @param {import("../structures/DiscordMusicBot")} bot
-     * @param {import("discord.js").Message} interaction
-     * @param {string[]} args
-     * @param {*} param3
-     */
+
     async execute (bot, interaction) {
       await interaction.deferReply()
       const guild = bot.guilds.cache.get(interaction.guild.id)
@@ -72,5 +62,5 @@ module.exports = {
       player.stop(skipTo)
       bot.say.infoMessage(interaction, '**已跳過!**')
     }
-  }
+  
 }
