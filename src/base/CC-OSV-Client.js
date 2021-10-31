@@ -1,9 +1,10 @@
-const { Collection, Client, MessageEmbed } = require("discord.js");
+const { Collection, Client, MessageEmbed } = require('discord.js')
 const { LavasfyClient } = require('lavasfy')
 const { Manager } = require('erela.js')
 const economy = require('../models/EconomyModel')
 const { readdirSync } = require('fs')
 const { join } = require('path')
+const prettyMilliseconds = require('pretty-ms')
 
 require('discordjs-activity')
 require('./EpicPlayer')
@@ -25,8 +26,8 @@ class bot extends Client {
     this.utils = require('../models/Functions')
     this.say = require('../models/Embeds')
     this.config = require('../config')
-    
-    const bot = this;
+
+    const bot = this
     this.Lavasfy = new LavasfyClient(
       {
         clientID: this.config.Spotify.ClientID,
@@ -102,7 +103,6 @@ class bot extends Client {
         bot.channels.cache.get(player.textChannel).send(QueueEmbed)
         if (!this.config['24/7']) player.destroy()
       })
-    
   }
   fetchUser (bot, userId) {
     const someone = bot.users.cache.get(userId)
