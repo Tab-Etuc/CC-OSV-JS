@@ -28,7 +28,7 @@ module.exports = {
       if (!member.voice.channel)
         return bot.sendTime(
           interaction,
-          "❌ | **您必須和我在相同的語音通道以使用此指令！**"
+          "❌ | **您必須先加入一個語音頻道！**"
         );
       if (
         guild.me.voice.channel &&

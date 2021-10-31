@@ -23,17 +23,17 @@ module.exports = {
       if (!player.queue.current)
         return bot.sendTime(
           interaction,
-          "❌ | **Nothing is playing right now...**"
+          "❌ | **目前沒有播放任何音樂...**"
         );
 
       let song = player.queue.current;
       let QueueEmbed = new MessageEmbed()
-        .setAuthor("Currently playing", bot.botconfig.IconURL)
+        .setAuthor("正在播放", bot.botconfig.IconURL)
         .setColor(bot.botconfig.EmbedColor)
         .setDescription(`[${song.title}](${song.uri})`)
-        .addField("Requested by", `${song.requester}`, true)
+        .addField("請求者", `${song.requester}`, true)
         .addField(
-          "Duration",
+          "持續時間",
           `${
             bot.ProgressBar(
               player.position,

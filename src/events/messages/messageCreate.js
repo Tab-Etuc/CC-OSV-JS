@@ -10,7 +10,9 @@ module.exports = {
   async execute (bot, message) {
     try {
       if (message.author.bot || !message.guild) return //如果是機器人發出的訊息、不在公會裡 就不執行
-
+      
+      
+      let prefix = bot.config.DefaultPrefix
       const args = message.content
         .slice(prefix.length)
         .trim()
@@ -23,7 +25,7 @@ module.exports = {
         bot.msgCommands.get(command) ||
         bot.msgCommands.find(x => x.aliases && x.aliases.includes(command))
       if (cmd) {
-        let prefix = bot.config.DefaultPrefix
+        
 
         let GuildData = await Guilds.findOne({
           guildId: message.guild.id
