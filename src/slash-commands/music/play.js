@@ -101,7 +101,7 @@ module.exports = {
               `${player.queue.size - 0}`,
               true
             )
-          return interaction.editReply(SongAddedEmbed)
+          return interaction.editReply({embeds: [SongAddedEmbed]})
 
         case 'SEARCH_RESULT':
           player.queue.add(TrackUtils.build(Searched.tracks[0], member.user))
@@ -120,7 +120,7 @@ module.exports = {
               `${player.queue.size - 0}`,
               true
             )
-          return interaction.editReply(SongAdded)
+          return interaction.editReply({embeds: [SongAdded]})
 
         case 'PLAYLIST_LOADED':
           let songs = []
@@ -146,7 +146,7 @@ module.exports = {
             `\`${Searched.tracks.length}\` 首歌`,
             false
           )
-          return interaction.editReply(Playlist)
+          return interaction.editReply({embeds: [Playlist]})
       }
     } else {
       try {
@@ -193,7 +193,7 @@ module.exports = {
               `${player.queue.size - 0}`,
               true
             )
-          return interaction.editReply(SongAddedEmbed)
+          return interaction.editReply({embeds: [SongAddedEmbed]})
 
         case 'PLAYLIST_LOADED':
           player.queue.add(res.tracks)
@@ -215,7 +215,7 @@ module.exports = {
             })}\``,
             false
           )
-          return interaction.editReply(SongAdded)
+          return interaction.editReply({embeds: [SongAdded]})
         case 'SEARCH_RESULT':
           const track = res.tracks[0]
           player.queue.add(track)
@@ -241,7 +241,7 @@ module.exports = {
                 true
               )
             player.play()
-            return interaction.editReply(SongAddedEmbed)
+            return interaction.editReply({embeds: [SongAddedEmbed]})
           } else {
             let SongAddedEmbed = new MessageEmbed()
             SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
@@ -262,7 +262,7 @@ module.exports = {
                 `${player.queue.size - 0}`,
                 true
               )
-            interaction.editReply(SongAddedEmbed)
+            interaction.editReply({embeds: [SongAddedEmbed]})
           }
       }
     }
