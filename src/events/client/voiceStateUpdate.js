@@ -1,6 +1,6 @@
 /**
  *
- * @param {import("../lib/DiscordMusicBot")} client
+ * @param {import("../../base/CC-OSV-Client")} bot
  * @param {import("discord.js").VoiceState} oldState
  * @param {import("discord.js").VoiceState} newState
  * @returns {Promise<void>}
@@ -8,10 +8,10 @@
 module.exports = {
   name: 'voiceStateUpdate',
   once: true,
-  async execute (bot) {
+  async execute (bot, oldState, newState){
     // get guild and player
     let guildId = newState.guild.id
-    const player = client.manager.get(guildId)
+    const player = bot.manager.get(guildId)
 
     // check if the bot is active (playing, paused or empty does not matter (return otherwise)
     if (!player || player.state !== 'CONNECTED') return
@@ -52,18 +52,18 @@ module.exports = {
     switch (stateChange.type) {
       case 'JOIN':
         if (stateChange.members.size === 1 && player.paused) {
-          let emb = client
+          let emb = bot
             .Embed()
-            .setAuthor(`Resuming paused queue`, client.config.iconURL)
+            .setAuthor(`Resuming paused queue`, bot.config.iconURL)
             .setDescription(
               `Resuming playback because all of you left me with music to play all alone`
             )
-          await client.channels.cache
+          await bot.channels.cache
             .get(player.textChannel)
             .send({ embeds: [emb] })
 
           // update the now playing message and bring it to the front
-          let msg2 = await client.channels.cache
+          let msg2 = await bot.channels.cache
             .get(player.textChannel)
             .send({ embeds: [player.nowPlayingMessage.embeds[0]] })
           player.setNowplayingMessage(msg2)
@@ -79,11 +79,11 @@ module.exports = {
         ) {
           player.pause(true)
 
-          let emb = client
+          let emb = bot
             .Embed()
-            .setAuthor(`Paused!`, client.config.iconURL)
+            .setAuthor(`Paused!`, bot.config.iconURL)
             .setDescription(`The player has been paused because everybody left`)
-          await client.channels.cache
+          await bot.channels.cache
             .get(player.textChannel)
             .send({ embeds: [emb] })
         }
