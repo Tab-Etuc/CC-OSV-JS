@@ -30,8 +30,8 @@ module.exports = {
    */
   async execute (bot, interaction) {
     await interaction.deferReply()
-    let search = await interaction.options.getString('歌曲', true)
 
+    let search = await interaction.options.getString('歌曲', true)
     const guild = bot.guilds.cache.get(interaction.guild.id)
     const member = guild.members.cache.get(interaction.member.user.id)
     const voiceChannel = interaction.member?.voice?.channel
@@ -41,7 +41,6 @@ module.exports = {
         interaction,
         '❌ | **您必須先加入一個語音頻道！**'
       )
-
     if (
       guild.me.voice.channel &&
       !guild.me.voice.channel.equals(member.voice.channel)
@@ -131,7 +130,6 @@ module.exports = {
         player.queue.add(track)
 
         if (!player.playing && !player.paused && !player.queue.length) {
-          
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
           SongAddedEmbed.setThumbnail(track.displayThumbnail())
@@ -154,7 +152,7 @@ module.exports = {
           player.play()
           return interaction.editReply({ embeds: [SongAddedEmbed] })
         } else {
-          player.queue.add(res.tracks);
+          player.queue.add(res.tracks)
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
           SongAddedEmbed.setThumbnail(track.displayThumbnail())

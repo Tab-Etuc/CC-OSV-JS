@@ -1,10 +1,14 @@
 const { Collection, Client, MessageEmbed } = require('discord.js')
-const { LavasfyClient } = require('lavasfy')
 const { Manager } = require('erela.js')
 const economy = require('../models/EconomyModel')
 const { readdirSync } = require('fs')
 const { join } = require('path')
 const prettyMilliseconds = require('pretty-ms')
+const spotify = require("better-erela.js-spotify").default;
+const apple = require("erela.js-apple");
+const deezer = require("erela.js-deezer");
+const facebook = require("erela.js-facebook");
+const getLavalink = require("../util/getLavalink");
 
 require('discordjs-activity')
 require('./EpicPlayer')
@@ -27,87 +31,7 @@ class bot extends Client {
     this.say = require('../models/Embeds')
     this.config = require('../config')
 
-    const bot = this
-    this.Lavasfy = new LavasfyClient(
-      {
-        clientID: this.config.Spotify.ClientID,
-        clientSecret: this.config.Spotify.ClientSecret,
-        playlistPageLoadLimit: 3,
-        filterAudioOnlyResult: true,
-        autoResolve: true,
-        useSpotifyMetadata: true
-      },
-      [
-        {
-          id: this.config.Lavalink.id,
-          host: this.config.Lavalink.host,
-          port: this.config.Lavalink.port,
-          password: this.config.Lavalink.pass,
-          secure: this.config.Lavalink.secure
-        }
-      ]
-    )
-
-    this.Manager = new Manager({
-      nodes: [
-        {
-          identifier: this.config.Lavalink.id,
-          host: this.config.Lavalink.host,
-          port: this.config.Lavalink.port,
-          password: this.config.Lavalink.pass,
-          secure: this.config.Lavalink.secure
-        }
-      ],
-      send (id, payload) {
-        const guild = bot.guilds.cache.get(id)
-        if (guild) guild.shard.send(payload)
-      }
-    })
-      .on('nodeConnect', node =>
-        console.log(`Lavalink: Node ${node.options.identifier} connected`)
-      )
-      .on('nodeError', (node, error) =>
-        console.log(
-          `Lavalink: Node ${node.options.identifier} had an error: ${error.message}`
-        )
-      )
-      .on('trackStart', async (player, track) => {
-        this.SongsPlayed++
-        let TrackStartedEmbed = new MessageEmbed()
-          .setAuthor(`正在播放 ♪`, this.config.IconURL)
-          .setThumbnail(player.queue.current.displayThumbnail())
-          .setDescription(`[${track.title}](${track.uri})`)
-          .addField('請求者', `${track.requester}`, true)
-          .addField(
-            '持續時間',
-            `\`${prettyMilliseconds(track.duration, {
-              colonNotation: true
-            })}\``,
-            true
-          )
-          .setColor(this.config.EmbedColor)
-        //.setFooter("Started playing at");
-        let NowPlaying = await bot.channels.cache
-          .get(player.textChannel)
-          .send({ embeds: [TrackStartedEmbed] })
-        player.setNowplayingMessage(NowPlaying)
-      })
-      .on('queueEnd', player => {
-        if (player.queueRepeat || player.trackRepeat) {
-          console.log(player)
-        }
-        let QueueEmbed = new MessageEmbed()
-          .setAuthor(
-            '播放結束。\n註：如遇到突發狀況，請再次嘗試輸入指令。',
-            this.config.IconURL
-          )
-          .setColor(this.config.EmbedColor)
-          .setTimestamp()
-        bot.channels.cache
-          .get(player.textChannel)
-          .send({ embeds: [QueueEmbed] })
-        if (!this.config['24/7']) player.destroy()
-      })
+    this.getLavalink = getLavalink;
   }
   fetchUser (bot, userId) {
     const someone = bot.users.cache.get(userId)
@@ -198,6 +122,62 @@ class bot extends Client {
     require('../handlers/EventHandler')(this)
     require(`../task/CangeChannelTime`)(this)
     this.LoadMsgCommands()
+
+    let bot = this;
+
+    this.manager = new Manager({
+      plugins: [new deezer(), new apple(), new spotify(), new facebook()],
+      nodes: this.config.nodes,
+      send (id, payload) {
+        const guild = bot.guilds.cache.get(id)
+        if (guild) guild.shard.send(payload)
+      }
+    })
+      .on('nodeConnect', node =>
+        console.log(`Lavalink: Node ${node.options.identifier} connected`)
+      )
+      .on('nodeError', (node, error) =>
+        console.log(
+          `Lavalink: Node ${node.options.identifier} had an error: ${error.message}`
+        )
+      )
+      .on('trackStart', async (player, track) => {
+        this.SongsPlayed++
+        let TrackStartedEmbed = new MessageEmbed()
+          .setAuthor(`正在播放 ♪`, this.config.IconURL)
+          .setThumbnail(player.queue.current.displayThumbnail())
+          .setDescription(`[${track.title}](${track.uri})`)
+          .addField('請求者', `${track.requester}`, true)
+          .addField(
+            '持續時間',
+            `\`${prettyMilliseconds(track.duration, {
+              colonNotation: true
+            })}\``,
+            true
+          )
+          .setColor(this.config.EmbedColor)
+        //.setFooter("Started playing at");
+        let NowPlaying = await bot.channels.cache
+          .get(player.textChannel)
+          .send({ embeds: [TrackStartedEmbed] })
+        player.setNowplayingMessage(NowPlaying)
+      })
+      .on('queueEnd', player => {
+        if (player.queueRepeat || player.trackRepeat) {
+          console.log(player)
+        }
+        let QueueEmbed = new MessageEmbed()
+          .setAuthor(
+            '播放結束。\n註：如遇到突發狀況，請再次嘗試輸入指令。',
+            this.config.IconURL
+          )
+          .setColor(this.config.EmbedColor)
+          .setTimestamp()
+        bot.channels.cache
+          .get(player.textChannel)
+          .send({ embeds: [QueueEmbed] })
+        if (!this.config['24/7']) player.destroy()
+      })
   }
   sendTime (Channel, Error) {
     let embed = new MessageEmbed()
@@ -226,15 +206,7 @@ class bot extends Client {
       volume: this.config.defaultVolume
     })
   }
-  getLavalink (bot) {
-    return new Promise(resolve => {
-      for (let i = 0; i < bot.manager.nodes.size; i++) {
-        const node = bot.manager.nodes.array()[i]
-        if (node.connected) resolve(node)
-      }
-      resolve(undefined)
-    })
-  }
+ 
 }
 
 module.exports = bot
