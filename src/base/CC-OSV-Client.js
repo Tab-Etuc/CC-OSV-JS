@@ -89,7 +89,7 @@ class bot extends Client {
         //.setFooter("Started playing at");
         let NowPlaying = await bot.channels.cache
           .get(player.textChannel)
-          .send(TrackStartedEmbed)
+          .send({ embeds: [TrackStartedEmbed] })
         player.setNowplayingMessage(NowPlaying)
       })
       .on('queueEnd', player => {
@@ -100,7 +100,9 @@ class bot extends Client {
           .setAuthor('The queue has ended', this.config.IconURL)
           .setColor(this.config.EmbedColor)
           .setTimestamp()
-        bot.channels.cache.get(player.textChannel).send(QueueEmbed)
+        bot.channels.cache
+          .get(player.textChannel)
+          .send({ embeds: [QueueEmbed] })
         if (!this.config['24/7']) player.destroy()
       })
   }
