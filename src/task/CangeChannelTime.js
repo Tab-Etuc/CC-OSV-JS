@@ -43,6 +43,6 @@ module.exports = async function ChangeTime (bot) {
           bot.logger.log('EVENTS', `Bot: 已更換頻道日期。`)
         }
       }
-    } catch {}
+    } catch (error) {console.log(error)}
   }, 30000)
 }
