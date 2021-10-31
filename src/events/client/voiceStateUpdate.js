@@ -54,9 +54,9 @@ module.exports = {
         if (stateChange.members.size === 1 && player.paused) {
           let emb = bot
             .Embed()
-            .setAuthor(`Resuming paused queue`, bot.config.iconURL)
+            .setAuthor(`恢復暫停的播放列`, bot.config.iconURL)
             .setDescription(
-              `Resuming playback because all of you left me with music to play all alone`
+              `已重新播放！`
             )
           await bot.channels.cache
             .get(player.textChannel)
@@ -81,8 +81,8 @@ module.exports = {
 
           let emb = bot
             .Embed()
-            .setAuthor(`Paused!`, bot.config.iconURL)
-            .setDescription(`The player has been paused because everybody left`)
+            .setAuthor(`暫停！`, bot.config.iconURL)
+            .setDescription(`語音頻道空無一人，音樂已暫停！`)
           await bot.channels.cache
             .get(player.textChannel)
             .send({ embeds: [emb] })
