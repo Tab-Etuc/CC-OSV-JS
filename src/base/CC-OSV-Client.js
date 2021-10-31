@@ -1,6 +1,5 @@
 const {
   Client,
-  Intents,
   MessageEmbed,
   Collection,
   MessageActionRow,
@@ -168,8 +167,8 @@ class CCOSV extends Client {
       .on('playerCreate', player =>
         console.log(
           `Player: ${player.options.guild} | A player has been created in ${
-            client.guilds.cache.get(player.options.guild)
-              ? client.guilds.cache.get(player.options.guild).name
+            bot.guilds.cache.get(player.options.guild)
+              ? bot.guilds.cache.get(player.options.guild).name
               : 'a guild'
           }`
         )
@@ -177,8 +176,8 @@ class CCOSV extends Client {
       .on('playerDestroy', player =>
         console.log(
           `Player: ${player.options.guild} | A player has been destroyed in ${
-            client.guilds.cache.get(player.options.guild)
-              ? client.guilds.cache.get(player.options.guild).name
+            bot.guilds.cache.get(player.options.guild)
+              ? bot.guilds.cache.get(player.options.guild).name
               : 'a guild'
           }`
         )
