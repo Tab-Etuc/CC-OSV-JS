@@ -142,7 +142,7 @@ class bot extends Client {
         )
       )
       .on('trackStart', async (player, track) => {
-        this.SongsPlayed++
+        
         let TrackStartedEmbed = new MessageEmbed()
           .setAuthor(`正在播放 ♪`, this.config.IconURL)
           .setThumbnail(player.queue.current.displayThumbnail())
@@ -168,7 +168,7 @@ class bot extends Client {
         }
         let QueueEmbed = new MessageEmbed()
           .setAuthor(
-            '播放結束。\n註：如遇到突發狀況，請再次嘗試輸入指令。',
+            '播放結束。\n註：如遇到突發狀況，請嘗試再次輸入指令。',
             this.config.IconURL
           )
           .setColor(this.config.EmbedColor)

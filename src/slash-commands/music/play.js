@@ -73,6 +73,7 @@ module.exports = {
     } catch (err) {
       return bot.sendError(interaction, `在查詢時出了錯誤: ${err.interaction}`)
     }
+    console.log(`123`)
     switch (res.loadType) {
       case 'NO_MATCHES':
         if (!player.queue.current) player.destroy()
@@ -80,7 +81,8 @@ module.exports = {
           interaction,
           '❌ | **查無結果。**您可以嘗試重新輸入指令。'
         )
-      case 'TRACK_LOADED':
+      case "TRACK_LOADED" ||  "SEARCH_RESULT":
+        console.log(`345`)
         player.queue.add(res.tracks[0])
         if (!player.playing && !player.paused && !player.queue.length)
           player.play()
@@ -125,55 +127,8 @@ module.exports = {
           false
         )
         return interaction.editReply({ embeds: [SongAdded] })
-      case 'SEARCH_RESULT':
-        const track = res.tracks[0]
-        player.queue.add(track)
-
-        if (!player.playing && !player.paused && !player.queue.length) {
-          let SongAddedEmbed = new MessageEmbed()
-          SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
-          SongAddedEmbed.setThumbnail(track.displayThumbnail())
-          SongAddedEmbed.setColor(bot.config.EmbedColor)
-          SongAddedEmbed.setDescription(`[${track.title}](${track.uri})`)
-          SongAddedEmbed.addField('上傳者', track.author, true)
-          SongAddedEmbed.addField(
-            '持續時間',
-            `\`${prettyMilliseconds(track.duration, {
-              colonNotation: true
-            })}\``,
-            true
-          )
-          if (player.queue.totalSize > 1)
-            SongAddedEmbed.addField(
-              '播放列中的位置',
-              `${player.queue.size - 0}`,
-              true
-            )
-          player.play()
-          return interaction.editReply({ embeds: [SongAddedEmbed] })
-        } else {
-          player.queue.add(res.tracks)
-          let SongAddedEmbed = new MessageEmbed()
-          SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
-          SongAddedEmbed.setThumbnail(track.displayThumbnail())
-          SongAddedEmbed.setColor(bot.config.EmbedColor)
-          SongAddedEmbed.setDescription(`[${track.title}](${track.uri})`)
-          SongAddedEmbed.addField('上傳者', track.author, true)
-          SongAddedEmbed.addField(
-            '持續時間',
-            `\`${prettyMilliseconds(track.duration, {
-              colonNotation: true
-            })}\``,
-            true
-          )
-          if (player.queue.totalSize > 1)
-            SongAddedEmbed.addField(
-              '播放列中的位置',
-              `${player.queue.size - 0}`,
-              true
-            )
-          interaction.editReply({ embeds: [SongAddedEmbed] })
+      
         }
-    }
+    
   }
 }
