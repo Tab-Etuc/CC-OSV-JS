@@ -40,7 +40,8 @@ class CCOSV extends Client {
     this.utils = require('../models/Functions')
     this.say = require('../models/Embeds')
     this.config = require('../config')
-
+    this.ms = prettyMilliseconds;
+    
     this.getLavalink = getLavalink
     this.getChannel = getChannel
     this.build();
@@ -244,6 +245,26 @@ class CCOSV extends Client {
         .setCustomId(`controller:${guild}:HighVolume`)
         .setEmoji('🔊')
     )
+  }
+  Embed(text) {
+    let embed = new MessageEmbed().setColor(this.config.embedColor);
+
+    if (text) embed.setDescription(text);
+
+    return embed;
+  }
+
+  /**
+   *
+   * @param {string} text
+   * @returns {MessageEmbed}
+   */
+  ErrorEmbed(text) {
+    let embed = new MessageEmbed()
+      .setColor("RED")
+      .setDescription("❌ | " + text);
+
+    return embed;
   }
 }
 
