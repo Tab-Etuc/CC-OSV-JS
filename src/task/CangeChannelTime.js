@@ -30,7 +30,7 @@ module.exports = async function ChangeTime(bot) {
             
             if (channel_name !== timeM + timeD) {
                 bot.channels.cache.get(data_date[i]).edit({
-                    name: '📅肆年●' + timeM + '月' + timeD + '日●'
+                    name: '📅伍年●' + timeM + '月' + timeD + '日●'
                 });
                 bot.logger.log("EVENTS", `Bot: 已更換頻道日期。`);
             }

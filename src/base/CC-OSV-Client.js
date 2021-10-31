@@ -1,12 +1,12 @@
 const { Client, Collection } = require('discord.js')
-const { LavasfyClient } = require("lavasfy");
-const { Manager } = require("erela.js");
-const economy = require('../models/EconomyModel');
-const { readdirSync } = require("fs");
-const { join } = require("path");
+const { LavasfyClient } = require('lavasfy')
+const { Manager } = require('erela.js')
+const economy = require('../models/EconomyModel')
+const { readdirSync } = require('fs')
+const { join } = require('path')
 
-require("discordjs-activity");
-require("./EpicPlayer");
+require('discordjs-activity')
+require('./EpicPlayer')
 
 // Creates CC-OSV-bot class
 class bot extends Client {
@@ -18,94 +18,94 @@ class bot extends Client {
         parse: ['users']
       }
     })
-    
-    this.msgCommands = new Collection();
-    this.ittCommands = new Collection();
-    this.logger = require('./Logger');
-    this.utils = require('../models/Functions');
-    this.say = require('../models/Embeds');
-    this.config = require("../config");
-  
 
-  this.Lavasfy = new LavasfyClient(
-    {
-      clientID: this.config.Spotify.ClientID,
-      clientSecret: this.config.Spotify.ClientSecret,
-      playlistPageLoadLimit: 3,
-      filterAudioOnlyResult: true,
-      autoResolve: true,
-      useSpotifyMetadata: true,
-    },
-    [
+    this.msgCommands = new Collection()
+    this.ittCommands = new Collection()
+    this.logger = require('./Logger')
+    this.utils = require('../models/Functions')
+    this.say = require('../models/Embeds')
+    this.config = require('../config')
+    require('../handlers/EventHandler')(this)
+    require(`../task/CangeChannelTime`)(this)
+    this.LoadMsgCommands()
+    const bot = this;
+    bot.Lavasfy = new LavasfyClient(
       {
-        id: this.config.Lavalink.id,
-        host: this.config.Lavalink.host,
-        port: this.config.Lavalink.port,
-        password: this.config.Lavalink.pass,
-        secure: this.config.Lavalink.secure,
+        clientID: bot.config.Spotify.ClientID,
+        clientSecret: bot.config.Spotify.ClientSecret,
+        playlistPageLoadLimit: 3,
+        filterAudioOnlyResult: true,
+        autoResolve: true,
+        useSpotifyMetadata: true
       },
-    ]
-  );
+      [
+        {
+          id: bot.config.Lavalink.id,
+          host: bot.config.Lavalink.host,
+          port: bot.config.Lavalink.port,
+          password: bot.config.Lavalink.pass,
+          secure: bot.config.Lavalink.secure
+        }
+      ]
+    )
 
-  this.Manager = new Manager({
-    nodes: [
-      {
-        identifier: this.config.Lavalink.id,
-        host: this.config.Lavalink.host,
-        port: this.config.Lavalink.port,
-        password: this.config.Lavalink.pass,
-        secure: this.config.Lavalink.secure,
-      },
-    ],
-    send(id, payload) {
-      const guild = this.guilds.cache.get(id);
-      if (guild) guild.shard.send(payload);
-    },
-  })
-    .on("nodeConnect", (node) =>
-      this.log(`Lavalink: Node ${node.options.identifier} connected`)
-    )
-    .on("nodeError", (node, error) =>
-      this.log(
-        `Lavalink: Node ${node.options.identifier} had an error: ${error.message}`
-      )
-    )
-    .on("trackStart", async (player, track) => {
-      this.SongsPlayed++;
-      let TrackStartedEmbed = new MessageEmbed()
-        .setAuthor(`正在播放 ♪`, this.config.IconURL)
-        .setThumbnail(player.queue.current.displayThumbnail())
-        .setDescription(`[${track.title}](${track.uri})`)
-        .addField("Requested by", `${track.requester}`, true)
-        .addField(
-          "Duration",
-          `\`${prettyMilliseconds(track.duration, {
-            colonNotation: true,
-          })}\``,
-          true
-        )
-        .setColor(this.config.EmbedColor);
-      //.setFooter("Started playing at");
-      let NowPlaying = await this.channels.cache
-        .get(player.textChannel)
-        .send(TrackStartedEmbed);
-      player.setNowplayingMessage(NowPlaying);
-    })
-    .on("queueEnd", (player) => {
-      if(player.queueRepeat || player.trackRepeat){
-        console.log(player)
+    bot.Manager = new Manager({
+      nodes: [
+        {
+          identifier: bot.config.Lavalink.id,
+          host: bot.config.Lavalink.host,
+          port: bot.config.Lavalink.port,
+          password: bot.config.Lavalink.pass,
+          secure: bot.config.Lavalink.secure
+        }
+      ],
+      send (id, payload) {
+        const guild = bot.guilds.cache.get(id)
+        if (guild) guild.shard.send(payload)
       }
-      let QueueEmbed = new MessageEmbed()
-        .setAuthor("The queue has ended", this.config.IconURL)
-        .setColor(this.config.EmbedColor)
-        .setTimestamp();
-      this.channels.cache.get(player.textChannel).send(QueueEmbed);
-      if (!this.config["24/7"]) player.destroy();
-    });
-    require('../handlers/EventHandler')(this);
-    require(`../task/CangeChannelTime`)(this);
-    this.LoadMsgCommands();
-}
+    })
+      .on('nodeConnect', node =>
+        bot.log(`Lavalink: Node ${node.options.identifier} connected`)
+      )
+      .on('nodeError', (node, error) =>
+        bot.log(
+          `Lavalink: Node ${node.options.identifier} had an error: ${error.message}`
+        )
+      )
+      .on('trackStart', async (player, track) => {
+        bot.SongsPlayed++
+        let TrackStartedEmbed = new MessageEmbed()
+          .setAuthor(`正在播放 ♪`, bot.config.IconURL)
+          .setThumbnail(player.queue.current.displayThumbnail())
+          .setDescription(`[${track.title}](${track.uri})`)
+          .addField('Requested by', `${track.requester}`, true)
+          .addField(
+            'Duration',
+            `\`${prettyMilliseconds(track.duration, {
+              colonNotation: true
+            })}\``,
+            true
+          )
+          .setColor(bot.config.EmbedColor)
+        //.setFooter("Started playing at");
+        let NowPlaying = await bot.channels.cache
+          .get(player.textChannel)
+          .send(TrackStartedEmbed)
+        player.setNowplayingMessage(NowPlaying)
+      })
+      .on('queueEnd', player => {
+        if (player.queueRepeat || player.trackRepeat) {
+          console.log(player)
+        }
+        let QueueEmbed = new MessageEmbed()
+          .setAuthor('The queue has ended', bot.config.IconURL)
+          .setColor(bot.config.EmbedColor)
+          .setTimestamp()
+        bot.channels.cache.get(player.textChannel).send(QueueEmbed)
+        if (!bot.config['24/7']) player.destroy()
+      })
+    
+  }
   fetchUser (bot, userId) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
@@ -120,7 +120,7 @@ class bot extends Client {
       return newUser
     }
     return user
-  };
+  }
 
   /**
    *
@@ -144,7 +144,7 @@ class bot extends Client {
     user.bankSpace += parseInt(amount)
     user.save()
     return user
-  };
+  }
 
   /**
    *
@@ -163,7 +163,7 @@ class bot extends Client {
     })
     newUser.save()
     return newUser
-  };
+  }
 
   /**
    *
@@ -188,27 +188,28 @@ class bot extends Client {
     user.coinsInWallet += parseInt(amount)
     user.save()
     return user
-  };
-  
-  build() {
-    this.login(this.config.Token);
   }
-  sendTime(Channel, Error) {
+
+  build () {
+    this.login(this.config.Token)
+  }
+  sendTime (Channel, Error) {
     let embed = new MessageEmbed()
       .setColor(this.config.EmbedColor)
-      .setDescription(Error);
+      .setDescription(Error)
 
-    Channel.send(embed);
+    Channel.send(embed)
   }
 
-  LoadMsgCommands(){
-    const commandFiles = readdirSync(join(__dirname, "../message-commands")).filter((file) => file.endsWith(".js"));
+  LoadMsgCommands () {
+    const commandFiles = readdirSync(
+      join(__dirname, '../message-commands')
+    ).filter(file => file.endsWith('.js'))
     for (const file of commandFiles) {
-      const command = require(join(__dirname, "../message-commands", `${file}`));
-      this.msgCommands.set(command.name, command);
+      const command = require(join(__dirname, '../message-commands', `${file}`))
+      this.msgCommands.set(command.name, command)
+    }
   }
-
-}
 }
 
 module.exports = bot

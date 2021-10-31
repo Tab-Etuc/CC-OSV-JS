@@ -1,9 +1,9 @@
-const moment = require("moment");
+const moment = require('moment-timezone');
 const chalk = require("chalk");
 
 class Logger {
   get now() {
-    return moment().format("MM-DD, HH:mm:ss a");
+    return moment().tz("Asia/Taipei").format("MM-DD, HH:mm:ss a");
   }
 
   /**
