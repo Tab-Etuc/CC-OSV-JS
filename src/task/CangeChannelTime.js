@@ -29,17 +29,17 @@ module.exports = async function ChangeTime (bot) {
       for (i in data_date) {
         const timeM = moment()
           .tz('Asia/Taipei')
-          .format('MM').toString()
+          .format('MM')
         const timeD = moment()
           .tz('Asia/Taipei')
-          .format('DD').toString()
+          .format('DD')
         let channel_name
         var channel = bot.channels.cache.get(data_time[i])
         channel ? (channel_name = channel.name) : (channel_name = false)
         if (!channel_name) return
         channel_name = channel_name.replace(/📅伍年●|月|日●/g, '')
 
-        if (channel_name !== timeM + timeD) {
+        if (channel_name !== timeM.toString() + timeD.toString()) {
           bot.channels.cache.get(data_date[i]).edit({
             name: '📅伍年●' + timeM + '月' + timeD + '日●'
           })
