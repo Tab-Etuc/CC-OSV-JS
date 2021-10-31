@@ -1,7 +1,7 @@
 const glob = require("glob");
 
 module.exports = async function loadCommands(bot) {
-  const commandFiles = glob.sync("./Source/Slash-commands/**/*.js");
+  const commandFiles = glob.sync("./src/slash-commands/**/*.js");
   // const commandFiles = glob.sync("./Source/Slash-commands/utility/*.js")
   for (const file of commandFiles) {
     const command = require(`../../${file}`);

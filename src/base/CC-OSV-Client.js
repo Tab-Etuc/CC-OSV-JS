@@ -25,9 +25,7 @@ class bot extends Client {
     this.utils = require('../models/Functions')
     this.say = require('../models/Embeds')
     this.config = require('../config')
-    require('../handlers/EventHandler')(this)
-    require(`../task/CangeChannelTime`)(this)
-    this.LoadMsgCommands()
+    
     const bot = this;
     bot.Lavasfy = new LavasfyClient(
       {
@@ -192,6 +190,9 @@ class bot extends Client {
 
   build () {
     this.login(this.config.Token)
+    require('../handlers/EventHandler')(this)
+    require(`../task/CangeChannelTime`)(this)
+    this.LoadMsgCommands()
   }
   sendTime (Channel, Error) {
     let embed = new MessageEmbed()

@@ -1,7 +1,7 @@
 const glob = require('glob')
 
 module.exports = function loadEvents (bot) {
-  const eventFiles = glob.sync('./Source/events/**/*.js')
+  const eventFiles = glob.sync('./src/events/**/*.js')
   
 
   eventFiles.forEach(file => {
