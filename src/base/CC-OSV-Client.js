@@ -8,7 +8,7 @@ const spotify = require("better-erela.js-spotify").default;
 const apple = require("erela.js-apple");
 const deezer = require("erela.js-deezer");
 const facebook = require("erela.js-facebook");
-const getLavalink = require("../util/getLavalink");
+const getLavalink = require("../models/getLavalink");
 
 require('discordjs-activity')
 require('./EpicPlayer')
