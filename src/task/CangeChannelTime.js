@@ -33,6 +33,7 @@ module.exports = async function ChangeTime (bot) {
           .tz('Asia/Taipei')
           .format('DD')
         var channel = bot.channels.cache.get(data_time[i])
+        let _ = false
         channel ? (channel_name = channel.name) : (_ = true)
         if (_) return
         channel_name = channel_name.replace(/📅伍年●|月|日●/g, '')
