@@ -18,7 +18,7 @@ module.exports = async function loadCommands(bot) {
 
     
 
-    bot.ittCommands.set(command.name, command);
+    bot.slashCommands.set(command.name, command);
 
     // debug
     bot.logger.log("commands", `Loaded Command: ${command.name}`);
