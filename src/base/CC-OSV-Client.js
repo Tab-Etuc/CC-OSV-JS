@@ -1,4 +1,4 @@
-const { Client, Collection } = require('discord.js')
+const { Collection, Client, MessageEmbed } = require("discord.js");
 const { LavasfyClient } = require('lavasfy')
 const { Manager } = require('erela.js')
 const economy = require('../models/EconomyModel')
