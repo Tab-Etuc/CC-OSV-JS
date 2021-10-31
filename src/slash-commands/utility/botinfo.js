@@ -28,7 +28,7 @@ module.exports = {
         `**Users:** ${util.formatNumber(users)}
 **Servers:** ${util.formatNumber(bot.guilds.cache.size)}
 **Channels:** ${util.formatNumber(bot.channels.cache.size)}
-**Command Count:** ${util.formatNumber(bot.commands.size)}`
+**Command Count:** ${util.formatNumber(bot.slashCommands.size)}`
       )
       .addField("__**System Info**__",
         `**RAM Usage:**  ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB

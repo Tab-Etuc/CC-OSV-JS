@@ -234,7 +234,7 @@ module.exports = {
       .setColor('#0099ff')
       .setAuthor('CC-OSV　幫助頁面', bot.user.displayAvatarURL())
       .setTitle('此為前導介面')
-      .setDescription('總計指令數：**23**\n__***請點擊下方指令欄，選取指令類別***__\n\n備註：輸入指令時，請善用**Tab**鍵\n\n\n上次更新內容：\n\n`-` 🟢 新增 音樂機器人系統 🎶\n`-` 🟢 新增 伐木、挖礦、釣魚、農耕等賺錢管道\n`-` 🟢 新增 按鈕式計算機、井字遊戲...')
+      .setDescription(`總計指令數：**${bot.slashCommands.size}**\n__***請點擊下方指令欄，選取指令類別***__\n\n備註：輸入指令時，請善用**Tab**鍵\n\n\n上次更新內容：\n\n\`-\` 🟢 新增 音樂機器人系統 🎶\n\`-\` 🟢 新增 伐木、挖礦、釣魚、農耕等賺錢管道\n\`-\` 🟢 新增 按鈕式計算機、井字遊戲...`)
       .setThumbnail(bot.user.displayAvatarURL())
       .setTimestamp()
       .setFooter(interaction.user?.tag, interaction.user?.displayAvatarURL({ dynamic: true }));
@@ -447,7 +447,7 @@ module.exports = {
           .setColor('#0099ff')
           .setAuthor('CC-OSV　幫助頁面', bot.user.displayAvatarURL())
           .setTitle('此為前導介面')
-          .setDescription('總計指令數：**23**\n__***請點擊下方指令欄，選取指令類別***__\n\n備註：輸入指令時，請善用**Tab**鍵\n\n\n上次更新內容：\n\n`-` 🟢 新增 音樂機器人系統 🎶\n`-` 🟢 新增 伐木、挖礦、釣魚、農耕等賺錢管道\n`-` 🟢 新增 按鈕式計算機、井字遊戲...')
+          .setDescription(`總計指令數：**${bot.slashCommands.size}**\n__***請點擊下方指令欄，選取指令類別***__\n\n備註：輸入指令時，請善用**Tab**鍵\n\n\n上次更新內容：\n\n\`-\` 🟢 新增 音樂機器人系統 🎶\n\`-\` 🟢 新增 伐木、挖礦、釣魚、農耕等賺錢管道\n\`-\` 🟢 新增 按鈕式計算機、井字遊戲...`)
           .setThumbnail(bot.user.displayAvatarURL())
           .setTimestamp()
           .setFooter(i.user?.tag, i.user?.displayAvatarURL({ dynamic: true }));
