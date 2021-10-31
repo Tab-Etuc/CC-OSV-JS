@@ -63,10 +63,10 @@ class bot extends Client {
       }
     })
       .on('nodeConnect', node =>
-        this.log(`Lavalink: Node ${node.options.identifier} connected`)
+        console.log(`Lavalink: Node ${node.options.identifier} connected`)
       )
       .on('nodeError', (node, error) =>
-        this.log(
+        console.log(
           `Lavalink: Node ${node.options.identifier} had an error: ${error.message}`
         )
       )
