@@ -189,7 +189,7 @@ module.exports = {
       });
 
 
-    let query = await interaction.options.getString('query', true)
+    let query = await interaction.options.getString('歌曲', true)
     let player = bot.createPlayer(interaction.channel, channel);
 
     if (player.state != "CONNECTED") await player.connect();
