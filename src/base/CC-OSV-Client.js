@@ -40,11 +40,11 @@ class CCOSV extends Client {
     this.utils = require('../models/Functions')
     this.say = require('../models/Embeds')
     this.config = require('../config')
-    this.ms = prettyMilliseconds;
-    
+    this.ms = prettyMilliseconds
+
     this.getLavalink = getLavalink
     this.getChannel = getChannel
-    this.build();
+    this.build()
   }
   fetchUser (bot, userId) {
     const someone = bot.users.cache.get(userId)
@@ -149,9 +149,38 @@ class CCOSV extends Client {
       .on('nodeConnect', node =>
         console.log(`Lavalink: Node ${node.options.identifier} connected`)
       )
+      .on('nodeReconnect', node =>
+        console.log(
+          `Lavalink: Node ${node.options.identifier} | Lavalink node is reconnecting.`
+        )
+      )
       .on('nodeError', (node, error) =>
         console.log(
           `Lavalink: Node ${node.options.identifier} had an error: ${error.message}`
+        )
+      )
+      .on('trackError', (player, track) =>
+        console.log(`Player: ${player.options.guild} | Track had an error.`)
+      )
+      .on('trackStuck', (player, track, threshold) =>
+        console.log(`Player: ${player.options.guild} | Track is stuck.`)
+      )
+      .on('playerCreate', player =>
+        console.log(
+          `Player: ${player.options.guild} | A player has been created in ${
+            client.guilds.cache.get(player.options.guild)
+              ? client.guilds.cache.get(player.options.guild).name
+              : 'a guild'
+          }`
+        )
+      )
+      .on('playerDestroy', player =>
+        console.log(
+          `Player: ${player.options.guild} | A player has been destroyed in ${
+            client.guilds.cache.get(player.options.guild)
+              ? client.guilds.cache.get(player.options.guild).name
+              : 'a guild'
+          }`
         )
       )
       .on('trackStart', async (player, track) => {
@@ -171,7 +200,10 @@ class CCOSV extends Client {
         //.setFooter("Started playing at");
         let NowPlaying = await bot.channels.cache
           .get(player.textChannel)
-          .send({ embeds: [TrackStartedEmbed] })
+          .send({
+            embeds: [TrackStartedEmbed],
+            components: [bot.createController(player.options.guild)]
+          })
         player.setNowplayingMessage(NowPlaying)
       })
       .on('queueEnd', player => {
@@ -246,12 +278,12 @@ class CCOSV extends Client {
         .setEmoji('🔊')
     )
   }
-  Embed(text) {
-    let embed = new MessageEmbed().setColor(this.config.embedColor);
+  Embed (text) {
+    let embed = new MessageEmbed().setColor(this.config.embedColor)
 
-    if (text) embed.setDescription(text);
+    if (text) embed.setDescription(text)
 
-    return embed;
+    return embed
   }
 
   /**
@@ -259,13 +291,13 @@ class CCOSV extends Client {
    * @param {string} text
    * @returns {MessageEmbed}
    */
-  ErrorEmbed(text) {
+  ErrorEmbed (text) {
     let embed = new MessageEmbed()
-      .setColor("RED")
-      .setDescription("❌ | " + text);
+      .setColor('RED')
+      .setDescription('❌ | ' + text)
 
-    return embed;
+    return embed
   }
 }
 
-module.exports = CCOSV;
+module.exports = CCOSV
