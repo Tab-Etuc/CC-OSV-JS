@@ -77,9 +77,9 @@ class bot extends Client {
           .setAuthor(`正在播放 ♪`, this.config.IconURL)
           .setThumbnail(player.queue.current.displayThumbnail())
           .setDescription(`[${track.title}](${track.uri})`)
-          .addField('Requested by', `${track.requester}`, true)
+          .addField('請求者', `${track.requester}`, true)
           .addField(
-            'Duration',
+            '持續時間',
             `\`${prettyMilliseconds(track.duration, {
               colonNotation: true
             })}\``,
@@ -97,7 +97,10 @@ class bot extends Client {
           console.log(player)
         }
         let QueueEmbed = new MessageEmbed()
-          .setAuthor('The queue has ended', this.config.IconURL)
+          .setAuthor(
+            '播放結束。\n註：如遇到突發狀況，請再次嘗試輸入指令。',
+            this.config.IconURL
+          )
           .setColor(this.config.EmbedColor)
           .setTimestamp()
         bot.channels.cache
@@ -212,6 +215,25 @@ class bot extends Client {
       const command = require(join(__dirname, '../message-commands', `${file}`))
       this.msgCommands.set(command.name, command)
     }
+  }
+
+  createPlayer (textChannel, voiceChannel) {
+    return this.manager.create({
+      guild: textChannel.guild.id,
+      voiceChannel: voiceChannel.id,
+      textChannel: textChannel.id,
+      selfDeafen: this.config.serverDeafen,
+      volume: this.config.defaultVolume
+    })
+  }
+  getLavalink (bot) {
+    return new Promise(resolve => {
+      for (let i = 0; i < bot.manager.nodes.size; i++) {
+        const node = bot.manager.nodes.array()[i]
+        if (node.connected) resolve(node)
+      }
+      resolve(undefined)
+    })
   }
 }
 
