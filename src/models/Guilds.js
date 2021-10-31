@@ -10,4 +10,4 @@ const guldSchema = mongoose.Schema({
   ClockDate: { type: Array, default: [] }
 })
 
-module.exports = mongoose.model('Gulids', levelSchema)
+module.exports = mongoose.model('Gulids', guldSchema)
