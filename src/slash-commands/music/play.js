@@ -28,8 +28,8 @@ module.exports = {
    * @param {string[]} args
    * @param {*} param3
    */
-  async execute (bot, interaction, args, { GuildDB }) {
-    await interaction.deferReply()
+  async execute (bot, interaction) {
+    await interaction.deferReply();
     let search = await interaction.options.getString("歌曲", true);
 
     const guild = bot.guilds.cache.get(interaction.guild.id)
