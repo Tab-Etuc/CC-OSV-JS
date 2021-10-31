@@ -18,6 +18,7 @@ module.exports = {
     bot.logger.error("database", `Unable to connect to the Mongodb database. Error:`+err);
     });
     bot.logger.log('EVENTS', `Bot: 已上線。`)
+    bot.Manager.init(bot.user.id);
     const formatNum = bot.utils.formatNumber
 
     const serverCount = formatNum(bot.guilds.cache.size)
