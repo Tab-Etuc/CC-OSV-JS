@@ -29,10 +29,10 @@ module.exports = async function ChangeTime (bot) {
       for (i in data_date) {
         const timeM = moment()
           .tz('Asia/Taipei')
-          .format('MM')
+          .format('MM').toString()
         const timeD = moment()
           .tz('Asia/Taipei')
-          .format('DD')
+          .format('DD').toString()
         let channel_name
         var channel = bot.channels.cache.get(data_time[i])
         channel ? (channel_name = channel.name) : (channel_name = false)
