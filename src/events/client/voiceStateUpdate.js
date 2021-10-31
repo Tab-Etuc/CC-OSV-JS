@@ -7,7 +7,7 @@
  */
 module.exports = {
   name: 'voiceStateUpdate',
-  once: true,
+  once: false,
   async execute (bot, oldState, newState){
     // get guild and player
     let guildId = newState.guild.id
