@@ -64,7 +64,6 @@ module.exports = {
     if (player.state != 'CONNECTED') await player.connect()
 
     let res = await player.search(search, interaction.user)
-    console.log(res)
     try {
       if (res.loadType === 'LOAD_FAILED') {
         if (!player.queue.current) player.destroy()
@@ -130,9 +129,10 @@ module.exports = {
         player.queue.add(track)
 
         if (!player.playing && !player.paused && !player.queue.length) {
-          console.log(`123`)
-          console.log(player)
+
           player.play()
+          console.log(`123`)
+
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
           SongAddedEmbed.setThumbnail(track.displayThumbnail())
