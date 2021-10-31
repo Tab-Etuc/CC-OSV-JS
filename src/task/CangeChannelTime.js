@@ -12,10 +12,11 @@ module.exports = async function ChangeTime (bot) {
         const time_hour = moment()
           .tz('Asia/Taipei')
           .format('HH')
+          let channel_name
         var channel = bot.channels.cache.get(data_time[i])
         let _ = false
-        channel ? (channel_name = channel.name) : (_ = true)
-        if (_) return
+        channel ? (channel_name = channel.name) : (channel_name = false)
+        if (!channel_name) return
         channel_name = channel_name.replace(/🕠現在時刻：|點/g, '')
 
         if (channel_name !== time_hour) {
@@ -32,10 +33,10 @@ module.exports = async function ChangeTime (bot) {
         const timeD = moment()
           .tz('Asia/Taipei')
           .format('DD')
+        let channel_name
         var channel = bot.channels.cache.get(data_time[i])
-        let _ = false
-        channel ? (channel_name = channel.name) : (_ = true)
-        if (_) return
+        channel ? (channel_name = channel.name) : (channel_name = false)
+        if (!channel_name) return
         channel_name = channel_name.replace(/📅伍年●|月|日●/g, '')
 
         if (channel_name !== timeM + timeD) {
