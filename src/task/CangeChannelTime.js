@@ -13,6 +13,7 @@ module.exports = async function ChangeTime (bot) {
           .tz('Asia/Taipei')
           .format('HH')
         var channel = bot.channels.cache.get(data_time[i])
+        let _ = false
         channel ? (channel_name = channel.name) : (_ = true)
         if (_) return
         channel_name = channel_name.replace(/🕠現在時刻：|點/g, '')
