@@ -40,7 +40,7 @@ class CCOSV extends Client {
     this.say = require('../models/Embeds')
     this.config = require('../config')
     this.ProgressBar = require('../models/ProgressBar')
-    this.pagination = require('../models/pagination')
+    this.Pagination = require('../models/pagination')
     this.ms = prettyMilliseconds
 
     this.getLavalink = getLavalink

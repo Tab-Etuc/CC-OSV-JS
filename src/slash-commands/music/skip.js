@@ -44,7 +44,7 @@ module.exports = {
           ':x: | **您必須和我在相同的語音通道以使用此指令！**'
         )
 
-      const skipTo = await interaction.options.getString('位置', true)
+      const skipTo = await interaction.options.getString('位置', false)
 
       let player = await bot.manager.get(interaction.guild.id)
 

@@ -112,7 +112,7 @@ module.exports = {
       return Embed
     })
 
-    if (!Pages.length || Pages.length === 1) return interaction.send(Pages[0])
+    if (!Pages.length || Pages.length === 1) return interaction.editReply(Pages[0])
     else bot.Pagination(interaction, Pages)
   }
 }
