@@ -1,28 +1,38 @@
-const { Collection, Client, MessageEmbed } = require('discord.js')
+const {
+  Client,
+  Intents,
+  MessageEmbed,
+  Collection,
+  MessageActionRow,
+  MessageButton
+} = require('discord.js')
 const { Manager } = require('erela.js')
 const economy = require('../models/EconomyModel')
 const { readdirSync } = require('fs')
 const { join } = require('path')
 const prettyMilliseconds = require('pretty-ms')
-const spotify = require("better-erela.js-spotify").default;
-const apple = require("erela.js-apple");
-const deezer = require("erela.js-deezer");
-const facebook = require("erela.js-facebook");
-const getLavalink = require("../models/getLavalink");
+const spotify = require('better-erela.js-spotify').default
+const apple = require('erela.js-apple')
+const deezer = require('erela.js-deezer')
+const facebook = require('erela.js-facebook')
+const getLavalink = require('../models/getLavalink')
+const getChannel = require('../models/getChannel')
 
 require('discordjs-activity')
 require('./EpicPlayer')
 
 // Creates CC-OSV-bot class
 class bot extends Client {
-  constructor () {
-    super({
+  constructor (
+    props = {
       intents: 32767,
       fetchAllMembers: true,
       allowedMentions: {
         parse: ['users']
       }
-    })
+    }
+  ) {
+    super(props)
 
     this.msgCommands = new Collection()
     this.slashCommands = new Collection()
@@ -31,7 +41,8 @@ class bot extends Client {
     this.say = require('../models/Embeds')
     this.config = require('../config')
 
-    this.getLavalink = getLavalink;
+    this.getLavalink = getLavalink
+    this.getChannel = getChannel
   }
   fetchUser (bot, userId) {
     const someone = bot.users.cache.get(userId)
@@ -123,7 +134,7 @@ class bot extends Client {
     require(`../task/CangeChannelTime`)(this)
     this.LoadMsgCommands()
 
-    let bot = this;
+    let bot = this
 
     this.manager = new Manager({
       plugins: [new deezer(), new apple(), new spotify(), new facebook()],
@@ -142,7 +153,6 @@ class bot extends Client {
         )
       )
       .on('trackStart', async (player, track) => {
-        
         let TrackStartedEmbed = new MessageEmbed()
           .setAuthor(`正在播放 ♪`, this.config.IconURL)
           .setThumbnail(player.queue.current.displayThumbnail())
@@ -206,7 +216,34 @@ class bot extends Client {
       volume: this.config.defaultVolume
     })
   }
- 
+  createController (guild) {
+    return new MessageActionRow().addComponents(
+      new MessageButton()
+        .setStyle('SECONDARY')
+        .setCustomId(`controller:${guild}:LowVolume`)
+        .setEmoji('🔉'),
+
+      new MessageButton()
+        .setStyle('SUCCESS')
+        .setCustomId(`controller:${guild}:Replay`)
+        .setEmoji('◀'),
+
+      new MessageButton()
+        .setStyle('DANGER')
+        .setCustomId(`controller:${guild}:PlayAndPause`)
+        .setEmoji('⏯'),
+
+      new MessageButton()
+        .setStyle('SUCCESS')
+        .setCustomId(`controller:${guild}:Next`)
+        .setEmoji('▶'),
+
+      new MessageButton()
+        .setStyle('SECONDARY')
+        .setCustomId(`controller:${guild}:HighVolume`)
+        .setEmoji('🔊')
+    )
+  }
 }
 
 module.exports = bot
