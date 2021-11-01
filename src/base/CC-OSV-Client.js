@@ -17,7 +17,6 @@ const facebook = require('erela.js-facebook')
 const getLavalink = require('../models/getLavalink')
 const getChannel = require('../models/getChannel')
 
-require('discordjs-activity')
 require('./EpicPlayer')
 
 // Creates CC-OSV-bot class
