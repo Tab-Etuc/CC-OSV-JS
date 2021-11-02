@@ -12,7 +12,7 @@ module.exports = {
       .duration(bot.uptime)
       .format(' D [天], H [小時], m [分], s [秒]')
     const nodev = process.version
-    const createdAt = new Date(bot.user.createdAt).toISOString()
+    const createdAt = new Date(bot.user.createdAt).toISOString().getTime()
     const users = bot.guilds.cache.reduce((a, g) => a + g.memberCount, 0)
     const core = os.cpus()[0]
 
