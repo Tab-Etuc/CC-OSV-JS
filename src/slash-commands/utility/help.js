@@ -1,5 +1,3 @@
-// const catDetails = require("../../data/categoryDetails.json");
-// const categories = require("../../data/categories.json");
 const { MessageActionRow, MessageSelectMenu, MessageButton, MessageEmbed } = require('discord.js');
 module.exports = {
   name: "help",
@@ -39,9 +37,11 @@ module.exports = {
     const arg = interaction.options.getString("指令", false);
     const timeout = 120000
     var timeForStart = Date.now();
+
+    // 查詢單一指令介紹
     if (arg) {
 
-      const cmd = bot.commands.get(arg);
+      const cmd = bot.slashCommands.get(arg);
       if (!cmd)
         return bot.say.warnMessage(interaction, `沒有這個指令： \`${arg}\`.`);
 
@@ -67,6 +67,8 @@ module.exports = {
       });
     }
     const arg_2 = interaction.options.getString("類別", false);
+
+    // 查詢類別介紹
     if (arg_2) {
       if (arg_2 === "music") {
         const embed = new MessageEmbed()
@@ -499,38 +501,5 @@ module.exports = {
         });
       }
     });
-
-
-    // {
-    //   label: '樂趣',
-    //   desc: '關於「樂趣」類別的相關指令',
-    //   embed: embed2, // embed sent when clicked
-    // },
-
-    // const botCmds = bot.commands.map((cmd) => {
-    //   return { name: cmd.name, category: cmd.category };
-    // });
-
-    // const commands = [...botCmds];
-
-    // const cates = [];
-    // for (let i = 0; i < categories.length; i++) {
-    //   const category = commands
-    //     .filter(({ category }) => category === categories[i])
-    //     .map(({ name }) => name);
-    //   cates.push(category);
-    // }
-
-    // const embed = bot.say.rootEmbed(interaction);
-    // for (let j = 0; j < cates.length; j++) {
-    //   const name = catDetails[categories[j]];
-    //   if (categories[j] === "botowner" && !'806346991730819121'
-    //     .includes(interaction?.user.id)) continue;
-    //   embed.addField(`${name}`, `\`\`\`${cates[j].join(", ")}\`\`\``);
-    // }
-
-    // embed
-    //   .setFooter(`輸入 '\/help <指令>' 查詢有關指令的更多詳細信息`)
-    //   .setAuthor("幫助頁面", bot.user.displayAvatarURL());
   }
 }

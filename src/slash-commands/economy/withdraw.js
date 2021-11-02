@@ -9,7 +9,7 @@ module.exports = {
         required: true,
     }],
     async execute(bot, interaction) {
-        let data = await bot.mongo.fetchUser(bot, interaction.member.id);
+        let data = await bot.fetchUser(bot, interaction.member.id);
         const arg = interaction.options.getString("金額", false);
         if (arg.toLowerCase() === 'all' || arg === '全部' || arg === '全' || arg === '所有' || arg === 'a' || arg === 'ＡＬＬ' || arg === 'ａｌｌ' || arg === 'ａ') {
             data.coinsInWallet += data.coinsInBank;

@@ -5,7 +5,7 @@ module.exports = {
     description: "查看您的背包。",
     category: "經濟",
     async execute(bot, interaction) {
-        const user = await bot.mongo.fetchUser(bot, interaction.member.id);
+        const user = await bot.fetchUser(bot, interaction.member.id);
 
         let page;
         if (user.items.length <= 5) page = 1;

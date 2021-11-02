@@ -12,7 +12,7 @@ module.exports = {
     async execute(bot, interaction) {
         const member = interaction.options.getString("指令", false) || interaction.member;
 
-        const user = await bot.mongo.fetchUser(bot, member.id);
+        const user = await bot.fetchUser(bot, member.id);
         const embed = new MessageEmbed()
             .setTitle(`${member.user.username}'s Balance`)
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
