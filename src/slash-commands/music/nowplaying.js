@@ -12,11 +12,8 @@ module.exports = {
   aliases: ['np', 'nowplaying', 'now playing'],
 
   /**
-   *
-   * @param {import("../structures/DiscordMusicBot")} bot
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} interaction
-   * @param {string[]} args
-   * @param {*} param3
    */
   async execute (bot, interaction) {
     await interaction.deferReply()
@@ -46,6 +43,6 @@ module.exports = {
         })}\``
       )
       .setThumbnail(player.queue.current.displayThumbnail())
-    return interaction.editReply({embeds:[QueueEmbed]})
+    return interaction.editReply({ embeds: [QueueEmbed] })
   }
 }

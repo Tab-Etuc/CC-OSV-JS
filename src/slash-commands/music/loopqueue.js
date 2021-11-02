@@ -8,11 +8,8 @@ module.exports = {
   },
   aliases: ['lq', 'repeatqueue', 'rq'],
   /**
-   *
-   * @param {import("../structures/DiscordMusicBot")} bot
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} interaction
-   * @param {string[]} args
-   * @param {*} param3
    */
   async execute (bot, interaction) {
     await interaction.deferReply()

@@ -15,9 +15,12 @@ module.exports = {
     }
   ],
   aliases: ['vol', 'v'],
-
+  /**
+   * @param {import("../base/CC-OSV-Client")} bot
+   * @param {import("discord.js").Message} interaction
+   */
   async execute (bot, interaction) {
-    await interaction.deferReply();
+    await interaction.deferReply()
     let arg = await interaction.options.getString('音量', true)
     const guild = bot.guilds.cache.get(interaction.guild.id)
     const member = guild.members.cache.get(interaction.member.user.id)

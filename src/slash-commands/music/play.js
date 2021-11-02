@@ -22,19 +22,16 @@ module.exports = {
     }
   ],
   /**
-   *
-   * @param {import("../structures/DiscordMusicBot")} bot
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} interaction
-   * @param {string[]} args
-   * @param {*} param3
    */
   async execute (bot, interaction) {
-    await interaction.deferReply();
+    await interaction.deferReply()
 
     let search = await interaction.options.getString('歌曲', true)
     const guild = bot.guilds.cache.get(interaction.guild.id)
     const member = guild.members.cache.get(interaction.member.user.id)
-    let channel = await bot.getChannel(bot, interaction);
+    let channel = await bot.getChannel(bot, interaction)
 
     if (!channel)
       return bot.say.errorMessage(
@@ -129,7 +126,6 @@ module.exports = {
         player.queue.add(track)
 
         if (!player.playing && !player.paused && !player.queue.length) {
-
           player.play()
           console.log(`123`)
 
@@ -187,7 +183,6 @@ module.exports = {
     //   return interaction.reply({
     //     embeds: [bot.ErrorEmbed("Lavalink node is not connected")],
     //   });
-
 
     // let query = await interaction.options.getString('歌曲', true)
     // let player = bot.createPlayer(interaction.channel, channel);

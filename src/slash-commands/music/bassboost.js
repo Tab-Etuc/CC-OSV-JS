@@ -23,13 +23,11 @@ module.exports = {
   ],
   /**
    *
-   * @param {import("../structures/DiscordMusicBot")} bot
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} interaction
-   * @param {string[]} args
-   * @param {*} param3
    */
 
-  async execute(bot, interaction) {
+  async execute (bot, interaction) {
     const levels = {
       無: 0.0,
       低: 0.2,
@@ -37,14 +35,16 @@ module.exports = {
       高: 0.35
     }
 
-    
     let player = await bot.manager.get(interaction.guild.id)
-    
+
     const guild = bot.guilds.cache.get(interaction.guild.id)
     const member = guild.members.cache.get(interaction.member.user.id)
-    const channel = await bot.getChannel(bot, interaction);
+    const channel = await bot.getChannel(bot, interaction)
     if (!player)
-      return bot.say.errorMessage(interaction, '❌ | **目前沒有播放任何音樂...**')
+      return bot.say.errorMessage(
+        interaction,
+        '❌ | **目前沒有播放任何音樂...**'
+      )
     if (!member.voice.channel)
       return bot.say.errorMessage(
         interaction,

@@ -24,11 +24,8 @@ module.exports = {
   ],
   */
   /**
-   *
-   * @param {import("../structures/DiscordMusicBot")} bot
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} interaction
-   * @param {string[]} args
-   * @param {*} param3
    */
   async execute (bot, interaction) {
     await interaction.deferReply()
@@ -112,7 +109,8 @@ module.exports = {
       return Embed
     })
 
-    if (!Pages.length || Pages.length === 1) return interaction.editReply(Pages[0])
+    if (!Pages.length || Pages.length === 1)
+      return interaction.editReply(Pages[0])
     else bot.Pagination(interaction, Pages)
   }
 }

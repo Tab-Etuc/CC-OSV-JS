@@ -20,20 +20,20 @@ module.exports = {
     }
   ],
   /**
-   *
-   * @param {import("../structures/DiscordMusicBot")} bot
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} interaction
-   * @param {string[]} args
-   * @param {*} param3
    */
-  async execute(bot, interaction)  {
-    await interaction.deferReply();
+  async execute (bot, interaction) {
+    await interaction.deferReply()
 
     let player = await bot.manager.get(interaction.guild.id)
     const guild = bot.guilds.cache.get(interaction.guild.id)
     const member = guild.members.cache.get(interaction.member.user.id)
     if (!player)
-      return bot.say.errorMessage(interaction, '❌ | **目前沒有播放任何音樂...**')
+      return bot.say.errorMessage(
+        interaction,
+        '❌ | **目前沒有播放任何音樂...**'
+      )
     if (!member.voice.channel)
       return bot.say.errorMessage(
         interaction,
@@ -50,17 +50,16 @@ module.exports = {
 
     if (!player.queue || !player.queue.length || player.queue.length === 0)
       return bot.say.errorMessage('❌ | **目前沒有播放任何音樂...**')
-      let track = await interaction.options.getString('編號', true)  
+    let track = await interaction.options.getString('編號', true)
     let rm = new MessageEmbed()
       .setDescription(
         `✅ | 已從播放列移除編號 **\`${Number(track)}\`** 之歌曲!`
       )
       .setColor('GREEN')
-    if (isNaN(track))
-      rm.setDescription(`**用法:** \`/remove [編號]\``)
+    if (isNaN(track)) rm.setDescription(`**用法:** \`/remove [編號]\``)
     if (track > player.queue.length)
       rm.setDescription(`播放列僅有 ${player.queue.length} 首歌曲！`)
-    await interaction.editReply({embeds:[rm]})
+    await interaction.editReply({ embeds: [rm] })
     player.queue.remove(Number(track) - 1)
   }
 }
