@@ -29,91 +29,96 @@ module.exports = {
    */
   async execute (bot, interaction) {
     await interaction.deferReply()
-    try{
-    let player = await bot.manager.get(interaction.guild.id)
-    if (!player)
-      return bot.say.errorMessage(
-        interaction,
-        '❌ | **目前沒有播放任何音樂...**'
-      )
-
-    if (!player.queue || !player.queue.length || player.queue === 0) {
-      let QueueEmbed = new MessageEmbed()
-        .setAuthor('目前正在播放', bot.config.IconURL)
-        .setColor(bot.config.EmbedColor)
-        .setDescription(
-          `[${player.queue.current.title}](${player.queue.current.uri})`
+    try {
+      let player = bot.manager.players.get(interaction.guild.id)
+      if (!player)
+        return bot.say.errorMessage(
+          interaction,
+          '❌ | **目前沒有播放任何音樂...**'
         )
-        .addField('請求者', `${player.queue.current.requester}`, true)
-        .addField(
-          '持續時間',
-          `${
-            bot.ProgressBar(player.position, player.queue.current.duration, 15)
-              .Bar
-          } \`[${prettyMilliseconds(player.position, {
-            colonNotation: true
-          })} / ${prettyMilliseconds(player.queue.current.duration, {
-            colonNotation: true
-          })}]\``
-        )
-        .setThumbnail(player.queue.current.displayThumbnail())
-      return interaction.editReply({ embeds: [QueueEmbed] })
-    }
 
-    let Songs = player.queue.map((t, index) => {
-      t.index = index
-      return t
-    })
-
-    let ChunkedSongs = _.chunk(Songs, 10) //How many songs to show per-page
-
-    let Pages = ChunkedSongs.map(Tracks => {
-      let SongsDescription = Tracks.map(
-        t =>
-          `\`${t.index + 1}.\` [${t.title}](${t.uri}) \n\`${prettyMilliseconds(
-            t.duration,
-            {
+      if (!player.queue || !player.queue.length || player.queue === 0) {
+        let QueueEmbed = new MessageEmbed()
+          .setAuthor('目前正在播放', bot.config.IconURL)
+          .setColor(bot.config.EmbedColor)
+          .setDescription(
+            `[${player.queue.current.title}](${player.queue.current.uri})`
+          )
+          .addField('請求者', `${player.queue.current.requester}`, true)
+          .addField(
+            '持續時間',
+            `${
+              bot.ProgressBar(
+                player.position,
+                player.queue.current.duration,
+                15
+              ).Bar
+            } \`[${prettyMilliseconds(player.position, {
               colonNotation: true
-            }
-          )}\` **|** 請求者: ${t.requester}\n`
-      ).join('\n')
+            })} / ${prettyMilliseconds(player.queue.current.duration, {
+              colonNotation: true
+            })}]\``
+          )
+          .setThumbnail(player.queue.current.displayThumbnail())
+        return interaction.editReply({ embeds: [QueueEmbed] })
+      }
 
-      let Embed = new MessageEmbed()
-        .setAuthor('播放列', bot.config.IconURL)
-        .setColor(bot.config.EmbedColor)
-        .setDescription(
-          `**目前正在播放:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Up Next:** \n${SongsDescription}\n\n`
-        )
-        .addField('總計曲目數 \n', `\`${player.queue.totalSize - 1}\``, true)
-        .addField(
-          '總計長度 \n',
-          `\`${prettyMilliseconds(player.queue.duration, {
-            colonNotation: true
-          })}\``,
-          true
-        )
-        .addField('請求者:', `${player.queue.current.requester}`, true)
-        .addField(
-          '當前之歌曲持續時間:',
-          `${
-            bot.ProgressBar(player.position, player.queue.current.duration, 15)
-              .Bar
-          } \`[${prettyMilliseconds(player.position, {
-            colonNotation: true
-          })} / ${prettyMilliseconds(player.queue.current.duration, {
-            colonNotation: true
-          })}]\``
-        )
-        .setThumbnail(player.queue.current.displayThumbnail())
+      let Songs = player.queue.map((t, index) => {
+        t.index = index
+        return t
+      })
 
-      return Embed
-    })
+      let ChunkedSongs = _.chunk(Songs, 10) //How many songs to show per-page
 
-    if (!Pages.length || Pages.length === 1)
-      return interaction.editReply({embeds:Pages[0]})
-    else bot.Pagination(interaction, Pages)
-  }catch (error) {
-    bot.utils.sendErrorLog(bot, error, "error");
+      let Pages = ChunkedSongs.map(Tracks => {
+        let SongsDescription = Tracks.map(
+          t =>
+            `\`${t.index + 1}.\` [${t.title}](${
+              t.uri
+            }) \n\`${prettyMilliseconds(t.duration, {
+              colonNotation: true
+            })}\` **|** 請求者: ${t.requester}\n`
+        ).join('\n')
+
+        let Embed = new MessageEmbed()
+          .setAuthor('播放列', bot.config.IconURL)
+          .setColor(bot.config.EmbedColor)
+          .setDescription(
+            `**目前正在播放:** \n[${player.queue.current.title}](${player.queue.current.uri}) \n\n**Up Next:** \n${SongsDescription}\n\n`
+          )
+          .addField('總計曲目數 \n', `\`${player.queue.totalSize - 1}\``, true)
+          .addField(
+            '總計長度 \n',
+            `\`${prettyMilliseconds(player.queue.duration, {
+              colonNotation: true
+            })}\``,
+            true
+          )
+          .addField('請求者:', `${player.queue.current.requester}`, true)
+          .addField(
+            '當前之歌曲持續時間:',
+            `${
+              bot.ProgressBar(
+                player.position,
+                player.queue.current.duration,
+                15
+              ).Bar
+            } \`[${prettyMilliseconds(player.position, {
+              colonNotation: true
+            })} / ${prettyMilliseconds(player.queue.current.duration, {
+              colonNotation: true
+            })}]\``
+          )
+          .setThumbnail(player.queue.current.displayThumbnail())
+
+        return Embed
+      })
+
+      if (!Pages.length || Pages.length === 1)
+        return interaction.editReply({ embeds: Pages[0] })
+      else bot.Pagination(interaction, Pages)
+    } catch (error) {
+      bot.utils.sendErrorLog(bot, error, 'error')
+    }
   }
-}
 }

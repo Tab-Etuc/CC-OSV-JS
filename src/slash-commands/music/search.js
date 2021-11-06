@@ -54,6 +54,7 @@ module.exports = {
     }
     let player = bot.createPlayer(interaction.channel, channel)
     if (player.state != 'CONNECTED') await player.connect()
+    let search = await interaction.options.getString('歌曲', true)
 
     try {
       let res = await player.search(search, interaction.user)

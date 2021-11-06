@@ -43,7 +43,7 @@ module.exports = {
 
     const skipTo = await interaction.options.getString('位置', false)
 
-    let player = await bot.manager.get(interaction.guild.id)
+    let player = bot.manager.players.get(interaction.guild.id);
 
     if (!player)
       return bot.say.errorMessage(

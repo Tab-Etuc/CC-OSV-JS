@@ -78,7 +78,7 @@ module.exports = {
         )
       case 'TRACK_LOADED':
         player.queue.add(res.tracks[0])
-        if (!player.playing && !player.paused && !player.queue.length)
+        if (!player.playing && !player.paused && player.queue.length === 1)
           player.play()
         let SongAddedEmbed = new MessageEmbed()
         SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
@@ -125,7 +125,7 @@ module.exports = {
         const track = res.tracks[0]
         player.queue.add(track)
 
-        if (!player.playing && !player.paused && !player.queue.length) {
+        if (!player.playing && !player.paused && player.queue.length === 1) {
           player.play()
           console.log(`123`)
 
@@ -151,7 +151,6 @@ module.exports = {
 
           return interaction.editReply({ embeds: [SongAddedEmbed] })
         } else {
-          console.log(`123`)
           player.queue.add(res.tracks)
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)

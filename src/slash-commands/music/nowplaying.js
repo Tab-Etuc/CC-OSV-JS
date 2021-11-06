@@ -18,7 +18,7 @@ module.exports = {
   async execute (bot, interaction) {
     await interaction.deferReply()
 
-    let player = await bot.manager.get(interaction.guild.id)
+    let player = bot.manager.players.get(interaction.guild.id);
     if (!player.queue.current)
       return bot.say.errorMessage(
         interaction,

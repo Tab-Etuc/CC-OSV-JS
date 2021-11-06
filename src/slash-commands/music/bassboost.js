@@ -35,7 +35,7 @@ module.exports = {
       高: 0.35
     }
 
-    let player = await bot.manager.get(interaction.guild.id)
+    let player = bot.manager.players.get(interaction.guild.id);
 
     const guild = bot.guilds.cache.get(interaction.guild.id)
     const member = guild.members.cache.get(interaction.member.user.id)

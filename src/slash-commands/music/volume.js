@@ -38,7 +38,7 @@ module.exports = {
         interaction,
         ':x: | **您必須和我在相同的語音通道以使用此指令！**'
       )
-    let player = await bot.manager.get(interaction.guild.id)
+    let player = bot.manager.players.get(interaction.guild.id);
     if (!player)
       return bot.say.errorMessage(
         interaction,
