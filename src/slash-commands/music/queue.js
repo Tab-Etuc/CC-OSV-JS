@@ -1,6 +1,5 @@
 const { MessageEmbed } = require('discord.js')
 const _ = require('lodash')
-const prettyMilliseconds = require('pretty-ms')
 
 module.exports = {
   name: 'queue',
@@ -53,9 +52,9 @@ module.exports = {
                 player.queue.current.duration,
                 15
               ).Bar
-            } \`[${prettyMilliseconds(player.position, {
+            } \`[${bot.ms(player.position, {
               colonNotation: true
-            })} / ${prettyMilliseconds(player.queue.current.duration, {
+            })} / ${bot.ms(player.queue.current.duration, {
               colonNotation: true
             })}]\``
           )
@@ -75,7 +74,7 @@ module.exports = {
           t =>
             `\`${t.index + 1}.\` [${t.title}](${
               t.uri
-            }) \n\`${prettyMilliseconds(t.duration, {
+            }) \n\`${bot.ms(t.duration, {
               colonNotation: true
             })}\` **|** 請求者: ${t.requester}\n`
         ).join('\n')
@@ -89,7 +88,7 @@ module.exports = {
           .addField('總計曲目數 \n', `\`${player.queue.totalSize - 1}\``, true)
           .addField(
             '總計長度 \n',
-            `\`${prettyMilliseconds(player.queue.duration, {
+            `\`${bot.ms(player.queue.duration, {
               colonNotation: true
             })}\``,
             true
@@ -103,9 +102,9 @@ module.exports = {
                 player.queue.current.duration,
                 15
               ).Bar
-            } \`[${prettyMilliseconds(player.position, {
+            } \`[${bot.ms(player.position, {
               colonNotation: true
-            })} / ${prettyMilliseconds(player.queue.current.duration, {
+            })} / ${bot.ms(player.queue.current.duration, {
               colonNotation: true
             })}]\``
           )

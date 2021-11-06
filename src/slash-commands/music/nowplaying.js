@@ -1,5 +1,4 @@
 const { MessageEmbed } = require('discord.js')
-const prettyMilliseconds = require('pretty-ms')
 
 module.exports = {
   name: 'nowplaying',
@@ -36,9 +35,9 @@ module.exports = {
         `${
           bot.ProgressBar(player.position, player.queue.current.duration, 15)
             .Bar
-        } \`${prettyMilliseconds(player.position, {
+        } \`${bot.ms(player.position, {
           colonNotation: true
-        })} / ${prettyMilliseconds(player.queue.current.duration, {
+        })} / ${bot.ms(player.queue.current.duration, {
           colonNotation: true
         })}\``
       )

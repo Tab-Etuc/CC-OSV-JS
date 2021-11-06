@@ -1,7 +1,5 @@
-const { MessageEmbed, Message } = require('discord.js')
-const { TrackUtils } = require('erela.js')
+const { MessageEmbed } = require('discord.js')
 const _ = require('lodash')
-const prettyMilliseconds = require('pretty-ms')
 
 module.exports = {
   name: 'search',
@@ -107,7 +105,7 @@ module.exports = {
             (track, index) =>
               `\`${++index}\` - [${track.title}](${
                 track.uri
-              }) \n\t\`${prettyMilliseconds(track.duration, {
+              }) \n\t\`${bot.ms(track.duration, {
                 colonNotation: true
               })}\`\n`
           )
@@ -155,7 +153,7 @@ module.exports = {
           SongAddedEmbed.addField('上傳者', track.author, true)
           SongAddedEmbed.addField(
             '持續時間',
-            `\`${prettyMilliseconds(track.duration, {
+            `\`${bot.ms(track.duration, {
               colonNotation: true
             })}\``,
             true

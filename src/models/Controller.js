@@ -10,14 +10,14 @@ module.exports = async (bot, interaction) => {
 
   if (!player)
     return interaction.reply({
-      embeds: [bot.Embed("There is no player to control in this server.")],
+      embeds: [bot.Embed("在此服務器中沒有播放器可以控制。")],
     });
 
   if (property === "LowVolume") {
     player.setVolume(player.volume - 10);
     return interaction.reply({
       embeds: [
-        bot.Embed("Successfully set server volume to " + player.volume),
+        bot.Embed("成功將音量設定至" + player.volume),
       ],
     });
   }
@@ -25,7 +25,7 @@ module.exports = async (bot, interaction) => {
   if (property === "Replay") {
     if (!player.queue.previous)
       return interaction.reply({
-        embeds: [bot.ErrorEmbed("There is no previous played song")],
+        embeds: [bot.ErrorEmbed("沒有找到先前播放的歌曲。")],
       });
     player.queue.unshift(player.queue.previous);
     player.queue.unshift(player.queue.current);
@@ -37,7 +37,7 @@ module.exports = async (bot, interaction) => {
     if (player.paused) player.pause(false);
     else player.pause(true);
     return interaction.reply({
-      embeds: [bot.Embed(player.paused ? "Paused" : "Resumed")],
+      embeds: [bot.Embed(player.paused ? "已暫停" : "重新播放")],
     });
   }
 
@@ -50,13 +50,13 @@ module.exports = async (bot, interaction) => {
     player.setVolume(player.volume + 10);
     return interaction.reply({
       embeds: [
-        bot.Embed("Successfully set server volume to " + player.volume),
+        bot.Embed("成功將音量設定至" + player.volume),
       ],
     });
   }
 
   return interaction.reply({
     ephemeral: true,
-    content: "Unknown controller option",
+    content: "未知的控制器選項。",
   });
 };

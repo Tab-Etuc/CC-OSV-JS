@@ -10,8 +10,7 @@ module.exports = {
   once: false,
   async execute (bot, oldState, newState){
     // get guild and player
-    let guildId = newState.guild.id
-    const player = bot.manager.get(guildId)
+    const player = bot.manager.get(newState.guild.id)
 
     // check if the bot is active (playing, paused or empty does not matter (return otherwise)
     if (!player || player.state !== 'CONNECTED') return

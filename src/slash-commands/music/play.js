@@ -1,6 +1,4 @@
 const { MessageEmbed } = require('discord.js')
-const { TrackUtils } = require('erela.js')
-const prettyMilliseconds = require('pretty-ms')
 
 module.exports = {
   name: 'play',
@@ -78,23 +76,21 @@ module.exports = {
         )
       case 'TRACK_LOADED':
         player.queue.add(res.tracks[0])
-        if (!player.playing && !player.paused && player.queue.length === 1)
+        if (!player.playing && !player.paused && !player.queue.size)
           player.play()
         let SongAddedEmbed = new MessageEmbed()
-        SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
-        //SongAddedEmbed.setThumbnail(res.tracks[0].displayThumbnail());
-        SongAddedEmbed.setColor(bot.config.EmbedColor)
-        SongAddedEmbed.setDescription(
-          `[${res.tracks[0].title}](${res.tracks[0].uri})`
-        )
-        SongAddedEmbed.addField('上傳者', res.tracks[0].author, true)
-        SongAddedEmbed.addField(
-          '持續時間',
-          `\`${prettyMilliseconds(res.tracks[0].duration, {
-            colonNotation: true
-          })}\``,
-          true
-        )
+          .setAuthor(`已新增至播放列`, bot.config.IconURL)
+          //.setThumbnail(res.tracks[0].displayThumbnail());
+          .setColor(bot.config.EmbedColor)
+          .setDescription(`[${res.tracks[0].title}](${res.tracks[0].uri})`)
+          .addField('上傳者', res.tracks[0].author, true)
+          .addField(
+            '持續時間',
+            `\`${bot.ms(res.tracks[0].duration, {
+              colonNotation: true
+            })}\``,
+            true
+          )
         if (player.queue.totalSize > 1)
           SongAddedEmbed.addField(
             '播放列中的位置',
@@ -105,7 +101,7 @@ module.exports = {
 
       case 'PLAYLIST_LOADED':
         player.queue.add(res.tracks)
-        await player.play()
+        player.play()
         let SongAdded = new MessageEmbed()
         SongAdded.setAuthor(`音樂播放清單已新增至播放列`, bot.config.IconURL)
         //SongAdded.setThumbnail(res.tracks[0].displayThumbnail());
@@ -115,7 +111,7 @@ module.exports = {
         SongAdded.addField('播放列', `\`${res.tracks.length}\` songs`, false)
         SongAdded.addField(
           '音樂播放清單 持續時間',
-          `\`${prettyMilliseconds(res.playlist.duration, {
+          `\`${bot.ms(res.playlist.duration, {
             colonNotation: true
           })}\``,
           false
@@ -125,9 +121,8 @@ module.exports = {
         const track = res.tracks[0]
         player.queue.add(track)
 
-        if (!player.playing && !player.paused && player.queue.length === 1) {
+        if (!player.playing && !player.paused && !player.queue.size) {
           player.play()
-          console.log(`123`)
 
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
@@ -137,7 +132,7 @@ module.exports = {
           SongAddedEmbed.addField('上傳者', track.author, true)
           SongAddedEmbed.addField(
             '持續時間',
-            `\`${prettyMilliseconds(track.duration, {
+            `\`${bot.ms(track.duration, {
               colonNotation: true
             })}\``,
             true
@@ -160,7 +155,7 @@ module.exports = {
           SongAddedEmbed.addField('上傳者', track.author, true)
           SongAddedEmbed.addField(
             '持續時間',
-            `\`${prettyMilliseconds(track.duration, {
+            `\`${bot.ms(track.duration, {
               colonNotation: true
             })}\``,
             true
@@ -174,80 +169,5 @@ module.exports = {
           interaction.editReply({ embeds: [SongAddedEmbed] })
         }
     }
-    // let channel = await bot.getChannel(bot, interaction);
-    // if (!channel) return;
-
-    // let node = await bot.getLavalink(bot);
-    // if (!node)
-    //   return interaction.reply({
-    //     embeds: [bot.ErrorEmbed("Lavalink node is not connected")],
-    //   });
-
-    // let query = await interaction.options.getString('歌曲', true)
-    // let player = bot.createPlayer(interaction.channel, channel);
-
-    // if (player.state != "CONNECTED") await player.connect();
-
-    // let res = await player.search(query, interaction.user);
-
-    // if (res.loadType === "LOAD_FAILED") {
-    //   if (!player.queue.current) player.destroy();
-    //   return interaction.reply({
-    //     embeds: [bot.ErrorEmbed("There was an error while searching")],
-    //   });
-    // }
-
-    // if (res.loadType === "NO_MATCHES") {
-    //   if (!player.queue.current) player.destroy();
-    //   return interaction.reply({
-    //     embeds: [bot.ErrorEmbed("No results were found")],
-    //   });
-    // }
-
-    // if (res.loadType === "TRACK_LOADED" || res.loadType === "SEARCH_RESULT") {
-    //   player.queue.add(res.tracks[0]);
-    //   if (!player.playing && !player.paused && !player.queue.size)
-    //     player.play();
-    //   let embed = bot
-    //     .Embed()
-    //     .setAuthor("Added to queue", bot.config.iconURL)
-    //     .setThumbnail(res.tracks[0].displayThumbnail())
-    //     .setDescription(`[${res.tracks[0].title}](${res.tracks[0].uri})`)
-    //     .addField("Author", res.tracks[0].author, true)
-    //     .addField(
-    //       "Duration",
-    //       `\`${bot.ms(res.tracks[0].duration, {
-    //         colonNotation: true,
-    //       })}\``,
-    //       true
-    //     );
-    //   if (player.queue.totalSize > 1)
-    //     embed.addField("Position in queue", `${player.queue.size - 0}`, true);
-    //   return interaction.reply({ embeds: [embed] });
-    // }
-
-    // if (res.loadType === "PLAYLIST_LOADED") {
-    //   player.queue.add(res.tracks);
-    //   if (
-    //     !player.playing &&
-    //     !player.paused &&
-    //     player.queue.totalSize === res.tracks.length
-    //   )
-    //     player.play();
-    //   let embed = bot
-    //     .Embed()
-    //     .setAuthor("Playlist added to queue", bot.config.iconURL)
-    //     .setThumbnail(res.tracks[0].displayThumbnail())
-    //     .setDescription(`[${res.playlist.name}](${query})`)
-    //     .addField("Enqueued", `\`${res.tracks.length}\` songs`, false)
-    //     .addField(
-    //       "Playlist duration",
-    //       `\`${bot.ms(res.playlist.duration, {
-    //         colonNotation: true,
-    //       })}\``,
-    //       false
-    //     );
-    //   return interaction.reply({ embeds: [embed] });
-    // }
   }
 }
