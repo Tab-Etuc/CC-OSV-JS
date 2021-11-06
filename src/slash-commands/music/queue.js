@@ -29,7 +29,7 @@ module.exports = {
    */
   async execute (bot, interaction) {
     await interaction.deferReply()
-
+    try{
     let player = await bot.manager.get(interaction.guild.id)
     if (!player)
       return bot.say.errorMessage(
@@ -110,7 +110,10 @@ module.exports = {
     })
 
     if (!Pages.length || Pages.length === 1)
-      return interaction.editReply(Pages[0])
+      return interaction.editReply({embeds:Pages[0]})
     else bot.Pagination(interaction, Pages)
+  }catch (error) {
+    bot.utils.sendErrorLog(bot, error, "error");
   }
+}
 }
