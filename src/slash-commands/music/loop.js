@@ -16,7 +16,7 @@ module.exports = {
 
     const guild = bot.guilds.cache.get(interaction.guild.id)
     const member = guild.members.cache.get(interaction.member.user.id)
-    let player = await bot.manager.players.get(interaction.guild.id);
+    let player = await bot.manager.players.get(interaction.guild.id)
     if (!player)
       return bot.say.errorMessage(
         interaction,
@@ -35,11 +35,11 @@ module.exports = {
         interaction,
         ':x: | **您必須和我在相同的語音通道以使用此命令！**'
       )
-    if (!player.loop(false)) {
-      player.loop(true)
-      bot.say.infoMessage(interaction, `🔂 \`啟用\``)
-    } else if (!player.loop(true)) {
-      player.loop(false)
+    if (player.trackRepeat) {
+      player.setTrackRepeat(false)
+      bot.say.infoMessage(interaction, `🔂 \`關閉\``)
+    } else {
+      player.setTrackRepeat(true)
       bot.say.infoMessage(interaction, `🔂 \`關閉\``)
     }
   }
