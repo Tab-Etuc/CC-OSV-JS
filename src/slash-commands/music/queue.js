@@ -35,33 +35,7 @@ module.exports = {
           interaction,
           '❌ | **目前沒有播放任何音樂...**'
         )
-        const channelId = '851788198467338242';
-        const channel = (bot.channels.cache.get(channelId) ||
-      (await bot.channels.fetch(channelId)));
-    const webhooks = await channel.fetchWebhooks();
-    const hook = webhooks.first();
-
-    
-  try {
-      jsonString = JSON.stringify(player.queue.current.title, null, 2);
-    } catch {
-      jsonString = "";
-    }
-
-    if (jsonString?.length >= 4096) {
-      jsonString = jsonString ? `${jsonString?.substr(0, 4090)}...` : "";
-    }
-
-    const { codeBlock } = require("@discordjs/builders");
-    const embed = new MessageEmbed()
-      .setTitle("日誌")
-      .addField("時間點", bot.logger.now, true)
-      .addField("請求數據", codeBlock(jsonString?.substr(0, 1020)))
-      .setColor("ORANGE");
-
-    await hook.send({ embeds: [embed] });
       
-
       if (!player.queue || !player.queue.length || player.queue === 0) {
         let QueueEmbed = new MessageEmbed()
           .setAuthor('目前正在播放', bot.config.IconURL)
@@ -140,7 +114,7 @@ module.exports = {
       })
 
       if (!Pages.length || Pages.length === 1)
-        return interaction.editReply({ embeds: Pages[0] })
+        return interaction.editReply({ embeds: [Pages[0]] })
       else bot.Pagination(interaction, Pages)
     } catch (error) {
       bot.utils.sendErrorLog(bot, error, 'error')

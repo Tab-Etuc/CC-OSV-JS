@@ -53,9 +53,9 @@ module.exports = {
     let player = bot.createPlayer(interaction.channel, channel)
     if (player.state != 'CONNECTED') await player.connect()
     let search = await interaction.options.getString('歌曲', true)
-
+    let res = await player.search(search, interaction.user)
     try {
-      let res = await player.search(search, interaction.user)
+      
       if (res.loadType === 'LOAD_FAILED') {
         if (!player.queue.current) player.destroy()
         throw new Error(res.exception.interaction)
@@ -66,6 +66,7 @@ module.exports = {
         `:x: | **在搜索時出現了錯誤** ${err.interaction}`
       )
     }
+    
     switch (res.loadType) {
       case 'NO_MATCHES':
         if (!player.queue.current) player.destroy()
