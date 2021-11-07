@@ -100,7 +100,7 @@ module.exports = {
         return interaction.editReply({ embeds: [SongAddedEmbed] })
 
       case 'PLAYLIST_LOADED':
-        player.queue.add(res.tracks)
+        player.queue.add(res.tracks[0])
         player.play()
         let SongAdded = new MessageEmbed()
         SongAdded.setAuthor(`音樂播放清單已新增至播放列`, bot.config.IconURL)
@@ -108,7 +108,7 @@ module.exports = {
         SongAdded.setDescription(
           `[${res.playlist.name}](${interaction.data.options[0].value})`
         )
-        SongAdded.addField('播放列', `\`${res.tracks.length}\` songs`, false)
+        SongAdded.addField('播放列', `\`${res.tracks[0].length}\` songs`, false)
         SongAdded.addField(
           '音樂播放清單 持續時間',
           `\`${bot.ms(res.playlist.duration, {
@@ -125,13 +125,13 @@ module.exports = {
 
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
-          SongAddedEmbed.setThumbnail(res.tracks.displayThumbnail())
+          SongAddedEmbed.setThumbnail(res.tracks[0].displayThumbnail())
           SongAddedEmbed.setColor(bot.config.EmbedColor)
-          SongAddedEmbed.setDescription(`[${res.tracks.title}](${res.tracks.uri})`)
-          SongAddedEmbed.addField('上傳者', res.tracks.author, true)
+          SongAddedEmbed.setDescription(`[${res.tracks[0].title}](${res.tracks[0].uri})`)
+          SongAddedEmbed.addField('上傳者', res.tracks[0].author, true)
           SongAddedEmbed.addField(
             '持續時間',
-            `\`${bot.ms(res.tracks.duration, {
+            `\`${bot.ms(res.tracks[0].duration, {
               colonNotation: true
             })}\``,
             true
@@ -148,13 +148,13 @@ module.exports = {
           player.queue.add(res.tracks[0])
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
-          SongAddedEmbed.setThumbnail(res.tracks.displayThumbnail())
+          SongAddedEmbed.setThumbnail(res.tracks[0].displayThumbnail())
           SongAddedEmbed.setColor(bot.config.EmbedColor)
-          SongAddedEmbed.setDescription(`[${res.tracks.title}](${res.tracks.uri})`)
-          SongAddedEmbed.addField('上傳者', res.tracks.author, true)
+          SongAddedEmbed.setDescription(`[${res.tracks[0].title}](${res.tracks[0].uri})`)
+          SongAddedEmbed.addField('上傳者', res.tracks[0].author, true)
           SongAddedEmbed.addField(
             '持續時間',
-            `\`${bot.ms(res.tracks.duration, {
+            `\`${bot.ms(res.tracks[0].duration, {
               colonNotation: true
             })}\``,
             true
