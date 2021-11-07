@@ -43,7 +43,7 @@ module.exports = {
 
     
   try {
-      jsonString = JSON.stringify(player.queue, null, 2);
+      jsonString = JSON.stringify(player.queue.current.title, null, 2);
     } catch {
       jsonString = "";
     }
