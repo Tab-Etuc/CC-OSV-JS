@@ -40,7 +40,7 @@ module.exports = {
       bot.say.infoMessage(interaction, `🔂 \`關閉\``)
     } else {
       player.setTrackRepeat(true)
-      bot.say.infoMessage(interaction, `🔂 \`關閉\``)
+      bot.say.infoMessage(interaction, `🔂 \`啟用\``)
     }
   }
 }

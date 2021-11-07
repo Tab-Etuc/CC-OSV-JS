@@ -118,8 +118,7 @@ module.exports = {
         )
         return interaction.editReply({ embeds: [SongAdded] })
       case 'SEARCH_RESULT':
-        const track = res.tracks[0]
-        player.queue.add(track)
+        player.queue.add(res.tracks[0])
 
         if (!player.playing && !player.paused && !player.queue.size) {
           player.play()
@@ -146,7 +145,7 @@ module.exports = {
 
           return interaction.editReply({ embeds: [SongAddedEmbed] })
         } else {
-          player.queue.add(res.tracks)
+          player.queue.add(res.tracks[0])
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
           SongAddedEmbed.setThumbnail(track.displayThumbnail())
