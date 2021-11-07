@@ -114,8 +114,8 @@ module.exports = {
 
         const resultss = new MessageEmbed()
           .setDescription(`${results}\n\n\t**輸入您欲播放之歌曲編號！**\n`)
-          .setColor(bot.botconfig.EmbedColor)
-          .setAuthor(`搜尋結果── ${search}`, bot.botconfig.IconURL)
+          .setColor(bot.config.EmbedColor)
+          .setAuthor(`搜尋結果── ${search}`, bot.config.IconURL)
         interaction.editReply(resultss)
         try {
           collected = await awaitchannel.awaitMessages(filter, {
@@ -147,9 +147,9 @@ module.exports = {
           player.play()
         } else {
           let SongAddedEmbed = new MessageEmbed()
-          SongAddedEmbed.setAuthor(`Added to queue`, bot.botconfig.IconURL)
+          SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
           SongAddedEmbed.setThumbnail(track.displayThumbnail())
-          SongAddedEmbed.setColor(bot.botconfig.EmbedColor)
+          SongAddedEmbed.setColor(bot.config.EmbedColor)
           SongAddedEmbed.setDescription(`[${track.title}](${track.uri})`)
           SongAddedEmbed.addField('上傳者', track.author, true)
           SongAddedEmbed.addField(
