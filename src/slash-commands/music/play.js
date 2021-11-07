@@ -100,7 +100,7 @@ module.exports = {
         return interaction.editReply({ embeds: [SongAddedEmbed] })
 
       case 'PLAYLIST_LOADED':
-        player.queue.add(res.tracks[0])
+        player.queue.add(res.tracks)
         player.play()
         let SongAdded = new MessageEmbed()
         SongAdded.setAuthor(`音樂播放清單已新增至播放列`, bot.config.IconURL)
