@@ -35,7 +35,7 @@ module.exports = {
           interaction,
           '❌ | **目前沒有播放任何音樂...**'
         )
-      bot.sendError(interaction, player.queue)
+      bot.say.errorMessage(interaction, player.queue)
 
       if (!player.queue || !player.queue.length || player.queue === 0) {
         let QueueEmbed = new MessageEmbed()

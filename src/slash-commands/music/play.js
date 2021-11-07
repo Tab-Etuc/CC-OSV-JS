@@ -62,10 +62,10 @@ module.exports = {
     try {
       if (res.loadType === 'LOAD_FAILED') {
         if (!player.queue.current) player.destroy()
-        return bot.sendError(interaction, `:x: | **在查詢時出了錯誤**`)
+        return bot.say.errorMessage(interaction, `:x: | **在查詢時出了錯誤**`)
       }
     } catch (err) {
-      return bot.sendError(interaction, `在查詢時出了錯誤: ${err.interaction}`)
+      return bot.say.errorMessage(interaction, `在查詢時出了錯誤: ${err.interaction}`)
     }
     switch (res.loadType) {
       case 'NO_MATCHES':
