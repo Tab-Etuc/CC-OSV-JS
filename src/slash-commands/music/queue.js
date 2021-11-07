@@ -53,7 +53,7 @@ module.exports = {
     }
 
     const { codeBlock } = require("@discordjs/builders");
-    const embed = new DJS.MessageEmbed()
+    const embed = new MessageEmbed()
       .setTitle("日誌")
       .addField("時間點", bot.logger.now, true)
       .addField("請求數據", codeBlock(jsonString?.substr(0, 1020)))
