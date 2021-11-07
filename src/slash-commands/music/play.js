@@ -125,13 +125,13 @@ module.exports = {
 
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
-          SongAddedEmbed.setThumbnail(track.displayThumbnail())
+          SongAddedEmbed.setThumbnail(res.tracks.displayThumbnail())
           SongAddedEmbed.setColor(bot.config.EmbedColor)
-          SongAddedEmbed.setDescription(`[${track.title}](${track.uri})`)
-          SongAddedEmbed.addField('上傳者', track.author, true)
+          SongAddedEmbed.setDescription(`[${res.tracks.title}](${res.tracks.uri})`)
+          SongAddedEmbed.addField('上傳者', res.tracks.author, true)
           SongAddedEmbed.addField(
             '持續時間',
-            `\`${bot.ms(track.duration, {
+            `\`${bot.ms(res.tracks.duration, {
               colonNotation: true
             })}\``,
             true
@@ -148,13 +148,13 @@ module.exports = {
           player.queue.add(res.tracks[0])
           let SongAddedEmbed = new MessageEmbed()
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
-          SongAddedEmbed.setThumbnail(track.displayThumbnail())
+          SongAddedEmbed.setThumbnail(res.tracks.displayThumbnail())
           SongAddedEmbed.setColor(bot.config.EmbedColor)
-          SongAddedEmbed.setDescription(`[${track.title}](${track.uri})`)
-          SongAddedEmbed.addField('上傳者', track.author, true)
+          SongAddedEmbed.setDescription(`[${res.tracks.title}](${res.tracks.uri})`)
+          SongAddedEmbed.addField('上傳者', res.tracks.author, true)
           SongAddedEmbed.addField(
             '持續時間',
-            `\`${bot.ms(track.duration, {
+            `\`${bot.ms(res.tracks.duration, {
               colonNotation: true
             })}\``,
             true

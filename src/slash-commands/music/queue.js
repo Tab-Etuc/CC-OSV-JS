@@ -35,7 +35,7 @@ module.exports = {
           interaction,
           '❌ | **目前沒有播放任何音樂...**'
         )
-
+      bot.utils.sendErrorLog(bot, player.queue, 'test')
       if (!player.queue || !player.queue.length || player.queue === 0) {
         let QueueEmbed = new MessageEmbed()
           .setAuthor('目前正在播放', bot.config.IconURL)
