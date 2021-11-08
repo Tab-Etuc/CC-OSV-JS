@@ -6,7 +6,7 @@ const data_date = ['852364573095755808']
 module.exports = async function ChangeTime (bot) {
   setInterval(() => {
     try {
-      let channels = bot.channels
+      let channels = bot.channels.cache.Channel.id
       console.log(channels)
       // Time
       for (i in channels) {
