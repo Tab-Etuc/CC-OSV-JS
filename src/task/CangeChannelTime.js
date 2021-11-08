@@ -7,6 +7,7 @@ module.exports = async function ChangeTime (bot) {
   setInterval(() => {
     try {
       let channels = bot.channels.cache
+      console.log(channels)
       // Time
       for (i in channels) {
         const time_hour = moment()
