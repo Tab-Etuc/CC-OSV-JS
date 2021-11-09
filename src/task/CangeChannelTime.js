@@ -16,7 +16,7 @@ const TimeDay = moment()
 module.exports = async function ChangeTime (bot) {
   setInterval(() => {
     try {
-      console.log(bot.guilds.cache.guild)
+      console.log(bot.guilds.cache)
       bot.guilds.cache.forEach(guild => {
         let server = Guild.findOne({ guildId: guild.id })
         if (!server) return;
