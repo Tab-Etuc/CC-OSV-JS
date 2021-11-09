@@ -19,9 +19,9 @@ module.exports = async function ChangeTime (bot) {
       
       let list = bot.guilds.cache.map(g => g.id);
       console.log(list)
-      for (i in list){
-        let server = bot.fetchGuild(bot, list[i])
-      console.log(list[i])
+      list.forEach(a => {
+        let server = bot.fetchGuild(bot, a)
+      console.log(a)
       console.log(server)
         if (!server) return;
       console.log('123')
@@ -58,7 +58,7 @@ module.exports = async function ChangeTime (bot) {
             bot.logger.log('EVENTS', `Bot: 已更換頻道日期。`)
           }
         }
-      }
+      })
       
     } catch (error) {
       console.log(error)
