@@ -16,9 +16,11 @@ const TimeDay = moment()
 module.exports = async function ChangeTime (bot) {
   setInterval(() => {
     try {
-      console.log(bot.guilds.cache)
-      bot.guilds.cache.forEach(guild => {
-        let server = Guild.findOne({ guildId: guild.id })
+      
+      let list = bot.guilds.cache.map(g => g.id);
+      console.log(list)
+      for (i in list){
+        let server = Guild.findOne({ guildId: list[i] })
         if (!server) return;
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
@@ -49,7 +51,7 @@ module.exports = async function ChangeTime (bot) {
             bot.logger.log('EVENTS', `Bot: 已更換頻道日期。`)
           }
         }
-      })
+      }
       
     } catch (error) {
       console.log(error)
