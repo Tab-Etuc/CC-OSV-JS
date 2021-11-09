@@ -17,8 +17,8 @@ module.exports = async function ChangeTime (bot) {
   setInterval(() => {
     try {
       bot.guilds.cache.forEach(guild => {
-        let guildId = guild.id
-        let server = Guild.findOne({ guildId: guildId })
+        let server = Guild.findOne({ guildId: guild.id })
+        if (!server) return;
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
 

@@ -42,9 +42,8 @@ module.exports = {
     setInterval(() => {
       const status = statuses[Math.floor(Math.random() * statuses.length)]
       bot.user.setPresence({
-        status: statuses.status,
-        name: status.name,
-        type: status.type
+        activities: [{ name: status.name, type: status.type }],
+        status: statuses.status
       })
     }, 60000)
   }
