@@ -21,12 +21,17 @@ module.exports = async function ChangeTime (bot) {
       console.log(list)
       for (i in list){
         let server = Guild.findOne({ guildId: list[i] })
+      console.log('44')
+
         if (!server) return;
+      console.log('123')
+
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
-
+        console.log(ClockTime_Array)
         let channel_name
         for (i in ClockTime_Array) {
+          console.log('777')
           var channel = bot.channels.cache.get(ClockTime_Array[i])
           channel ? (channel_name = channel.name) : (channel_name = false)
           if (!channel_name) return
