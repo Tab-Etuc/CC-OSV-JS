@@ -1,4 +1,4 @@
-const bot = require('./index')
+const { bot } = require('./index')
 
 const formatNum = bot.utils.formatNumber
 const serverCount = formatNum(bot.guilds.cache.size)
