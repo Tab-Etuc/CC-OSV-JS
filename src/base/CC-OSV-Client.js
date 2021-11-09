@@ -7,6 +7,7 @@ const {
 } = require('discord.js')
 const { Manager } = require('erela.js')
 const economy = require('../models/EconomyModel')
+const Guild = require('../models/Guilds')
 const { readdirSync } = require('fs')
 const { join } = require('path')
 const prettyMilliseconds = require('pretty-ms')
@@ -60,6 +61,10 @@ class CCOSV extends Client {
       return newUser
     }
     return user
+  }
+  fetchGuild (bot, guildId) {
+    const guild = Guild.findOne({ guildId: guildId })
+    return guild
   }
 
   /**

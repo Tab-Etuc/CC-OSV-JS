@@ -20,7 +20,7 @@ module.exports = async function ChangeTime (bot) {
       let list = bot.guilds.cache.map(g => g.id);
       console.log(list)
       for (i in list){
-        let server = Guild.findOne({ guildId: list[i] })
+        let server = bot.fetchGuild(bot, list[i])
       console.log(list[i])
       console.log(server)
         if (!server) return;
