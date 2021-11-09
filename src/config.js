@@ -1,5 +1,5 @@
-const { CCOSV } = require('./base/CC-OSV-Client')
-const bot = CCOSV
+const bot = require('./index')
+
 const formatNum = bot.utils.formatNumber
 const serverCount = formatNum(bot.guilds.cache.size)
 const userCount = formatNum(
