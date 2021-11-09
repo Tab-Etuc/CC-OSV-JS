@@ -30,7 +30,15 @@ module.exports = {
     const userCount = formatNum(
       bot.guilds.cache.reduce((a, g) => a + g.memberCount, 0)
     )
-    const statuses = bot.config.Presence
+    const statuses = [
+      {
+        status: 'idle',
+        name: `正服務 ${serverCount} 個伺服器 和 ${userCount} 位使用者`,
+        type: 'LISTENING'
+      },
+      { status: 'idle', name: 'CC-OSV 測試版', type: 'WATCHING' },
+      { status: 'idle', name: '由 CC_#8844 編寫', type: 'WATCHING' }
+    ]
     setInterval(() => {
       const status = statuses[Math.floor(Math.random() * statuses.length)]
       bot.user.setPresence({

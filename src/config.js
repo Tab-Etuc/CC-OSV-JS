@@ -1,6 +1,3 @@
-const {serverCount} =  require("./events/client/ready")
-const {userCount} =  require("./events/client/ready")
-
 module.exports = {
   Admins: ['806346991730819121'], //Admins of the bot
   DefaultPrefix: process.env.Prefix || 'C', //Default prefix, Server Admins can change the prefix
@@ -25,13 +22,5 @@ module.exports = {
     }
   ], //Lavalink servers
 
-  Presence: [
-    {
-      status: 'idle',
-      name: `正服務 ${serverCount} 個伺服器 和 ${userCount} 位使用者`,
-      type: 'LISTENING'
-    },
-    { status: 'idle', name: 'CC-OSV 測試版', type: 'WATCHING' },
-    { status: 'idle', name: '由 CC_#8844 編寫', type: 'WATCHING' }
-  ]
+  
 }
