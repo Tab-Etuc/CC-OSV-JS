@@ -24,7 +24,7 @@ module.exports = async function ChangeTime (bot) {
       console.log(a)
       console.log(server)
         if (!server) return;
-      console.log('123')
+      console.log(server.prefix)
 
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
