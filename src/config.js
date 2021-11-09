@@ -1,10 +1,6 @@
-const { bot } = require('./index')
+const {serverCount} =  require("./events/client/ready")
+const {userCount} =  require("./events/client/ready")
 
-const formatNum = bot.utils.formatNumber
-const serverCount = formatNum(bot.guilds.cache.size)
-const userCount = formatNum(
-  bot.guilds.cache.reduce((a, g) => a + g.memberCount, 0)
-)
 module.exports = {
   Admins: ['806346991730819121'], //Admins of the bot
   DefaultPrefix: process.env.Prefix || 'C', //Default prefix, Server Admins can change the prefix
