@@ -28,6 +28,7 @@ module.exports = async function ChangeTime (bot) {
 
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
+        console.log(ClockTime_Array)
         if (!ClockTime_Array || !ClockDate_Array) return;
         console.log(ClockTime_Array)
         let channel_name
