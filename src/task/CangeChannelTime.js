@@ -17,23 +17,17 @@ module.exports = async function ChangeTime (bot) {
   setInterval(() => {
     try {
       
-      let list = bot.guilds.cache.map(g => g.id);
-      console.log(list)
-      list.forEach(a => {
+      let guildsList = bot.guilds.cache.map(g => g.id);
+      guildsList.forEach(a => {
         let server = bot.fetchGuild(bot, a)
-      console.log(a)
-      console.log(server)
-        if (!server) return;
-      console.log(server.prefix)
 
-        let ClockTime_Array = server.ClockTime
-        let ClockDate_Array = server.ClockDate
-        console.log(ClockTime_Array)
-        if (!ClockTime_Array || !ClockDate_Array) return;
-        console.log(ClockTime_Array)
+
+      let ClockTime_Array = server.ClockTime
+      let ClockDate_Array = server.ClockDate
+
+      if (!ClockTime_Array || !ClockDate_Array) guildsList.splice(0, 1);
         let channel_name
         for (i in ClockTime_Array) {
-          console.log('777')
           var channel = bot.channels.cache.get(ClockTime_Array[i])
           channel ? (channel_name = channel.name) : (channel_name = false)
           if (!channel_name) return

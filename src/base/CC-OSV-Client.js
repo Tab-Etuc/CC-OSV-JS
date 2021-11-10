@@ -64,6 +64,13 @@ class CCOSV extends Client {
   }
   fetchGuild (bot, guildId) {
     const guild = Guild.findOne({ guildId: guildId })
+    if (!guild) {
+      const newGuild = new Guild({
+        guildId: guildId,
+      })
+      newGuild.save()
+      return newGuild
+    }
     return guild
   }
 
