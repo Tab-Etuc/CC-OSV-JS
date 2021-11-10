@@ -19,8 +19,9 @@ module.exports = async function ChangeTime (bot) {
       const guildsList = bot.guilds.cache.map(g => g.id)
       guildsList.forEach(a => {
         console.log(guildsList)
+        a = a.toString()
         let server = bot.fetchGuild(bot, a)
-
+        
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
 
