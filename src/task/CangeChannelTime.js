@@ -16,49 +16,51 @@ const TimeDay = moment()
 module.exports = async function ChangeTime (bot) {
   setInterval(() => {
     try {
-      
-      let guildsList = bot.guilds.cache.map(g => g.id);
+      let guildsList = bot.guilds.cache.map(g => g.id)
       guildsList.forEach(a => {
-        console.log(guildsList);
+        console.log(guildsList)
         let server = bot.fetchGuild(bot, a)
 
+        let ClockTime_Array = server.ClockTime
+        let ClockDate_Array = server.ClockDate
 
-      let ClockTime_Array = server.ClockTime
-      let ClockDate_Array = server.ClockDate
-
-      if (!ClockTime_Array || !ClockDate_Array) guildsList.splice(0, 1);
-      console.log('898');
-        
-      let channel_name
-        for (i in ClockTime_Array) {
-          var channel = bot.channels.cache.get(ClockTime_Array[i])
-          channel ? (channel_name = channel.name) : (channel_name = false)
-          if (!channel_name) return
-          channel_name = channel_name.replace(/🕠現在時刻：|點/g, '')
-          if (channel_name !== TimeHour) {
-            bot.channels.cache.get(ClockTime_Array[i]).edit({
-              name: '🕠現在時刻：' + TimeHour + '點'
-            })
-            bot.logger.log('EVENTS', `Bot: 已更換頻道時間。`)
-          }
-        }
-        for (i in ClockDate_Array) {
-          var channel = bot.channels.cache.get(ClockDate_Array[i])
-          channel ? (channel_name = channel.name) : (channel_name = false)
-          if (!channel_name) return
-          channel_name = channel_name.replace(/📅伍年●|月|日●/g, '')
-
-          if (channel_name !== TimeMonth.toString() + TimeDay.toString()) {
-            bot.channels.cache.get(ClockDate_Array[i]).edit({
-              name: '📅伍年●' + TimeMonth + '月' + TimeDay + '日●'
-            })
-            bot.logger.log('EVENTS', `Bot: 已更換頻道日期。`)
-          }
-        }
+        ClockTime_Array ? ChangeClockTime(bot, ClockTime_Array) : console.log(a)
+        ClockDate_Array ? ChangeClockDate(bot, ClockDate_Array) : console.log(a)
+        console.log('898')
       })
-      
     } catch (error) {
       console.log(error)
     }
   }, 30000)
+}
+async function ChangeClockTime (bot, ClockTime_Array) {
+  let channel_name
+  for (i in ClockTime_Array) {
+    var channel = bot.channels.cache.get(ClockTime_Array[i])
+    channel ? (channel_name = channel.name) : (channel_name = false)
+    if (!channel_name) return
+    channel_name = channel_name.replace(/🕠現在時刻：|點/g, '')
+    if (channel_name !== TimeHour) {
+      bot.channels.cache.get(ClockTime_Array[i]).edit({
+        name: '🕠現在時刻：' + TimeHour + '點'
+      })
+      bot.logger.log('EVENTS', `Bot: 已更換頻道時間。`)
+    }
+  }
+}
+async function ChangeClockDate (bot, ClockDate_Array) {
+  let channel_name
+  for (i in ClockDate_Array) {
+    var channel = bot.channels.cache.get(ClockDate_Array[i])
+    channel ? (channel_name = channel.name) : (channel_name = false)
+    if (!channel_name) return
+    channel_name = channel_name.replace(/📅伍年●|月|日●/g, '')
+
+    if (channel_name !== TimeMonth.toString() + TimeDay.toString()) {
+      bot.channels.cache.get(ClockDate_Array[i]).edit({
+        name: '📅伍年●' + TimeMonth + '月' + TimeDay + '日●'
+      })
+      bot.logger.log('EVENTS', `Bot: 已更換頻道日期。`)
+    }
+  }
 }
