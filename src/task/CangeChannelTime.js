@@ -19,6 +19,7 @@ module.exports = async function ChangeTime (bot) {
       
       let guildsList = bot.guilds.cache.map(g => g.id);
       guildsList.forEach(a => {
+        console.log(guildsList);
         let server = bot.fetchGuild(bot, a)
 
 
@@ -26,7 +27,9 @@ module.exports = async function ChangeTime (bot) {
       let ClockDate_Array = server.ClockDate
 
       if (!ClockTime_Array || !ClockDate_Array) guildsList.splice(0, 1);
-        let channel_name
+      console.log('898');
+        
+      let channel_name
         for (i in ClockTime_Array) {
           var channel = bot.channels.cache.get(ClockTime_Array[i])
           channel ? (channel_name = channel.name) : (channel_name = false)
