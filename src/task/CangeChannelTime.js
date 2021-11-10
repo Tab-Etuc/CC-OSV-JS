@@ -16,7 +16,7 @@ const TimeDay = moment()
 module.exports = async function ChangeTime (bot) {
   setInterval(() => {
     try {
-      let guildsList = bot.guilds.cache.map(g => g.id)
+      const guildsList = bot.guilds.cache.map(g => g.id)
       guildsList.forEach(a => {
         console.log(guildsList)
         let server = bot.fetchGuild(bot, a)
