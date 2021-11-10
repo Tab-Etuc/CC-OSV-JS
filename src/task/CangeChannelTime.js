@@ -25,7 +25,7 @@ module.exports = async function ChangeTime (bot) {
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
 
-        ClockTime_Array ? ChangeClockTime(bot, ClockTime_Array) : console.log(a)
+        ClockTime_Array ? ChangeClockTime(bot, ClockTime_Array) : console.log(server)
         ClockDate_Array ? ChangeClockDate(bot, ClockDate_Array) : console.log(a)
         console.log('898')
       })

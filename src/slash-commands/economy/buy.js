@@ -18,7 +18,7 @@ module.exports = {
     async execute(bot, interaction) {
         let user = await bot.fetchUser(bot, interaction.member.id);
         const arg = interaction.options.getString("商品", false);
-        const item = itemss.find(x => x.name.toLowerCase() === args.join(' ').toString().toLowerCase() || x.name.toLowerCase() === arg.toString().toLowerCase() || x.name.toLowerCase() === `${arg.toString().toLowerCase()} ${arg.toString().toLowerCase()}`);
+        const item = itemss.find(x => x.name.toLowerCase() === arg.join(' ').toString().toLowerCase() || x.name.toLowerCase() === arg.toString().toLowerCase() || x.name.toLowerCase() === `${arg.toString().toLowerCase()} ${arg.toString().toLowerCase()}`);
         if (!item) {
             return interaction.reply("您無法購買不存在的商品。請使用正確的商品ID");
         }
