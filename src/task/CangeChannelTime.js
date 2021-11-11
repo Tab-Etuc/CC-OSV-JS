@@ -1,5 +1,6 @@
 const moment = require('moment-timezone')
 const Guild = require('../models/Guilds')
+let util = require('util')
 
 const data_time = ['888695124438163476', '852346393141182484']
 const data_date = ['852364573095755808']
@@ -21,11 +22,12 @@ module.exports = async function ChangeTime (bot) {
         console.log(guildsList)
         a = a.toString()
         let server = bot.fetchGuild(bot, a)
-        
+
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
-
-        ClockTime_Array ? ChangeClockTime(bot, ClockTime_Array) : console.log(server)
+        ClockTime_Array
+          ? ChangeClockTime(bot, ClockTime_Array)
+          : console.log(server)
         ClockDate_Array ? ChangeClockDate(bot, ClockDate_Array) : console.log(a)
         console.log('898')
       })
@@ -34,6 +36,8 @@ module.exports = async function ChangeTime (bot) {
     }
   }, 30000)
 }
+
+
 async function ChangeClockTime (bot, ClockTime_Array) {
   let channel_name
   for (i in ClockTime_Array) {

@@ -19,6 +19,7 @@ const getLavalink = require('../models/getLavalink')
 const getChannel = require('../models/getChannel')
 
 require('./EpicPlayer')
+require('dotenv').config();
 
 // Creates CC-OSV-bot class
 class CCOSV extends Client {
@@ -62,17 +63,7 @@ class CCOSV extends Client {
     }
     return user
   }
-  fetchGuild (bot, guildId) {
-    const guild = Guild.findOne({ _id: guildId })
-    if (!guild) {
-      const newGuild = new Guild({
-        _id: guildId,
-      })
-      newGuild.save()
-      return newGuild
-    }
-    return guild
-  }
+  
 
   /**
    *
@@ -210,12 +201,10 @@ class CCOSV extends Client {
           )
           .setColor(this.config.EmbedColor)
         //.setFooter("Started playing at");
-        let NowPlaying = await bot.channels.cache
-          .get(player.textChannel)
-          .send({
-            embeds: [TrackStartedEmbed],
-            components: [bot.createController(player.options.guild)]
-          })
+        let NowPlaying = await bot.channels.cache.get(player.textChannel).send({
+          embeds: [TrackStartedEmbed],
+          components: [bot.createController(player.options.guild)]
+        })
         player.setNowplayingMessage(NowPlaying)
       })
       .on('queueEnd', player => {

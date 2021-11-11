@@ -1,3 +1,4 @@
+require('dotenv').config();
 module.exports = {
   Admins: ['806346991730819121'], //Admins of the bot
   DefaultPrefix: process.env.Prefix || 'C', //Default prefix, Server Admins can change the prefix
