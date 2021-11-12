@@ -8,7 +8,7 @@ module.exports = {
   ClientSecret: process.env.Discord_ClientSecret || '', //Discord Client Secret
   Scopes: ['identify', 'guilds', 'applications.commands'], //Discord OAuth2 Scopes
   DefaultVolume: 100, //Sets the default volume of the bot, You can change this number anywhere from 1 to 100
-  '24/7': true, //If you want the bot to be stay in the vc 24/7
+  '24/7': false, //If you want the bot to be stay in the vc 24/7
   EmbedColor: 'RANDOM', //Color of most embeds | Dont edit unless you want a specific color instead of a random one each time
   Permissions: 2205281600, //Bot Inviting Permissions
   nodes: [

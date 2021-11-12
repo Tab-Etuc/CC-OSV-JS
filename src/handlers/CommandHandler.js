@@ -1,26 +1,33 @@
-const glob = require("glob");
+const glob = require('glob')
+const { readdirSync } = require('fs')
+const { join } = require('path')
+module.exports = async function loadCommands (bot) {
+  const slashCommandFiles = glob.sync('./src/slash-commands/**/*.js')
+  const msgCommandFiles = readdirSync(
+    join(__dirname, '../message-commands')
+  ).filter(file => file.endsWith('.js'))
 
-module.exports = async function loadCommands(bot) {
-  const commandFiles = glob.sync("./src/slash-commands/**/*.js");
-  // const commandFiles = glob.sync("./Source/Slash-commands/utility/*.js")
-  for (const file of commandFiles) {
-    const command = require(`../../${file}`);
+  for (const file of slashCommandFiles) {
+    const command = require(`../../${file}`)
 
     const data = {
       name: command.name,
-      description: command?.description ?? "Empty description",
+      description: command?.description ?? 'Empty description',
       options: command?.options ?? []
-    };
+    }
 
-    await bot.application?.commands.create(data);
+    await bot.application?.commands.create(data)
 
-    delete require.cache[require.resolve(`../../${file}`)];
+    delete require.cache[require.resolve(`../../${file}`)]
 
-    
-
-    bot.slashCommands.set(command.name, command);
+    bot.slashCommands.set(command.name, command)
 
     // debug
-    bot.logger.log("commands", `Loaded Command: ${command.name}`);
+    bot.logger.log('Slash-Commands', `${command.name}`)
   }
-};
+  for (const file of msgCommandFiles) {
+    const command = require(join(__dirname, '../message-commands', `${file}`))
+    bot.msgCommands.set(command.name, command)
+    bot.logger.log('Msg-Commands', `${command.name}`)
+  }
+}

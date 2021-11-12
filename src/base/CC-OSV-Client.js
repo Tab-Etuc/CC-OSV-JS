@@ -7,9 +7,6 @@ const {
 } = require('discord.js')
 const { Manager } = require('erela.js')
 const economy = require('../models/EconomyModel')
-const Guild = require('../models/Guilds')
-const { readdirSync } = require('fs')
-const { join } = require('path')
 const prettyMilliseconds = require('pretty-ms')
 const spotify = require('better-erela.js-spotify').default
 const apple = require('erela.js-apple')
@@ -139,7 +136,6 @@ class CCOSV extends Client {
     this.login(this.config.Token)
     require('../handlers/EventHandler')(this)
     require(`../task/CangeChannelTime`)(this)
-    this.LoadMsgCommands()
 
     
 
@@ -232,16 +228,6 @@ class CCOSV extends Client {
       .setDescription(Error)
 
     Channel.send(embed)
-  }
-
-  LoadMsgCommands () {
-    const commandFiles = readdirSync(
-      join(__dirname, '../message-commands')
-    ).filter(file => file.endsWith('.js'))
-    for (const file of commandFiles) {
-      const command = require(join(__dirname, '../message-commands', `${file}`))
-      this.msgCommands.set(command.name, command)
-    }
   }
 
   createPlayer (textChannel, voiceChannel) {
