@@ -17,7 +17,7 @@ module.exports = async function ChangeTime (bot) {
       servers = servers.map(g => g._id)
       servers.forEach(async a => {
         let server = await Guild.findOne({ _id: a })
-
+        console.log(a)
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
         ClockTime_Array
