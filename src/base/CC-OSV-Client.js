@@ -134,12 +134,14 @@ class CCOSV extends Client {
   }
 
   build () {
+    let bot = this
+
     this.login(this.config.Token)
     require('../handlers/EventHandler')(this)
     require(`../task/CangeChannelTime`)(this)
     this.LoadMsgCommands()
 
-    let bot = this
+    
 
     this.manager = new Manager({
       plugins: [new deezer(), new apple(), new spotify(), new facebook()],

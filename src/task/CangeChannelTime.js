@@ -1,9 +1,5 @@
 const moment = require('moment-timezone')
 const Guild = require('../models/Guilds')
-let util = require('util')
-
-const data_time = ['888695124438163476', '852346393141182484']
-const data_date = ['852364573095755808']
 
 const TimeHour = moment()
   .tz('Asia/Taipei')
@@ -15,13 +11,14 @@ const TimeDay = moment()
   .tz('Asia/Taipei')
   .format('DD')
 module.exports = async function ChangeTime (bot) {
-  setInterval(() => {
+  setInterval(async () => {
     try {
-      const guildsList = bot.guilds.cache.map(g => g.id)
-      guildsList.forEach(a => {
-        console.log(guildsList)
-        a = a.toString()
-        let server = bot.fetchGuild(bot, a)
+      let servers = await Guild.find()
+      servers = servers.map(g => g._id)
+
+      console.log(servers)
+      servers.forEach(async a => {
+        let server = await Guild.findOne({ _id: a })
 
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
@@ -29,14 +26,12 @@ module.exports = async function ChangeTime (bot) {
           ? ChangeClockTime(bot, ClockTime_Array)
           : console.log(server)
         ClockDate_Array ? ChangeClockDate(bot, ClockDate_Array) : console.log(a)
-        console.log('898')
       })
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err)
     }
   }, 30000)
 }
-
 
 async function ChangeClockTime (bot, ClockTime_Array) {
   let channel_name
