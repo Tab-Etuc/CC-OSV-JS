@@ -17,7 +17,6 @@ module.exports = async function ChangeTime (bot) {
       servers = servers.map(g => g._id)
       servers.forEach(async a => {
         let server = await Guild.findOne({ _id: a })
-        console.log(a)
         let ClockTime_Array = server.ClockTime
         let ClockDate_Array = server.ClockDate
         ClockTime_Array
@@ -37,7 +36,6 @@ async function ChangeClockTime (bot, ClockTime_Array) {
     var channel = bot.channels.cache.get(ClockTime_Array[i])
     channel ? (channel_name = channel.name) : (channel_name = false)
     if (!channel_name) return
-    console.log(channel_name)
     channel_name = channel_name.replace(/🕠現在時刻：|點/g, '')
     if (channel_name !== TimeHour) {
       bot.channels.cache.get(ClockTime_Array[i]).edit({
@@ -53,7 +51,6 @@ async function ChangeClockDate (bot, ClockDate_Array) {
     var channel = bot.channels.cache.get(ClockDate_Array[i])
     channel ? (channel_name = channel.name) : (channel_name = false)
     if (!channel_name) return
-    console.log(channel_name)
 
     channel_name = channel_name.replace(/📅伍年●|月|日●/g, '')
 
