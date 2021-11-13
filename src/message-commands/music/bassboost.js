@@ -15,20 +15,23 @@ module.exports = {
   aliases: ['bb', 'bass'],
   /**
    *
-   * @param {import("../structures/DiscordMusicBot")} client
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} message
    * @param {string[]} args
    * @param {*} param3
    */
-  run: async (client, message, args, { GuildDB }) => {
-    let player = await client.Manager.get(message.guild.id)
+
+  run: async (bot, message, args, GuildDB) => {
+    let player = await bot.manager.get(message.guild.id)
     if (!player)
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
         '❌ | **目前沒有播放任何音樂...**'
       )
     if (!message.member.voice.channel)
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
         '❌ | **您必須在語音通道中使用此指令！**'
       )
@@ -36,20 +39,22 @@ module.exports = {
       message.guild.me.voice.channel &&
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     )
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
-        ':x: | **您必須和我在相同的語音通道以使用此指令！**'
+        '❌ | **您必須和我在相同的語音通道以使用此指令！**'
       )
 
     if (!args[0])
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
         '**請指定一個效果等級 \n可用的等級:** `無`, `低`, `中`, `高`'
       ) //if the user do not provide args [arguments]
 
     let level = '無'
-    if (args.length && args[0].to低erCase() in levels)
-      level = args[0].to低erCase()
+    if (args.length && args[0].toLowerCase in levels)
+      level = args[0].toLowerCase()
 
     player.setEQ(
       ...new Array(3)
@@ -57,11 +62,10 @@ module.exports = {
         .map((_, i) => ({ band: i, gain: levels[level] }))
     )
 
-    return client.sendTime(
+    return bot.say.sendTime(
+      bot,
       message.channel,
       `✅ | **低音效果等級已設定至：** \`${level}\``
     )
   }
-    
-  
 }

@@ -16,7 +16,7 @@ const getLavalink = require('../models/getLavalink')
 const getChannel = require('../models/getChannel')
 
 require('./EpicPlayer')
-require('dotenv').config();
+require('dotenv').config()
 
 // Creates CC-OSV-bot class
 class CCOSV extends Client {
@@ -60,7 +60,6 @@ class CCOSV extends Client {
     }
     return user
   }
-  
 
   /**
    *
@@ -137,8 +136,6 @@ class CCOSV extends Client {
     require('../handlers/EventHandler')(this)
     require(`../task/CangeChannelTime`)(this)
 
-    
-
     this.manager = new Manager({
       plugins: [new deezer(), new apple(), new spotify(), new facebook()],
       nodes: this.config.nodes,
@@ -162,27 +159,6 @@ class CCOSV extends Client {
       )
       .on('trackError', (player, track) =>
         console.log(`Player: ${player.options.guild} | Track had an error.`)
-      )
-      .on('trackStuck', (player, track, threshold) =>
-        console.log(`Player: ${player.options.guild} | Track is stuck.`)
-      )
-      .on('playerCreate', player =>
-        console.log(
-          `Player: ${player.options.guild} | A player has been created in ${
-            bot.guilds.cache.get(player.options.guild)
-              ? bot.guilds.cache.get(player.options.guild).name
-              : 'a guild'
-          }`
-        )
-      )
-      .on('playerDestroy', player =>
-        console.log(
-          `Player: ${player.options.guild} | A player has been destroyed in ${
-            bot.guilds.cache.get(player.options.guild)
-              ? bot.guilds.cache.get(player.options.guild).name
-              : 'a guild'
-          }`
-        )
       )
       .on('trackStart', async (player, track) => {
         let TrackStartedEmbed = new MessageEmbed()
@@ -222,14 +198,6 @@ class CCOSV extends Client {
         if (!this.config['24/7']) player.destroy()
       })
   }
-  sendTime (Channel, Error) {
-    let embed = new MessageEmbed()
-      .setColor(this.config.EmbedColor)
-      .setDescription(Error)
-
-    Channel.send(embed)
-  }
-
   createPlayer (textChannel, voiceChannel) {
     return this.manager.create({
       guild: textChannel.guild.id,

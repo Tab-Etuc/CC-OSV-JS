@@ -1,52 +1,52 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
-  name: "pause",
-  description: "⏸暫停音樂。",
-  usage: "",
+  name: 'pause',
+  description: '⏸暫停音樂。',
+  usage: '',
   permissions: {
-    channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
-    member: [],
+    channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
+    member: []
   },
   aliases: [],
   /**
    *
-   * @param {import("../structures/DiscordMusicBot")} client
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} message
    * @param {string[]} args
    * @param {*} param3
    */
-  run: async (client, message, args, { GuildDB }) => {
-    let player = await client.Manager.get(message.guild.id);
+  run: async (bot, message, args, GuildDB) => {
+    let player = await bot.manager.get(message.guild.id)
     if (!player)
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
-        "❌ | **Nothing is playing right now...**"
-      );
+        '❌ | **目前沒有播放任何音樂...**'
+      )
     if (!message.member.voice.channel)
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
-        "❌ | **You must be in a voice channel to use this command!**"
-      );
+        '❌ | **您必須在語音通道中使用此指令！**'
+      )
     if (
       message.guild.me.voice.channel &&
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     )
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
-        ":x: | **You must be in the same voice channel as me to use this command!**"
-      );
+        '❌ | **您必須和我在相同的語音通道以使用此指令！**'
+      )
     if (player.paused)
-      return client.sendTime(
-        message.channel,
-        "❌ | **Music is already paused!**"
-      );
-    player.pause(true);
+      return bot.say.sendTime(bot, message.channel, '❌ | **音樂暫停中！**')
+    player.pause(true)
     let embed = new MessageEmbed()
-      .setAuthor(`Paused!`, client.botconfig.IconURL)
-      .setColor(client.botconfig.EmbedColor)
-      .setDescription(`Type \`${GuildDB.prefix}resume\` to continue playing!`);
-    await message.channel.send(embed);
-    await message.react("✅");
+      .setAuthor(`已暫停！`, bot.botconfig.IconURL)
+      .setColor(bot.botconfig.EmbedColor)
+      .setDescription(`輸入 \`${GuildDB.prefix}resume\` 以重新播放！`)
+    await message.channel.send({ embeds: [embed] })
+    await message.react('✅')
   }
-};
+}

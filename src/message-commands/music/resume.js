@@ -1,49 +1,46 @@
-const { MessageEmbed } = require("discord.js");
-const { TrackUtils } = require("erela.js");
-
 module.exports = {
-  name: "resume",
-  description: "🔂重新播放音樂。",
-  usage: "",
+  name: 'resume',
+  description: '🔂重新播放音樂。',
+  usage: '',
   permissions: {
-    channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
-    member: [],
+    channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
+    member: []
   },
   aliases: [],
   /**
    *
-   * @param {import("../structures/DiscordMusicBot")} client
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} message
    * @param {string[]} args
    * @param {*} param3
    */
-  run: async (client, message, args, { GuildDB }) => {
-    let player = await client.Manager.get(message.guild.id);
+  run: async (bot, message, args, GuildDB) => {
+    let player = await bot.manager.get(message.guild.id)
     if (!player)
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
-        "❌ | **目前沒有播放任何音樂...**"
-      );
+        '❌ | **目前沒有播放任何音樂...**'
+      )
     if (!message.member.voice.channel)
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
-        "❌ | **您必須在語音通道中使用此指令！**"
-      );
+        '❌ | **您必須在語音通道中使用此指令！**'
+      )
     if (
       message.guild.me.voice.channel &&
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     )
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
-        ":x: | **您必須和我在相同的語音通道以使用此指令！**"
-      );
+        '❌ | **您必須和我在相同的語音通道以使用此指令！**'
+      )
 
     if (player.playing)
-      return client.sendTime(
-        message.channel,
-        "❌ | **歌曲播放中！**"
-      );
-    player.pause(false);
-    await message.react("✅");
+      return bot.say.sendTime(bot, message.channel, '❌ | **歌曲播放中！**')
+    player.pause(false)
+    await message.react('✅')
   }
-};
+}

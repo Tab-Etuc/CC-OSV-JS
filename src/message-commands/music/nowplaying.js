@@ -1,48 +1,48 @@
-const { MessageEmbed } = require("discord.js");
-const prettyMilliseconds = require("pretty-ms");
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
-  name: "nowplaying",
-  description: "🎵查看目前正在播放的歌曲",
-  usage: "",
+  name: 'nowplaying',
+  description: '🎵查看目前正在播放的歌曲',
+  usage: '',
   permissions: {
-    channel: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
-    member: [],
+    channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
+    member: []
   },
-  aliases: ["np", "nowplaying", "now playing"],
+  aliases: ['np', 'nowplaying', 'now playing'],
   /**
    *
-   * @param {import("../structures/DiscordMusicBot")} client
+   * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} message
    * @param {string[]} args
    * @param {*} param3
    */
-  run: async (client, message, args, { GuildDB }) => {
-    let player = await client.Manager.get(message.guild.id);
+  run: async (bot, message, args, GuildDB) => {
+    let player = await bot.manager.get(message.guild.id)
     if (!player)
-      return client.sendTime(
+      return bot.say.sendTime(
+        bot,
         message.channel,
-        "❌ | **Nothing is playing right now...**"
-      );
+        '❌ | **目前沒有播放任何音樂...**'
+      )
 
-    let song = player.queue.current;
+    let song = player.queue.current
     let QueueEmbed = new MessageEmbed()
-      .setAuthor("Currently playing", client.botconfig.IconURL)
-      .setColor(client.botconfig.EmbedColor)
+      .setAuthor('正在播放', bot.config.IconURL)
+      .setColor(bot.config.EmbedColor)
       .setDescription(`[${song.title}](${song.uri})`)
-      .addField("Requested by", `${song.requester}`, true)
+      .addField('請求者', `${song.requester}`, true)
       .addField(
-        "Duration",
+        '持續時間',
         `${
-          client.ProgressBar(player.position, player.queue.current.duration, 15)
+          bot.ProgressBar(player.position, player.queue.current.duration, 15)
             .Bar
-        } \`${prettyMilliseconds(player.position, {
-          colonNotation: true,
-        })} / ${prettyMilliseconds(player.queue.current.duration, {
-          colonNotation: true,
+        } \`${bot.ms(player.position, {
+          colonNotation: true
+        })} / ${bot.ms(player.queue.current.duration, {
+          colonNotation: true
         })}\``
       )
-      .setThumbnail(player.queue.current.displayThumbnail());
-    return message.channel.send(QueueEmbed);
+      .setThumbnail(player.queue.current.displayThumbnail())
+    return message.channel.send({ embeds: [QueueEmbed] })
   }
-};
+}
