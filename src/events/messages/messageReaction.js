@@ -1,4 +1,4 @@
-const Guild = require('../models/Guilds')
+const Guild = require('../../models/Guilds')
 
 module.exports = {
   name: 'raw',
