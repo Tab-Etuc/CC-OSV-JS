@@ -50,7 +50,7 @@ module.exports = {
     if (!node || !node.connected) {
       return bot.say.errorMessage(
         interaction,
-        '❌ | **Lavalink node not connected**'
+        '❌ | **Lavalink伺服器重新連線中，請稍後再試。**'
       )
     }
 

@@ -2,25 +2,11 @@ const glob = require('glob')
 
 module.exports = function loadEvents (bot) {
   const eventFiles = glob.sync('./src/events/**/*.js')
-  
 
   eventFiles.forEach(file => {
     const event = require(`../../${file}`)
-    let type = 'bot'
 
-    if (!event.execute) {
-      throw new TypeError(
-        `[ERROR]: execute function is required for events! (${file})`
-      )
-    }
-
-    if (!event.name) {
-      throw new TypeError(`[ERROR]: name is required for events! (${file})`)
-    }
-
-    if (file.includes('player.')) {
-      bot.player.on(event.name, event.execute.bind(null, bot))
-    } else if (event.once === true) {
+    if (event.once === true) {
       bot.once(event.name, event.execute.bind(null, bot))
     } else if (event.once === false) {
       bot.on(event.name, event.execute.bind(null, bot))
@@ -31,7 +17,7 @@ module.exports = function loadEvents (bot) {
     // debug
     bot.logger.log(
       'events',
-      `Loaded ${bot.utils.toCapitalize(type)}: ${event.name}`
+      `Loaded BOT: ${event.name}`
     )
   })
 }

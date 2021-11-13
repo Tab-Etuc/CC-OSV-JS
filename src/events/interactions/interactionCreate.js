@@ -1,23 +1,20 @@
 const Guilds = require('../../models/Guilds.js')
-const Controller = require("../../models/Controller");
+const Controller = require('../../models/Controller')
 
 module.exports = {
   name: 'interactionCreate',
   once: false,
   async execute (bot, interaction) {
+    // 指令
     if (interaction.isCommand()) {
-      let prefix = bot.config.DefaultPrefix
-
       let GuildData = await Guilds.findOne({
-        guildId: interaction.guildId
+        _id: interaction.guildId
       })
-
-      if (GuildData && GuildData.prefix) prefix = GuildData.prefix
       // 如果沒有伺服器資料，則創建
       if (!GuildData) {
         let newGuild = new Guilds({
-          guildId: interaction.guildId,
-          prefix: prefix
+          _id: interaction.guildId,
+          prefix: bot.config.DefaultPrefix
         }).save()
       }
 
@@ -57,7 +54,7 @@ module.exports = {
         await command?.execute(bot, interaction)
         let guild = await Guilds.findOne({ guildId: interaction.guildId })
         guild.CommandsRan++
-        guild.save()
+        await guild.save()
       } catch (err) {
         bot.say.errorMessage(
           interaction,
@@ -65,9 +62,10 @@ module.exports = {
         )
         return bot.utils.sendErrorLog(bot, err, 'error')
       }
-    }else if (interaction.isButton()) {
-      if (interaction.customId.startsWith("controller"))
-        Controller(bot, interaction);
+      // 按鈕
+    } else if (interaction.isButton()) {
+      if (interaction.customId.startsWith('controller'))
+        Controller(bot, interaction)
     }
   }
 }

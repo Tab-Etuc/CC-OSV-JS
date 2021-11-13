@@ -1,4 +1,3 @@
-const Discord = require('discord.js')
 
 async function embed(message, options=[]){
   try{
@@ -51,12 +50,12 @@ async function embed(message, options=[]){
     .setDescription('Select any ***option*** from the Select Menu in this message and i will **collect all informations and create a embed** for you using that data.\n\nThis is a completed embed.')
     .setImage('https://media.discordapp.net/attachments/867344516600037396/879238983492710450/unknown.png')
     .setColor(options.embedColor || '#075FFF')
-    .setFooter('Embed creator using Simply-DJS')
+    .setFooter('CC-OSV')
     
-    message.reply({ embeds: [embed], components: [row2, row]})
+    message.editReply({ embeds: [embed], components: [row2, row]})
     
     const emb = new MessageEmbed()
-    .setFooter('Simply DJS')
+    .setFooter('CC-OSV')
     .setColor('#2F3136')
     
     message.channel.send({ content: '***Preview***', embeds: [emb]}).then(async a => {

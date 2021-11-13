@@ -1,58 +1,58 @@
-const { MessageEmbed, Interaction } = require("discord.js");
-
-const { havePermissions } = require("./Functions");
+const { MessageEmbed, Interaction } = require('discord.js')
 
 /**
  * Returns a custom embed
  * @param {Interaction} interaction
  */
-function baseEmbed(interaction) {
+function baseEmbed (interaction) {
   if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (baseEmbed)");
+    throw Error("'interaction' must be passed down as param! (baseEmbed)")
   }
 
-  const avatar = interaction.user?.displayAvatarURL({ dynamic: true });
-  const tag = interaction.user?.tag;
+  const avatar = interaction.user?.displayAvatarURL({ dynamic: true })
+  const tag = interaction.user?.tag
 
   return new MessageEmbed()
     .setFooter(tag, avatar)
-    .setColor(interaction.guild.me.displayColor || "#00FFFF")
-    .setTimestamp();
+    .setColor(interaction.guild.me.displayColor || '#00FFFF')
+    .setTimestamp()
 }
 
 /**
  * Returns a custom embed
  * @param {Interaction} interaction
  */
-function rootEmbed(interaction) {
+function rootEmbed (interaction) {
   if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (baseEmbed)");
+    throw Error("'interaction' must be passed down as param! (baseEmbed)")
   }
 
-  return new MessageEmbed()
-    .setColor(interaction.guild.me.displayColor || "#00FFFF");
+  return new MessageEmbed().setColor(
+    interaction.guild.me.displayColor || '#00FFFF'
+  )
 }
-
 
 /**
  * Returns a custom embed
  * @param {Interaction} interaction
  * @param {string} text
  */
-function infoMessage(interaction, text) {
+function infoMessage (interaction, text) {
   if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (InfoMessage)");
+    throw Error("'interaction' must be passed down as param! (InfoMessage)")
   }
 
   if (!text) {
-    throw Error("'text' must be passed down as param! (InfoMessage)");
+    throw Error("'text' must be passed down as param! (InfoMessage)")
   }
 
   const embedI = new MessageEmbed()
     .setDescription(text)
-    .setColor(interaction.guild.me.displayColor || "#00FFFF");
+    .setColor(interaction.guild.me.displayColor || '#00FFFF')
 
-  return interaction.editReply({ embeds: [embedI], allowedMentions: { repliedUser: false } }).catch(console.error);
+  return interaction
+    .editReply({ embeds: [embedI], allowedMentions: { repliedUser: false } })
+    .catch(console.error)
 }
 
 /**
@@ -60,20 +60,24 @@ function infoMessage(interaction, text) {
  * @param {Interaction} interaction
  * @param {string} text
  */
-function warnMessage(interaction, text) {
+function warnMessage (interaction, text) {
   if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (WarnMessage)");
+    throw Error("'interaction' must be passed down as param! (WarnMessage)")
   }
 
   if (!text) {
-    throw Error("'text' must be passed down as param! (WarnMessage)");
+    throw Error("'text' must be passed down as param! (WarnMessage)")
   }
 
-  const embedW = new MessageEmbed()
-    .setDescription(text)
-    .setColor("ORANGE");
+  const embedW = new MessageEmbed().setDescription(text).setColor('ORANGE')
 
-  return interaction.editReply({ ephemeral: true, embeds: [embedW], allowedMentions: { repliedUser: false } }).catch(console.error);
+  return interaction
+    .editReply({
+      ephemeral: true,
+      embeds: [embedW],
+      allowedMentions: { repliedUser: false }
+    })
+    .catch(console.error)
 }
 
 /**
@@ -81,20 +85,24 @@ function warnMessage(interaction, text) {
  * @param {Interaction} interaction
  * @param {string} text
  */
-function errorMessage(interaction, text) {
+function errorMessage (interaction, text) {
   if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (ErrorMessage)");
+    throw Error("'interaction' must be passed down as param! (ErrorMessage)")
   }
 
   if (!text) {
-    throw Error("'text' must be passed down as param! (ErrorMessage)");
+    throw Error("'text' must be passed down as param! (ErrorMessage)")
   }
 
-  const embedE = new MessageEmbed()
-    .setDescription(text)
-    .setColor("RED");
+  const embedE = new MessageEmbed().setDescription(text).setColor('RED')
 
-  return interaction.editReply({ ephemeral: true, embeds: [embedE], allowedMentions: { repliedUser: false } }).catch(console.error);
+  return interaction
+    .editReply({
+      ephemeral: true,
+      embeds: [embedE],
+      allowedMentions: { repliedUser: false }
+    })
+    .catch(console.error)
 }
 
 /**
@@ -104,37 +112,42 @@ function errorMessage(interaction, text) {
  * @param {string} text
  * @param {string | number} color
  */
-function queueMessage(bot, queue, text, color) {
+function queueMessage (bot, queue, text, color) {
   if (!bot) {
-    throw Error("'bot' must be passed down as param! (queueMessage)");
+    throw Error("'bot' must be passed down as param! (queueMessage)")
   }
 
   if (!queue) {
-    throw Error("'queue' must be passed down as param! (queueMessage)");
+    throw Error("'queue' must be passed down as param! (queueMessage)")
   }
 
   if (!text) {
-    throw Error("'text' must be passed down as param! (queueMessage)");
+    throw Error("'text' must be passed down as param! (queueMessage)")
   }
 
   if (!bot.utils.havePermissions(queue.metadata.channel))
-    return queue.metadata.channel.send({ content: `**$text}**` });
+    return queue.metadata.channel.send({ content: `**$text}**` })
 
-  let colour = queue.guild.me.displayColor || "#00FFFF";
-  if (color) colour = color;
+  let colour = queue.guild.me.displayColor || '#00FFFF'
+  if (color) colour = color
 
-  const embedQ = new MessageEmbed()
-    .setDescription(text)
-    .setColor(colour);
+  const embedQ = new MessageEmbed().setDescription(text).setColor(colour)
 
-  return queue.metadata.channel.send({ embeds: [embedQ] });
+  return queue.metadata.channel.send({ embeds: [embedQ] })
 }
+function sendTime (bot, Channel, msg) {
+  let embed = new MessageEmbed()
+    .setColor(bot.config.EmbedColor)
+    .setDescription(msg)
 
+  Channel.send({ embeds: [embed] })
+}
 module.exports = {
   baseEmbed,
   rootEmbed,
   infoMessage,
   warnMessage,
   errorMessage,
-  queueMessage
-};
+  queueMessage,
+  sendTime
+}

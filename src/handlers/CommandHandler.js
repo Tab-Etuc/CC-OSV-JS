@@ -1,12 +1,18 @@
 const glob = require('glob')
-const { readdirSync } = require('fs')
-const { join } = require('path')
 module.exports = async function loadCommands (bot) {
   const slashCommandFiles = glob.sync('./src/slash-commands/**/*.js')
-  const msgCommandFiles = readdirSync(
-    join(__dirname, '../message-commands')
-  ).filter(file => file.endsWith('.js'))
+  const msgCommandFiles = glob.sync('./src/message-commands/**/*.js')
 
+  // 訊息指令
+  for (const file of msgCommandFiles) {
+    const command = require(`../../${file}`)
+    delete require.cache[require.resolve(`../../${file}`)]
+
+    bot.msgCommands.set(command.name, command)
+    bot.logger.log('Msg-Commands', `${command.name}`)
+  }
+
+  //斜線指令
   for (const file of slashCommandFiles) {
     const command = require(`../../${file}`)
 
@@ -24,10 +30,5 @@ module.exports = async function loadCommands (bot) {
 
     // debug
     bot.logger.log('Slash-Commands', `${command.name}`)
-  }
-  for (const file of msgCommandFiles) {
-    const command = require(join(__dirname, '../message-commands', `${file}`))
-    bot.msgCommands.set(command.name, command)
-    bot.logger.log('Msg-Commands', `${command.name}`)
   }
 }

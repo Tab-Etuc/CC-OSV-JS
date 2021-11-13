@@ -10,9 +10,24 @@ module.exports = {
   async execute (bot, message) {
     try {
       if (message.author.bot || !message.guild) return //如果是機器人發出的訊息、不在公會裡 就不執行
-      
-      
+
       let prefix = bot.config.DefaultPrefix
+      let GuildData = await Guilds.findOne({
+        _id: message.guildId
+      })
+
+      if (GuildData && GuildData.prefix) prefix = GuildData.prefix
+      // 如果沒有伺服器資料，則創建
+      if (!GuildData) {
+        let newGuild = new Guilds({
+          guildId: message.guildId,
+          prefix: prefix
+        }).save()
+      }
+      const prefixMention = new RegExp(`^<@!?${bot.user.id}> `)
+      prefix = message.content.match(prefixMention)
+        ? message.content.match(prefixMention)[0]
+        : prefix
       const args = message.content
         .slice(prefix.length)
         .trim()
@@ -25,27 +40,6 @@ module.exports = {
         bot.msgCommands.get(command) ||
         bot.msgCommands.find(x => x.aliases && x.aliases.includes(command))
       if (cmd) {
-        
-
-        let GuildData = await Guilds.findOne({
-          guildId: message.guild.id
-        })
-
-        if (GuildData && GuildData.prefix) prefix = GuildData.prefix
-        // 如果沒有伺服器資料，則創建
-        if (!GuildData) {
-          let newGuild = new Guilds({
-            guildId: message.guild.id,
-            prefix: prefix
-          }).save()
-        }
-
-        //Prefixes also have mention match
-        const prefixMention = new RegExp(`^<@!?${bot.user.id}> `)
-        prefix = message.content.match(prefixMention)
-          ? message.content.match(prefixMention)[0]
-          : prefix
-
         if (message.content.indexOf(prefix) !== 0) return
 
         //Executing the codes when we get the command or aliases
@@ -68,11 +62,8 @@ module.exports = {
               .has(['ADMINISTRATOR']) &&
             !message.member.roles.cache.has(GuildData.DJ))
         )
-          return bot.sendError(
-            message.channel,
-            'Missing Permissions!'
-          )
-        cmd.run(bot, message, args, { GuildData })
+          return bot.sendError(message.channel, 'Missing Permissions!')
+        cmd.run(bot, message, args,  GuildData )
         let guild = await Guilds.findOne({ guildId: message.guild.id })
         guild.CommandsRan++
         guild.save()
@@ -80,24 +71,24 @@ module.exports = {
 
       // chat level
       let levelData = await Levels.findOne({
-        guildId: message.guild.id,
+        guildId: message.guildId,
         userId: message.author.id
       })
       let rankData = await Prizes.findOne({
-        guildId: message.guild.id
+        guildId: message.guildId
       })
 
       if (!rankData) {
         // 如果沒有伺服器資料，則創建
         let newRank = new Prizes({
-          guildId: message.guild.id
+          guildId: message.guildId
         }).save()
       }
 
       if (!levelData) {
         // 如果沒有玩家資料，則創建
         let newLevel = new Levels({
-          guildId: message.guild.id,
+          guildId: message.guildId,
           userId: message.author.id,
           userName: message.author.username
         }).save()
@@ -169,6 +160,7 @@ module.exports = {
         if (C_msg === message.content) return
 
         let webhook = await message.channel.fetchWebhooks()
+
         webhook = webhook.find(x => x.name === 'NQN')
 
         if (!webhook) {
@@ -234,9 +226,9 @@ module.exports = {
         avatar: message.author.displayAvatarURL({ dynamic: true })
       })
 
-      message.delete()
+      message.delete().catch(console.error)
 
-      webhook.send(NQN_msg)
+      webhook.send(NQN_msg).catch(console.error)
 
       await webhook.edit({
         name: `NQN`,
