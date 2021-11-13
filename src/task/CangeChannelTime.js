@@ -1,15 +1,6 @@
 const moment = require('moment-timezone')
 const Guild = require('../models/Guilds')
 
-const TimeHour = moment()
-  .tz('Asia/Taipei')
-  .format('HH')
-const TimeMonth = moment()
-  .tz('Asia/Taipei')
-  .format('MM')
-const TimeDay = moment()
-  .tz('Asia/Taipei')
-  .format('DD')
 module.exports = async function ChangeTime (bot) {
   setInterval(async () => {
     try {
@@ -32,6 +23,10 @@ module.exports = async function ChangeTime (bot) {
 
 async function ChangeClockTime (bot, ClockTime_Array) {
   let channel_name
+  const TimeHour = moment()
+    .tz('Asia/Taipei')
+    .format('HH')
+
   for (i in ClockTime_Array) {
     var channel = bot.channels.cache.get(ClockTime_Array[i])
     channel ? (channel_name = channel.name) : (channel_name = false)
@@ -47,6 +42,12 @@ async function ChangeClockTime (bot, ClockTime_Array) {
 }
 async function ChangeClockDate (bot, ClockDate_Array) {
   let channel_name
+  const TimeMonth = moment()
+    .tz('Asia/Taipei')
+    .format('MM')
+  const TimeDay = moment()
+    .tz('Asia/Taipei')
+    .format('DD')
   for (i in ClockDate_Array) {
     var channel = bot.channels.cache.get(ClockDate_Array[i])
     channel ? (channel_name = channel.name) : (channel_name = false)
