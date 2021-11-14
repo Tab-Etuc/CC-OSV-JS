@@ -6,7 +6,7 @@ const {
   MessageButton
 } = require('discord.js')
 const { Manager } = require('erela.js')
-const economy = require('../models/EconomyModel')
+const economy = require('../models/mongoDB/Economy')
 const prettyMilliseconds = require('pretty-ms')
 const spotify = require('better-erela.js-spotify').default
 const apple = require('erela.js-apple')

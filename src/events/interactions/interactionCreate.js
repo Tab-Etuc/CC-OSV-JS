@@ -1,4 +1,4 @@
-const Guilds = require('../../models/Guilds.js')
+const Guilds = require('../../models/mongoDB/Guilds.js')
 const Controller = require('../../models/Controller')
 
 module.exports = {

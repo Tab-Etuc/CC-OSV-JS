@@ -1,6 +1,6 @@
-const Prizes = require('../../models/Prizes.js')
-const Levels = require('../../models/Levels.js')
-const Guilds = require('../../models/Guilds.js')
+const Prizes = require('../../models/mongoDB/Prizes.js')
+const Levels = require('../../models/mongoDB/Levels.js')
+const Guilds = require('../../models/mongoDB/Guilds.js')
 
 const Discord = require('discord.js')
 
