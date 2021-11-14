@@ -1,5 +1,5 @@
 const moment = require('moment-timezone')
-const Guild = require('../models/Guilds')
+const Guild = require('../models/mongoDB/Guilds')
 
 module.exports = async function ChangeTime (bot) {
   setInterval(async () => {
