@@ -5,32 +5,23 @@
  * @returns
  */
 module.exports = async (bot, interaction) => {
-  return new Promise(async (resolve) => {
+  return new Promise(async resolve => {
     if (!interaction.member.voice.channel) {
-      await interaction.reply({
-        embeds: [
-          bot.ErrorEmbed(
-            "You must be in a voice channel to use this command!"
-          ),
-        ],
-      });
-      return resolve(false);
+      bot.say.errorMessage(interaction, '❌ | **您必須先加入一個語音頻道！**')
+      return resolve(false)
     }
     if (
       interaction.guild.me.voice.channel &&
       interaction.member.voice.channel.id !==
         interaction.guild.me.voice.channel.id
     ) {
-      await interaction.reply({
-        embeds: [
-          bot.ErrorEmbed(
-            "You must be in the same voice channel as me to use this command!"
-          ),
-        ],
-      });
-      return resolve(false);
+      bot.say.errorMessage(
+        interaction,
+        '❌ | **您必須和我處在同一個語音頻道以使用此指令！**'
+      )
+      return resolve(false)
     }
 
-    resolve(interaction.member.voice.channel);
-  });
-};
+    resolve(interaction.member.voice.channel)
+  })
+}

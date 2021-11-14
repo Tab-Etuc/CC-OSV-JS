@@ -1,14 +1,18 @@
 /**
  *
- * @param {import("../lib/DiscordMusicBot")} client
+ * @param {import("../base/CC-OSV-Client")} bot
  * @returns {import("erela.js").Node | undefined}
  */
- module.exports = async (client) => {
+ module.exports = async (bot, interaction) => {
     return new Promise((resolve) => {
-      for (let i = 0; i < client.manager.nodes.size; i++) {
-        const node = client.manager.nodes.array()[i];
+      for (let i = 0; i < bot.manager.nodes.size; i++) {
+        const node = bot.manager.nodes.array()[i];
         if (node.connected) resolve(node);
       }
+      bot.say.errorMessage(
+        interaction,
+        '❌ | **Lavalink伺服器重新連線中，請稍後再試。**'
+      )
       resolve(undefined);
     });
   };

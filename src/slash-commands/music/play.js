@@ -27,32 +27,12 @@ module.exports = {
     await interaction.deferReply()
 
     let search = await interaction.options.getString('歌曲', true)
-    const guild = bot.guilds.cache.get(interaction.guild.id)
-    const member = guild.members.cache.get(interaction.member.user.id)
     let channel = await bot.getChannel(bot, interaction)
 
-    if (!channel)
-      return bot.say.errorMessage(
-        interaction,
-        '❌ | **您必須先加入一個語音頻道！**'
-      )
-    if (
-      guild.me.voice.channel &&
-      !guild.me.voice.channel.equals(member.voice.channel)
-    ) {
-      return bot.say.errorMessage(
-        interaction,
-        ':x: | **您必須和我在相同的語音通道以使用此命令！**'
-      )
-    }
+    if (!channel) return
 
-    let node = await bot.getLavalink(bot)
-    if (!node || !node.connected) {
-      return bot.say.errorMessage(
-        interaction,
-        '❌ | **Lavalink伺服器重新連線中，請稍後再試。**'
-      )
-    }
+    let node = await bot.getLavalink(bot, interaction)
+    if (!node || !node.connected) return
 
     let player = bot.createPlayer(interaction.channel, channel)
 
@@ -65,7 +45,10 @@ module.exports = {
         return bot.say.errorMessage(interaction, `:x: | **在查詢時出了錯誤**`)
       }
     } catch (err) {
-      return bot.say.errorMessage(interaction, `在查詢時出了錯誤: ${err.interaction}`)
+      return bot.say.errorMessage(
+        interaction,
+        `在查詢時出了錯誤: ${err.interaction}`
+      )
     }
     switch (res.loadType) {
       case 'NO_MATCHES':
@@ -127,7 +110,9 @@ module.exports = {
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
           SongAddedEmbed.setThumbnail(res.tracks[0].displayThumbnail())
           SongAddedEmbed.setColor(bot.config.EmbedColor)
-          SongAddedEmbed.setDescription(`[${res.tracks[0].title}](${res.tracks[0].uri})`)
+          SongAddedEmbed.setDescription(
+            `[${res.tracks[0].title}](${res.tracks[0].uri})`
+          )
           SongAddedEmbed.addField('上傳者', res.tracks[0].author, true)
           SongAddedEmbed.addField(
             '持續時間',
@@ -150,7 +135,9 @@ module.exports = {
           SongAddedEmbed.setAuthor(`已新增至播放列`, bot.config.IconURL)
           SongAddedEmbed.setThumbnail(res.tracks[0].displayThumbnail())
           SongAddedEmbed.setColor(bot.config.EmbedColor)
-          SongAddedEmbed.setDescription(`[${res.tracks[0].title}](${res.tracks[0].uri})`)
+          SongAddedEmbed.setDescription(
+            `[${res.tracks[0].title}](${res.tracks[0].uri})`
+          )
           SongAddedEmbed.addField('上傳者', res.tracks[0].author, true)
           SongAddedEmbed.addField(
             '持續時間',

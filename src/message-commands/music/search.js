@@ -89,7 +89,7 @@ module.exports = {
 
       let w = a => new Promise(r => setInterval(r, a))
       await w(500) //waits 500ms cuz needed to wait for the above song search embed to send ._.
-      let msg = await message.channel.send('**輸入您想要收聽的歌曲的ID！**')
+      let msg = await message.channel.send('**輸入您想要收聽的歌曲的編號！**')
 
       let er = false
       let filter = msg => message.author.id === msg.author.id
@@ -104,7 +104,7 @@ module.exports = {
       let SongIDmsg = SongID.first()
 
       if (!parseInt(SongIDmsg.content))
-        return bot.sendTime(bot, message.channel, '請輸入正確的ID數字。')
+        return bot.sendTime(bot, message.channel, '請輸入正確的編號。')
       let Song = Searched.tracks[parseInt(SongIDmsg.content) - 1]
       if (!Song)
         return bot.sendTime(
