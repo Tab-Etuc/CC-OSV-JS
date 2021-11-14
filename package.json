@@ -1,6 +1,6 @@
 {
   "name": "cc-osv",
-  "version": "3.2.9",
+  "version": "3.3.0",
   "description": "CC-OSV Bot",
   "main": "./src/index.js",
   "engines": {
@@ -38,6 +38,7 @@
     "lodash": "^4.17.21",
     "mathjs": "^9.4.5",
     "moment": "^2.29.1",
+    "moment-duration-format": "2.3.2",
     "moment-timezone": "^0.5.33",
     "mongoose": "^6.0.5",
     "os": "^0.1.2",

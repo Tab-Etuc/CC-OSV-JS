@@ -3,11 +3,11 @@ const { MessageAttachment } = require('discord.js')
 const { resolve, join } = require('path')
 
 const Canvas = require('canvas')
-const { registerFont } = require('canvas')
-registerFont(
-  resolve(join(__dirname, '../../assets/Fonts/GenJyuuGothicX-Medium.ttf')),
-  { family: 'GenJyuuGothicX' }
-)
+// const { registerFont } = require('canvas')
+// registerFont(
+//   resolve(join(__dirname, '../../assets/Fonts/GenJyuuGothicX-Medium.ttf')),
+//   { family: 'GenJyuuGothicX' }
+// )
 module.exports = {
   name: 'rank',
   description: '顯示您的聊天等級。',
