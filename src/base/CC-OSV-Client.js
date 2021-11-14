@@ -183,7 +183,10 @@ class CCOSV extends Client {
       })
       .on('queueEnd', player => {
         if (player.queueRepeat || player.trackRepeat) {
-          console.log(player)
+          try {
+            player.queue.unshift(player.queue.previous)
+            player.queue.unshift(player.queue.current)
+          } catch {}
         }
         let QueueEmbed = new MessageEmbed()
           .setAuthor(

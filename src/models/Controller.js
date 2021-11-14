@@ -10,7 +10,7 @@ module.exports = async (bot, interaction) => {
 
   if (!player)
     return interaction.reply({
-      embeds: [bot.Embed("在此服務器中沒有播放器可以控制。")],
+      embeds: [bot.Embed("音樂已結束，沒有可以控制的播放器。")],
     });
 
   if (property === "LowVolume") {
