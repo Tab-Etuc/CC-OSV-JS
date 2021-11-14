@@ -145,20 +145,19 @@ class CCOSV extends Client {
       }
     })
       .on('nodeConnect', node =>
-        console.log(`Lavalink: Node ${node.options.identifier} connected`)
+        this.logger.log('Lavalink', `${node.options.identifier} connected`)
       )
       .on('nodeReconnect', node =>
-        console.log(
-          `Lavalink: Node ${node.options.identifier} | Lavalink node is reconnecting.`
-        )
+        this.logger.log('Lavalink', `${node.options.identifier} reconnected`)
       )
       .on('nodeError', (node, error) =>
-        console.log(
-          `Lavalink: Node ${node.options.identifier} had an error: ${error.message}`
+        this.logger.log(
+          'Lavalink',
+          `${node.options.identifier} had an error: ${error.message}`
         )
       )
       .on('trackError', (player, track) =>
-        console.log(`Player: ${player.options.guild} | Track had an error.`)
+        this.logger.log('Lavalink', `${track} had an error.`)
       )
       .on('trackStart', async (player, track) => {
         let TrackStartedEmbed = new MessageEmbed()

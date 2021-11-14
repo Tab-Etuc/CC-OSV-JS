@@ -7,7 +7,7 @@
     return new Promise((resolve) => {
       for (let i = 0; i < bot.manager.nodes.size; i++) {
         const node = bot.manager.nodes.array()[i];
-        if (node.connected) resolve(node);
+        if (node.connected) return resolve(node);
       }
       bot.say.errorMessage(
         interaction,
