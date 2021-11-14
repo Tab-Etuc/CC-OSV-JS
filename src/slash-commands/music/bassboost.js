@@ -1,9 +1,3 @@
-const levels = {
-  無: 0.0,
-  低: 0.2,
-  中: 0.3,
-  高: 0.35
-}
 module.exports = {
   name: 'bassboost',
   description: '🎵啟用低音效果',

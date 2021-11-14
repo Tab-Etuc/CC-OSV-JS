@@ -1,6 +1,6 @@
 
 const { MessageEmbed } = require('discord.js');
-const economy = require('../../models/EconomyModel');
+const economy = require('../../models/mongoDB/Economy');
 module.exports = {
     name: "top",
     description: "查看伺服器中的富豪榜。",

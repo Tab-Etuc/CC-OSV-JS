@@ -1,4 +1,4 @@
-const itemss = require('../../utils/items');
+const itemss = require('../../models/economy/items');
 module.exports = {
     name: "購買",
     description: "購買市廛上的商品。",

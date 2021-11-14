@@ -1,4 +1,4 @@
-const Prizes = require("../../models/Prizes.js");
+const Prizes = require("../../models/mongoDB/Prizes.js");
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {

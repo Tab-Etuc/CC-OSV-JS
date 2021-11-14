@@ -1,7 +1,7 @@
 
 const { MessageEmbed } = require('discord.js');
-const economy = require('../../models/EconomyModel');
-const Levels = require("../../models/Levels.js");
+const economy = require('../../models/mongoDB/Economy');
+const Levels = require("../../models/mongoDB/Levels.js");
 
 module.exports = {
     name: "排行榜",
