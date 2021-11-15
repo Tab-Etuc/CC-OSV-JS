@@ -23,7 +23,7 @@ module.exports = {
               packet.d.emoji.id in data[packet.d.message_id.toString()] ||
               packet.d.emoji.name in data[packet.d.message_id.toString()]
             ) {
-              const role = null
+              let role = null
               if (packet.d.emoji.id === null) {
                 role = packet.d.emoji.name
               } else if (packet.d.emoji.id) {
@@ -54,7 +54,7 @@ module.exports = {
             ) {
               const guild = await bot.guilds.fetch(packet.d.guild_id)
               const user = await guild.members.cache.get(packet.d.user_id)
-              const role = null
+              let role = null
               if (packet.d.emoji.id === null) {
                 role = packet.d.emoji.name
               } else if (packet.d.emoji.id) {
