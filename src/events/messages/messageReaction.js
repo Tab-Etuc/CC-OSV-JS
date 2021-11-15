@@ -24,10 +24,17 @@ module.exports = {
               packet.d.emoji.name in data[packet.d.message_id.toString()]
             ) {
               let role = null
+              let Message_On_Add = null
               if (packet.d.emoji.id === null) {
                 role = packet.d.emoji.name
+                Message_On_Add =
+                  data[packet.d.message_id.toString()][packet.d.emoji.name]
+                    .Message_On_Add
               } else if (packet.d.emoji.id) {
                 role = packet.d.emoji.id
+                Message_On_Add =
+                  data[packet.d.message_id.toString()][packet.d.emoji.id]
+                    .Message_On_Add
               } else return
               const guild = await bot.guilds.fetch(packet.d.guild_id)
               const user = await guild.members.cache.get(packet.d.user_id)
@@ -37,12 +44,7 @@ module.exports = {
                 const role = guild.roles.cache.find(r => r.id === roleId)
                 await user.roles.add(role)
               })
-              await user.send(
-                data[packet.d.message_id.toString()][packet.d.emoji.id]
-                  .Message_On_Add ||
-                  data[packet.d.message_id.toString()][packet.d.emoji.name]
-                    .Message_On_Remove
-              )
+              await user.send(Message_On_Add)
             }
           }
 
@@ -56,10 +58,17 @@ module.exports = {
               const guild = await bot.guilds.fetch(packet.d.guild_id)
               const user = await guild.members.cache.get(packet.d.user_id)
               let role = null
+              let Message_On_Remove = null
               if (packet.d.emoji.id === null) {
                 role = packet.d.emoji.name
+                Message_On_Remove =
+                  data[packet.d.message_id.toString()][packet.d.emoji.name]
+                    .Message_On_Remove
               } else if (packet.d.emoji.id) {
                 role = packet.d.emoji.id
+                Message_On_Remove =
+                  data[packet.d.message_id.toString()][packet.d.emoji.id]
+                    .Message_On_Remove
               } else return
               const roles = data[packet.d.message_id.toString()][role].role
               roles.forEach(async function (roleId) {
@@ -67,12 +76,7 @@ module.exports = {
                 await user.roles.remove(role)
               })
 
-              await user.send(
-                data[packet.d.message_id.toString()][packet.d.emoji.id]
-                  .Message_On_Remove ||
-                  data[packet.d.message_id.toString()][packet.d.emoji.name]
-                    .Message_On_Remove
-              )
+              await user.send(Message_On_Remove)
             }
           }
         }
