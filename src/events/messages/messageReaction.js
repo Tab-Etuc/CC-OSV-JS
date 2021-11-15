@@ -29,8 +29,9 @@ module.exports = {
               } else if (packet.d.emoji.id) {
                 role = packet.d.emoji.id
               } else return
-              const roles = data[packet.d.message_id.toString()][role].role
+              const guild = await bot.guilds.fetch(packet.d.guild_id)
               const user = await guild.members.cache.get(packet.d.user_id)
+              const roles = data[packet.d.message_id.toString()][role].role
 
               roles.forEach(async function (roleId) {
                 const role = guild.roles.cache.find(r => r.id === roleId)
