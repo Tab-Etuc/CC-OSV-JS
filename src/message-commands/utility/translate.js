@@ -1,4 +1,6 @@
 const request = require('superagent')
+const translate = require('translate-google')
+
 module.exports = {
   name: 'translate',
   description: '翻譯一段文字。',
@@ -36,15 +38,25 @@ module.exports = {
       .catch(console.error)
     msg = JSON.parse(msg.req.res.text)
 
-    !msg ||
-    !msg[1][0][1][0] ||
-    msg[1][0][1][0] == message.content ||
-    msg[1][0][1][0] == ''
-      ? (msg = message.content
-          .slice(GuildDB.prefix.length)
-          .replace(/翻譯|tr|translate/gi, ''))
-      : (msg = msg[1][0][1][0])
-
-    return message.channel.send(msg).catch(console.error)
+    // !msg ||
+    // !msg[1][0][1][0] ||
+    // msg[1][0][1][0] == message.content ||
+    // msg[1][0][1][0] == ''
+    //   ? (msg = message.content
+    //       .slice(GuildDB.prefix.length)
+    //       .replace(/翻譯|tr|translate/gi, ''))
+    //   : (msg = msg[1][0][1][0])
+    if (msg[1][0][1][0] !== message.content)
+      return message.channel.send(msg[1][0][1][0]).catch(console.error)
+    else {
+      msg_ = message.content.slice(GuildDB.prefix.length).replace(/翻譯|tr|translate/gi, '')
+      translate(msg_, { to: 'zh-tw' })
+        .then(res => {
+          return message.channel.send(res)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
   }
 }
