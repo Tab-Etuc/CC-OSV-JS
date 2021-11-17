@@ -46,7 +46,7 @@ module.exports = {
     //       .slice(GuildDB.prefix.length)
     //       .replace(/翻譯|tr|translate/gi, ''))
     //   : (msg = msg[1][0][1][0])
-    if (msg[1][0][1][0] && msg[1][0][1][0] !== message.content && msg[1][0][1][0] !== '')
+    if (msg[1][0][1][0] || msg[1][0][1][0] !== message.content || msg[1][0][1][0] !== '')
       return message.channel.send(msg[1][0][1][0]).catch(console.error)
     else {
       msg_ = message.content.slice(GuildDB.prefix.length).replace(/翻譯|tr|translate/gi, '')
