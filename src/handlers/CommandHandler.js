@@ -1,7 +1,7 @@
 const glob = require('glob')
 module.exports = async function loadCommands (bot) {
-  const slashCommandFiles = glob.sync('./src/slash-commands/**/*.js')
-  const msgCommandFiles = glob.sync('./src/message-commands/**/*.js')
+  const slashCommandFiles = glob.sync('./src/commands/slash/**/*.js')
+  const msgCommandFiles = glob.sync('./src/commands/message/**/*.js')
 
   // 訊息指令
   for (const file of msgCommandFiles) {
