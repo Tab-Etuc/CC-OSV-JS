@@ -5,7 +5,7 @@ const { resolve, join } = require('path')
 const Canvas = require('canvas')
 const { registerFont } = require('canvas')
 registerFont(
-  resolve(join(__dirname, '../../assets/Fonts/GenJyuuGothicX-Medium.ttf')),
+  resolve(join(__dirname, '../../../assets/Fonts/GenJyuuGothicX-Medium.ttf')),
   { family: 'GenJyuuGothicX' }
 )
 module.exports = {

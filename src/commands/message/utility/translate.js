@@ -20,7 +20,7 @@ module.exports = {
 
   run: async (bot, message, args, GuildDB) => {
     // 來日再精簡codeㄅ，能跑就好。
-    msg = message.content
+    const msg = message.content
       .slice(GuildDB.prefix.length)
       .replace(/翻譯|tr|translate/gi, '')
 
@@ -46,12 +46,26 @@ module.exports = {
     //       .slice(GuildDB.prefix.length)
     //       .replace(/翻譯|tr|translate/gi, ''))
     //   : (msg = msg[1][0][1][0])
-    if (msg[1][0][1][0] || msg[1][0][1][0] !== message.content || msg[1][0][1][0] !== '')
+    if (
+      msg[1][0][1][0] ||
+      msg[1][0][1][0] !==
+        message.content
+          .slice(GuildDB.prefix.length)
+          .replace(/翻譯|tr|translate/gi, '') ||
+      msg[1][0][1][0] !== ''
+    )
       return message.channel.send(msg[1][0][1][0]).catch(console.error)
     else {
-      msg_ = message.content.slice(GuildDB.prefix.length).replace(/翻譯|tr|translate/gi, '')
+      const msg_ = message.content
+        .slice(GuildDB.prefix.length)
+        .replace(/翻譯|tr|translate/gi, '')
       translate(msg_, { to: 'zh-tw' })
         .then(res => {
+          res
+            ? res
+            : message.content
+                .slice(GuildDB.prefix.length)
+                .replace(/翻譯|tr|translate/gi, '')
           return message.channel.send(res)
         })
         .catch(err => {
