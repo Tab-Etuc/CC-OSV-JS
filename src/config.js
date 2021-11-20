@@ -15,9 +15,9 @@ module.exports = {
   nodes: [
     {
       identifier: 'Main',
-      host: 'lava.link',
+      host: 'lavalink.darrennathanael.com',
       port: 80,
-      password: 'xji.gl4.vu'
+      password: 'boolookbelow'
       //retryAmount: 5, - Optional
       //retryDelay: 1000, - Optional
       //secure: false - Optional | Default: false
