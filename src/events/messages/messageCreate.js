@@ -72,7 +72,7 @@ module.exports = {
       // chat level
       let levelData = await Users.findOne({
         guildId: message.guildId,
-        userId: message.author.id
+        userId: message.author.id,
       })
       let rankData = await Prizes.findOne({
         guildId: message.guildId

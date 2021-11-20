@@ -54,12 +54,12 @@ class CCOSV extends Client {
   fetchUser (bot, userId, guildId) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    const user = Users.findOne({ _id: userId, guildId: guildId })
+    const user = Users.findOne({ userId: userId, guildId: guildId })
     if (!user) {
       const newUser = new Users({
-        _id: userId,
-        guildId: guildId,
-        userName: someone.username
+        guildId: message.guildId,
+        userId: message.author.id,
+        userName: message.user.username
       }).save()
       return newUser
     }
@@ -76,12 +76,12 @@ class CCOSV extends Client {
   give (bot, userId, guildId, amount) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    let user = Users.findOne({ _id: userId, guildId: guildId })
+    let user = Users.findOne({ userId: userId, guildId: guildId })
     if (!user) {
       const newUser = new Users({
-        _id: userId,
-        guildId: guildId,
-        name: someone.username,
+        guildId: message.guildId,
+        userId: message.author.id,
+        userName: message.user.username,
         coinsInWallet: parseInt(amount)
       }).save()
       return newUser

@@ -16,22 +16,7 @@ module.exports = {
   async execute (bot, interaction) {
     const member =
       interaction.options.getString('指令', false) || interaction.member
-
-    const someone = bot.users.cache.get(member.id)
-
-    let user = await Users.findOne({
-      guildId: interaction.guild.id,
-      userId: member.id
-    })
-    console.log(member.id)
-    if (!user) {
-      const newUser = new Users({
-        userId: member.id,
-        guildId: interaction.guild.id,
-        userName: someone.username
-      }).save()
-      user = newUser
-    }
+    let user = await bot.fetchUser(bot, member.id, interaction.guild.id)
 
     const embed = new MessageEmbed()
       .setTitle(`${member.user.username}'s Balance`)

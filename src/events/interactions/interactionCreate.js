@@ -1,4 +1,7 @@
 const Guilds = require('../../models/mongoDB/Guilds.js')
+const Users = require('../../models/mongoDB/Users.js')
+const Prizes = require('../../models/mongoDB/Prizes.js')
+
 const Controller = require('../../models/Controller')
 
 module.exports = {
@@ -7,6 +10,9 @@ module.exports = {
   async execute (bot, interaction) {
     // 指令
     if (interaction.isCommand()) {
+      if (!interaction.guildId) return
+
+      
       let GuildData = await Guilds.findOne({
         _id: interaction.guildId
       })
@@ -18,11 +24,34 @@ module.exports = {
         }).save()
       }
 
+      let rankData = await Prizes.findOne({
+        guildId: interaction.guildId
+      })
+      // 如果沒有伺服器資料，則創建
+      if (!rankData) {
+        let newRank = new Prizes({
+          guildId: interaction.guildId
+        }).save()
+      }
+
+      let userData = await Users.findOne({
+        guildId: message.guildId,
+        userId: message.author.id
+      })
+      // 如果沒有玩家資料，則創建
+      if (!userData) {
+        let newLevel = new Users({
+          guildId: message.guildId,
+          userId: message.author.id,
+          userName: message.author.username
+        }).save()
+      }
+
+
+
       await bot.application?.commands
         .fetch(interaction.commandId)
         .catch(() => null)
-
-      if (!interaction.guildId) return
 
       try {
         const command = bot.slashCommands.get(interaction.command?.name ?? '')
@@ -42,14 +71,14 @@ module.exports = {
             · · · ────── ·✘· ────── · · ·`)
           }
         }
-        if (
-          (command.category === 'botowner' || command.ownerOnly === true) &&
-          !process.env.OWNER.includes(interaction?.user.id)
-        )
-          return bot.say.errorMessage(
-            interaction,
-            '此指令只允許機器人擁有者使用。'
-          )
+        // if (
+        //   (command.category === 'botowner' || command.ownerOnly === true) &&
+        //   !process.env.OWNER.includes(interaction?.user.id)
+        // )
+        //   return bot.say.errorMessage(
+        //     interaction,
+        //     '此指令只允許機器人擁有者使用。'
+        //   )
 
         await command?.execute(bot, interaction)
         let guild = await Guilds.findOne({ guildId: interaction.guildId })
