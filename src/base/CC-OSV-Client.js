@@ -148,15 +148,15 @@ class CCOSV extends Client {
       })
       .on('queueEnd', async (player, track) => {
         if (player.queueRepeat || player.trackRepeat) {
-          let player = bot.createPlayer(player.textChannel, player.voiceChannel)
-          if (player.state != 'CONNECTED') player.connect()
-          let res = await player.search(track.uri, track.requester)
+          let player_ = bot.createPlayer(player.textChannel, player.voiceChannel)
+          if (player_.state != 'CONNECTED') player_.connect()
+          let res = await player_.search(track.uri, track.requester)
 
           switch (res.loadType) {
             case 'TRACK_LOADED':
-              player.queue.add(res.tracks[0])
-              if (!player.playing && !player.paused && !player.queue.size)
-                player.play()
+              player_.queue.add(res.tracks[0])
+              if (!player_.playing && !player_.paused && !player_.queue.size)
+                player_.play()
               let SongAddedEmbed = new MessageEmbed()
                 .setAuthor(`已新增至播放列`, bot.config.IconURL)
                 //.setThumbnail(res.tracks[0].displayThumbnail());
@@ -172,17 +172,19 @@ class CCOSV extends Client {
                   })}\``,
                   true
                 )
-              if (player.queue.totalSize > 1)
+              if (player_.queue.totalSize > 1)
                 SongAddedEmbed.addField(
                   '播放列中的位置',
-                  `${player.queue.size - 0}`,
+                  `${player_.queue.size - 0}`,
                   true
                 )
-                let NowPlaying = await bot.channels.cache.get(player.textChannel).send({
+              let NowPlaying = await bot.channels.cache
+                .get(player.textChannel)
+                .send({
                   embeds: [SongAddedEmbed],
                   components: [bot.createController(player.options.guild)]
                 })
-                player.setNowplayingMessage(NowPlaying)
+              player_.setNowplayingMessage(NowPlaying)
           }
         }
         let QueueEmbed = new MessageEmbed()
