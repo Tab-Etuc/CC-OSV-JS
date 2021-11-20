@@ -45,14 +45,21 @@ class CCOSV extends Client {
     this.getChannel = getChannel
     this.build()
   }
-  fetchUser (bot, userId) {
+  /**
+   *
+   * @param {string} userId - A discord user ID.
+   * @param {string} guildId - A discord guild Id.
+   */
+
+  fetchUser (bot, userId, guildId) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    const user = economy.findOne({ _id: userId })
+    const user = economy.findOne({ _id: userId, guildId: guildId })
     if (!user) {
       const newUser = new economy({
         _id: userId,
-        name: someone.username,
+        guildId: guildId,
+        userName: someone.username,
         items: []
       })
       newUser.save()
@@ -64,59 +71,18 @@ class CCOSV extends Client {
   /**
    *
    * @param {string} userId - A discord user ID.
-   * @param {number} amount - Amount of bank space to give.
-   */
-
-  giveBankSpace (bot, userId, amount) {
-    const someone = bot.users.cache.get(userId)
-    if (!someone || someone.bot) return false
-    let user = economy.findOne({ _id: userId })
-    if (!user) {
-      const newUser = new economy({
-        _id: userId,
-        name: someone.username,
-        items: []
-      })
-      newUser.save()
-      return newUser
-    }
-    user.bankSpace += parseInt(amount)
-    user.save()
-    return user
-  }
-
-  /**
-   *
-   * @param {string} userId - A discord user ID.
-   */
-
-  createUser (bot, userId) {
-    const someone = bot.users.cache.get(userId)
-    if (!someone || someone.bot) return false
-    const user = economy.findOne({ _id: userId })
-    if (!user) return false
-    const newUser = new economy({
-      _id: userId,
-      name: someone.name,
-      items: []
-    })
-    newUser.save()
-    return newUser
-  }
-
-  /**
-   *
-   * @param {string} userId - A discord user ID.
+   * @param {string} guildId - A discord guild Id.
    * @param {number} amount - Amount of coins to give.
    */
 
-  giveCoins (bot, userId, amount) {
+  give (bot, userId, guildId, amount) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    let user = economy.findOne({ _id: userId })
+    let user = economy.findOne({ _id: userId, guildId: guildId })
     if (!user) {
       const newUser = new economy({
         _id: userId,
+        guildId: guildId,
         name: someone.username,
         items: [],
         coinsInWallet: parseInt(amount)
@@ -180,12 +146,44 @@ class CCOSV extends Client {
         })
         player.setNowplayingMessage(NowPlaying)
       })
-      .on('queueEnd', player => {
+      .on('queueEnd', async (player, track) => {
         if (player.queueRepeat || player.trackRepeat) {
-          try {
-            player.queue.unshift(player.queue.previous)
-            player.queue.unshift(player.queue.current)
-          } catch {}
+          let player = bot.createPlayer(player.textChannel, player.voiceChannel)
+          if (player.state != 'CONNECTED') player.connect()
+          let res = await player.search(track.uri, track.requester)
+
+          switch (res.loadType) {
+            case 'TRACK_LOADED':
+              player.queue.add(res.tracks[0])
+              if (!player.playing && !player.paused && !player.queue.size)
+                player.play()
+              let SongAddedEmbed = new MessageEmbed()
+                .setAuthor(`已新增至播放列`, bot.config.IconURL)
+                //.setThumbnail(res.tracks[0].displayThumbnail());
+                .setColor(bot.config.EmbedColor)
+                .setDescription(
+                  `[${res.tracks[0].title}](${res.tracks[0].uri})`
+                )
+                .addField('上傳者', res.tracks[0].author, true)
+                .addField(
+                  '持續時間',
+                  `\`${bot.ms(res.tracks[0].duration, {
+                    colonNotation: true
+                  })}\``,
+                  true
+                )
+              if (player.queue.totalSize > 1)
+                SongAddedEmbed.addField(
+                  '播放列中的位置',
+                  `${player.queue.size - 0}`,
+                  true
+                )
+                let NowPlaying = await bot.channels.cache.get(player.textChannel).send({
+                  embeds: [SongAddedEmbed],
+                  components: [bot.createController(player.options.guild)]
+                })
+                player.setNowplayingMessage(NowPlaying)
+          }
         }
         let QueueEmbed = new MessageEmbed()
           .setAuthor(

@@ -16,7 +16,7 @@ module.exports = {
         required: false,
     }],
     async execute(bot, interaction) {
-        let user = await bot.fetchUser(bot, interaction.member.id);
+        let user = await bot.fetchUser(bot, interaction.member.id, interaction.guild.id);
         const arg = interaction.options.getString("商品", false);
         const item = itemss.find(x => x.name.toLowerCase() === arg.join(' ').toString().toLowerCase() || x.name.toLowerCase() === arg.toString().toLowerCase() || x.name.toLowerCase() === `${arg.toString().toLowerCase()} ${arg.toString().toLowerCase()}`);
         if (!item) {

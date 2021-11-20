@@ -1,5 +1,6 @@
 require('dotenv').config();
 module.exports = {
+  Test: process.env.Test || false,
   Admins: ['806346991730819121'], //Admins of the bot
   DefaultPrefix: process.env.Prefix || 'C', //Default prefix, Server Admins can change the prefix
   Token: process.env.Token || '', //Discord Bot Token

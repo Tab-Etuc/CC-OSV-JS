@@ -4,15 +4,19 @@ const { resolve, join } = require('path')
 
 const Canvas = require('canvas')
 const { registerFont } = require('canvas')
-registerFont(
-  resolve(join(__dirname, '../../../assets/Fonts/GenJyuuGothicX-Medium.ttf')),
-  { family: 'GenJyuuGothicX' }
-)
+
 module.exports = {
   name: 'rank',
   description: '顯示您的聊天等級。',
   category: '實用',
   async execute (bot, interaction) {
+    if (bot.config.Test == false)
+      registerFont(
+        resolve(
+          join(__dirname, '../../../assets/Fonts/GenJyuuGothicX-Medium.ttf')
+        ),
+        { family: 'GenJyuuGothicX' }
+      )
     await interaction.deferReply()
 
     const member = interaction.member
