@@ -17,7 +17,11 @@ module.exports = {
     const channel = await bot.getChannel(bot, interaction)
     if (!channel) return
     let player = await bot.manager.players.get(interaction.guild.id)
-
+    if (!player)
+      return bot.say.errorMessage(
+        interaction,
+        '❌ | **目前沒有播放任何音樂...**'
+      )
     if (player.trackRepeat) {
       player.setTrackRepeat(false)
       bot.say.infoMessage(interaction, `🔂 \`關閉\``)
