@@ -19,16 +19,16 @@ module.exports = {
 
     const someone = bot.users.cache.get(member.id)
 
-    let user = Users.findOne({
+    let user = await Users.findOne({
+      guildId: interaction.guild.id,
       userId: member.id
     })
-    console.log('1234')
+    console.log(member.id)
     if (!user) {
-        console.log('123')
       const newUser = new Users({
-        _id: member.id,
+        userId: member.id,
         guildId: interaction.guild.id,
-        name: someone.username
+        userName: someone.username
       }).save()
       user = newUser
     }
