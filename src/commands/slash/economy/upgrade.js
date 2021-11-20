@@ -30,7 +30,7 @@ module.exports = {
         const up_amount = interaction.options.getString("升級數", false);
         if (arg === 'bankSpace') {
             if (up_amount === 'all' || arg === '全部' || arg === '全' || arg === '所有' || arg === 'a' || arg === 'ＡＬＬ' || arg === 'ａｌｌ' || arg === 'ａ') {
-                const member_amount = await bot.fetchUser(bot, interaction.member.id);
+                const member_amount = await bot.fetchUser(bot, interaction.member.id, interaction.guild.id);
                 let coinsInWallet = member_amount.coinsInWallet
                 let coinsInBank = member_amount.coinsInBank
                 let bankSpace = member_amount.bankSpace
@@ -44,7 +44,7 @@ module.exports = {
                 }
                 
             }
-            const member_amount = await bot.fetchUser(bot, interaction.member.id);
+            const member_amount = await bot.fetchUser(bot, interaction.member.id, interaction.guild.id);
             let coinsInWallet = member_amount.coinsInWallet
             let coinsInBank = member_amount.coinsInBank
             let bankSpace = member_amount.bankSpace
@@ -62,7 +62,7 @@ module.exports = {
 
         } else if (arg === 'interest') {
             const up_amount = interaction.options.getString("升級數", false);
-            const member_amount = await bot.fetchUser(bot, interaction.member.id);
+            const member_amount = await bot.fetchUser(bot, interaction.member.id, interaction.guild.id);
             let coinsInWallet = member_amount.coinsInWallet
             let coinsInBank = member_amount.coinsInBank
             let interest = member_amount.interest
