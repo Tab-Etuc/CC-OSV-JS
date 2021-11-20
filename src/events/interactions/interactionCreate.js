@@ -35,15 +35,15 @@ module.exports = {
       }
 
       let userData = await Users.findOne({
-        guildId: message.guildId,
-        userId: message.author.id
+        guildId: interaction.guildId,
+        userId: interaction.member.id
       })
       // 如果沒有玩家資料，則創建
       if (!userData) {
         let newLevel = new Users({
-          guildId: message.guildId,
-          userId: message.author.id,
-          userName: message.author.username
+          guildId: interaction.guildId,
+          userId: interaction.member.id,
+          userName: interaction.member.user.username
         }).save()
       }
 
@@ -81,9 +81,8 @@ module.exports = {
         //   )
 
         await command?.execute(bot, interaction)
-        let guild = await Guilds.findOne({ guildId: interaction.guildId })
-        guild.CommandsRan++
-        await guild.save()
+        GuildData.CommandsRan++
+        await GuildData.save()
       } catch (err) {
         bot.say.errorMessage(
           interaction,
