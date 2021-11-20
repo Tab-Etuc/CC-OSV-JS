@@ -1,28 +1,32 @@
-const Levels = require('../../../models/mongoDB/Levels.js')
+const Users = require('../../../models/mongoDB/Users.js')
 const { MessageAttachment } = require('discord.js')
 const { resolve, join } = require('path')
 
 const Canvas = require('canvas')
 const { registerFont } = require('canvas')
-registerFont(
-  resolve(join(__dirname, '../../../assets/Fonts/GenJyuuGothicX-Medium.ttf')),
-  { family: 'GenJyuuGothicX' }
-)
+
 module.exports = {
   name: 'rank',
   description: '顯示您的聊天等級。',
   category: '實用',
   async execute (bot, interaction) {
+    if (bot.config.Test == false)
+      registerFont(
+        resolve(
+          join(__dirname, '../../../assets/Fonts/GenJyuuGothicX-Medium.ttf')
+        ),
+        { family: 'GenJyuuGothicX' }
+      )
     await interaction.deferReply()
 
     const member = interaction.member
 
-    let levelData = await Levels.findOne({
+    let levelData = await Users.findOne({
       guildId: interaction.guild.id,
       userId: member.id
     })
 
-    let rank = await Levels.find({
+    let rank = await Users.find({
       guildId: interaction.guild.id
     })
       .sort({
