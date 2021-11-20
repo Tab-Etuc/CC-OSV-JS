@@ -11,13 +11,13 @@ module.exports = {
     async execute(bot, interaction) {
         const member = interaction.options.getString("指令", false) || interaction.member;
 
-        const user = await bot.fetchUser(bot, interaction.author.id);
+        const user = await bot.fetchUser(bot, interaction.member.id, interaction.guild.id);
         
 
 
         if (member.bot) return interaction.reply(`您不能搶劫一個機器人。\n\`您不會覺得能靠搶劫身無分文的機器人發家致富...吧？\``);
 
-        const robbedUser = await bot.fetchUser(bot, member.id);
+        const robbedUser = await bot.fetchUser(bot, member.id, member.guildId);
         if (robbedUser.coinsInWallet < 1000) {
             return interaction.reply("他剩的錢不多了，放過他吧！");
         }
