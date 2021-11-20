@@ -1,5 +1,6 @@
 require('dotenv').config();
 module.exports = {
+  Test: process.env.Test || false,
   Admins: ['806346991730819121'], //Admins of the bot
   DefaultPrefix: process.env.Prefix || 'C', //Default prefix, Server Admins can change the prefix
   Token: process.env.Token || '', //Discord Bot Token
@@ -14,9 +15,9 @@ module.exports = {
   nodes: [
     {
       identifier: 'Main',
-      host: 'lava.link',
+      host: 'lavalink.darrennathanael.com',
       port: 80,
-      password: 'xji.gl4.vu'
+      password: 'boolookbelow'
       //retryAmount: 5, - Optional
       //retryDelay: 1000, - Optional
       //secure: false - Optional | Default: false
