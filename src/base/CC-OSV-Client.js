@@ -6,7 +6,7 @@ const {
   MessageButton
 } = require('discord.js')
 const { Manager } = require('erela.js')
-const economy = require('../models/mongoDB/Economy')
+const Users = require('../models/mongoDB/Users')
 const prettyMilliseconds = require('pretty-ms')
 const spotify = require('better-erela.js-spotify').default
 const apple = require('erela.js-apple')
@@ -45,17 +45,22 @@ class CCOSV extends Client {
     this.getChannel = getChannel
     this.build()
   }
-  fetchUser (bot, userId) {
+  /**
+   *
+   * @param {string} userId - A discord user ID.
+   * @param {string} guildId - A discord guild Id.
+   */
+
+  fetchUser (bot, userId, guildId) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    const user = economy.findOne({ _id: userId })
+    const user = Users.findOne({ _id: userId, guildId: guildId })
     if (!user) {
-      const newUser = new economy({
+      const newUser = new Users({
         _id: userId,
-        name: someone.username,
-        items: []
-      })
-      newUser.save()
+        guildId: guildId,
+        userName: someone.username
+      }).save()
       return newUser
     }
     return user
@@ -64,64 +69,21 @@ class CCOSV extends Client {
   /**
    *
    * @param {string} userId - A discord user ID.
-   * @param {number} amount - Amount of bank space to give.
-   */
-
-  giveBankSpace (bot, userId, amount) {
-    const someone = bot.users.cache.get(userId)
-    if (!someone || someone.bot) return false
-    let user = economy.findOne({ _id: userId })
-    if (!user) {
-      const newUser = new economy({
-        _id: userId,
-        name: someone.username,
-        items: []
-      })
-      newUser.save()
-      return newUser
-    }
-    user.bankSpace += parseInt(amount)
-    user.save()
-    return user
-  }
-
-  /**
-   *
-   * @param {string} userId - A discord user ID.
-   */
-
-  createUser (bot, userId) {
-    const someone = bot.users.cache.get(userId)
-    if (!someone || someone.bot) return false
-    const user = economy.findOne({ _id: userId })
-    if (!user) return false
-    const newUser = new economy({
-      _id: userId,
-      name: someone.name,
-      items: []
-    })
-    newUser.save()
-    return newUser
-  }
-
-  /**
-   *
-   * @param {string} userId - A discord user ID.
+   * @param {string} guildId - A discord guild Id.
    * @param {number} amount - Amount of coins to give.
    */
 
-  giveCoins (bot, userId, amount) {
+  give (bot, userId, guildId, amount) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    let user = economy.findOne({ _id: userId })
+    let user = Users.findOne({ _id: userId, guildId: guildId })
     if (!user) {
-      const newUser = new economy({
+      const newUser = new Users({
         _id: userId,
+        guildId: guildId,
         name: someone.username,
-        items: [],
         coinsInWallet: parseInt(amount)
-      })
-      newUser.save()
+      }).save()
       return newUser
     }
     user.coinsInWallet += parseInt(amount)
@@ -180,13 +142,8 @@ class CCOSV extends Client {
         })
         player.setNowplayingMessage(NowPlaying)
       })
-      .on('queueEnd', player => {
-        if (player.queueRepeat || player.trackRepeat) {
-          try {
-            player.queue.unshift(player.queue.previous)
-            player.queue.unshift(player.queue.current)
-          } catch {}
-        }
+      .on('queueEnd', async (player, track) => {
+        
         let QueueEmbed = new MessageEmbed()
           .setAuthor(
             '播放結束。\n註：如遇到突發狀況，請嘗試再次輸入指令。',
