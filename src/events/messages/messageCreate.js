@@ -1,5 +1,5 @@
 const Prizes = require('../../models/mongoDB/Prizes.js')
-const Levels = require('../../models/mongoDB/Levels.js')
+const Users = require('../../models/mongoDB/Users.js')
 const Guilds = require('../../models/mongoDB/Guilds.js')
 
 const Discord = require('discord.js')
@@ -15,8 +15,6 @@ module.exports = {
       let GuildData = await Guilds.findOne({
         _id: message.guildId
       })
-
-      if (GuildData && GuildData.prefix) prefix = GuildData.prefix
       // 如果沒有伺服器資料，則創建
       if (!GuildData) {
         let newGuild = new Guilds({
@@ -24,10 +22,13 @@ module.exports = {
           prefix: prefix
         }).save()
       }
+      if (GuildData && GuildData.prefix) prefix = GuildData.prefix
+
       const prefixMention = new RegExp(`^<@!?${bot.user.id}> `)
       prefix = message.content.match(prefixMention)
         ? message.content.match(prefixMention)[0]
         : prefix
+
       const args = message.content
         .slice(prefix.length)
         .trim()
@@ -43,7 +44,6 @@ module.exports = {
         if (message.content.indexOf(prefix) !== 0) return
 
         //Executing the codes when we get the command or aliases
-
         if (
           (cmd.permissions &&
             cmd.permissions.channel &&
@@ -63,14 +63,14 @@ module.exports = {
             !message.member.roles.cache.has(GuildData.DJ))
         )
           return bot.sendError(message.channel, 'Missing Permissions!')
-        cmd.run(bot, message, args,  GuildData )
+        cmd.run(bot, message, args, GuildData)
         let guild = await Guilds.findOne({ guildId: message.guild.id })
         guild.CommandsRan++
         guild.save()
       }
 
       // chat level
-      let levelData = await Levels.findOne({
+      let levelData = await Users.findOne({
         guildId: message.guildId,
         userId: message.author.id
       })
@@ -87,7 +87,7 @@ module.exports = {
 
       if (!levelData) {
         // 如果沒有玩家資料，則創建
-        let newLevel = new Levels({
+        let newLevel = new Users({
           guildId: message.guildId,
           userId: message.author.id,
           userName: message.author.username
