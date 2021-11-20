@@ -1,5 +1,5 @@
 const Prizes = require('../../models/mongoDB/Prizes.js')
-const Levels = require('../../models/mongoDB/Levels.js')
+const Users = require('../../models/mongoDB/Users.js')
 const Guilds = require('../../models/mongoDB/Guilds.js')
 
 const Discord = require('discord.js')
@@ -70,7 +70,7 @@ module.exports = {
       }
 
       // chat level
-      let levelData = await Levels.findOne({
+      let levelData = await Users.findOne({
         guildId: message.guildId,
         userId: message.author.id
       })
@@ -87,7 +87,7 @@ module.exports = {
 
       if (!levelData) {
         // 如果沒有玩家資料，則創建
-        let newLevel = new Levels({
+        let newLevel = new Users({
           guildId: message.guildId,
           userId: message.author.id,
           userName: message.author.username

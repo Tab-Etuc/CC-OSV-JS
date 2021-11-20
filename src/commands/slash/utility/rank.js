@@ -1,4 +1,4 @@
-const Levels = require('../../../models/mongoDB/Levels.js')
+const Users = require('../../../models/mongoDB/Users.js')
 const { MessageAttachment } = require('discord.js')
 const { resolve, join } = require('path')
 
@@ -21,12 +21,12 @@ module.exports = {
 
     const member = interaction.member
 
-    let levelData = await Levels.findOne({
+    let levelData = await Users.findOne({
       guildId: interaction.guild.id,
       userId: member.id
     })
 
-    let rank = await Levels.find({
+    let rank = await Users.find({
       guildId: interaction.guild.id
     })
       .sort({

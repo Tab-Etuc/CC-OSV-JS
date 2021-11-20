@@ -1,6 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const economy = require('../../../models/mongoDB/Economy')
-const Levels = require('../../../models/mongoDB/Levels.js')
+const Users = require('../../../models/mongoDB/Users.js')
 
 module.exports = {
   name: '排行榜',
@@ -28,7 +27,7 @@ module.exports = {
   async execute (bot, interaction) {
     const arg = interaction.options.getString('類別', false)
     if (arg === 'economy') {
-      let data = await economy
+      let data = await Users
         .find({ guildId: interaction.guild.id })
         .sort({ coinsInBank: -1 })
         .exec()
@@ -57,7 +56,7 @@ module.exports = {
         .setFooter('希望我能有這麼多錢......')
       interaction.reply({ embeds: [embed] })
     } else if (arg === 'level') {
-      let levelData = await Levels.find({ guildId: interaction.guild.id })
+      let levelData = await Users.find({ guildId: interaction.guild.id })
         .sort({ totalXp: -1 })
         .exec()
       levelData = levelData

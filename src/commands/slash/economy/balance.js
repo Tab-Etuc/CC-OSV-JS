@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const economy = require('../../../models/mongoDB/Economy')
+const Users = require('../../../models/mongoDB/Users')
 
 module.exports = {
   name: '餘額',
@@ -19,16 +19,18 @@ module.exports = {
 
     const someone = bot.users.cache.get(member.id)
 
-    let user = economy.findOne({
-      _id: member.id,
-      guildId: interaction.guild.id
+    let user = Users.findOne({
+      userId: member.id
     })
+    console.log('1234')
     if (!user) {
-      const newUser = new economy({
+        console.log('123')
+      const newUser = new Users({
         _id: member.id,
         guildId: interaction.guild.id,
         name: someone.username
       }).save()
+      user = newUser
     }
 
     const embed = new MessageEmbed()

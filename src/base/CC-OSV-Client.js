@@ -6,7 +6,7 @@ const {
   MessageButton
 } = require('discord.js')
 const { Manager } = require('erela.js')
-const economy = require('../models/mongoDB/Economy')
+const Users = require('../models/mongoDB/Users')
 const prettyMilliseconds = require('pretty-ms')
 const spotify = require('better-erela.js-spotify').default
 const apple = require('erela.js-apple')
@@ -54,9 +54,9 @@ class CCOSV extends Client {
   fetchUser (bot, userId, guildId) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    const user = economy.findOne({ _id: userId, guildId: guildId })
+    const user = Users.findOne({ _id: userId, guildId: guildId })
     if (!user) {
-      const newUser = new economy({
+      const newUser = new Users({
         _id: userId,
         guildId: guildId,
         userName: someone.username
@@ -76,9 +76,9 @@ class CCOSV extends Client {
   give (bot, userId, guildId, amount) {
     const someone = bot.users.cache.get(userId)
     if (!someone || someone.bot) return false
-    let user = economy.findOne({ _id: userId, guildId: guildId })
+    let user = Users.findOne({ _id: userId, guildId: guildId })
     if (!user) {
-      const newUser = new economy({
+      const newUser = new Users({
         _id: userId,
         guildId: guildId,
         name: someone.username,
