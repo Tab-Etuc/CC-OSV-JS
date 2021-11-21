@@ -47,12 +47,13 @@ module.exports = {
     //       .replace(/翻譯|tr|translate/gi, ''))
     //   : (msg = msg[1][0][1][0])
     if (
-      msg[1][0][1][0] ||
-      msg[1][0][1][0] !==
+      msg &&
+      msg[1][0][1][0] &&
+      msg[1][0][1][0] ==
         message.content
           .slice(GuildDB.prefix.length)
-          .replace(/翻譯|tr|translate/gi, '') ||
-      msg[1][0][1][0] !== ''
+          .replace(/翻譯|tr|translate/gi, '') &&
+      msg[1][0][1][0] == ''
     )
       return message.channel.send(msg[1][0][1][0]).catch(console.error)
     else {
