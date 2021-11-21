@@ -20,7 +20,7 @@ module.exports = {
 
   run: async (bot, message, args, GuildDB) => {
     // 來日再精簡codeㄅ，能跑就好。
-    const msg = message.content
+    let msg = message.content
       .slice(GuildDB.prefix.length)
       .replace(/翻譯|tr|translate/gi, '')
 
