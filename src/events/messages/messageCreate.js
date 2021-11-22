@@ -62,7 +62,7 @@ module.exports = {
               .has(['ADMINISTRATOR']) &&
             !message.member.roles.cache.has(GuildData.DJ))
         )
-          return bot.sendError(message.channel, 'Missing Permissions!')
+          return bot.sendError(message.channel, '缺少權限!')
         cmd.run(bot, message, args, GuildData)
         let guild = await Guilds.findOne({ guildId: message.guild.id })
         guild.CommandsRan++

@@ -7,7 +7,6 @@ module.exports = {
   description: '展示bot資訊',
   category: '實用',
   async execute (bot, interaction) {
-    const util = bot.utils
     const uptime = moment
       .duration(bot.uptime)
       .format(' D [天], H [小時], m [分], s [秒]')
@@ -28,10 +27,10 @@ module.exports = {
       )
       .addField(
         '__**狀態：**__',
-        `**用戶：** ${util.formatNumber(users)}
-**伺服器：** ${util.formatNumber(bot.guilds.cache.size)}
-**頻道：** ${util.formatNumber(bot.channels.cache.size)}
-**指令數：** ${util.formatNumber(bot.slashCommands.size)}`
+        `**用戶：** ${bot.utils.formatNumber(users)}
+**伺服器：** ${bot.utils.formatNumber(bot.guilds.cache.size)}
+**頻道：** ${bot.utils.formatNumber(bot.channels.cache.size)}
+**指令數：** ${bot.utils.formatNumber(bot.slashCommands.size)}`
       )
       .addField(
         '__**系統介紹**__',
@@ -48,7 +47,7 @@ module.exports = {
 **核心數：** ${os.cpus().length}
 **速度：** ${core.speed} MHz
 **位元：** ${os.arch()}
-**作業系統：** ${util.toCapitalize(process.platform)}`
+**作業系統：** ${bot.utils.toCapitalize(process.platform)}`
       )
     return interaction.reply({
       ephemeral: true,
