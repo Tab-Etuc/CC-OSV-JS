@@ -52,11 +52,11 @@ module.exports = {
     }
 
     await toMute.roles.add(muterole)
-    interaction.reply(`<@${toMute.id}> 已被禁言: ${ms(mutetime)}`)
+    interaction.reply(`<@${toMute.id}> 已被禁言: ${bot.ms(mutetime)}`)
 
     setTimeout(function () {
       toMute.roles.remove(muterole)
       interaction.followUp(`<@${toMute.id}> 已解除禁言！`)
-    }, ms(mutetime))
+    }, mutetime)
   }
 }
