@@ -1,3 +1,9 @@
+const {
+  MessageEmbed,
+  MessageActionRow,
+  MessageSelectMenu,
+  MessageButton
+} = require('discord.js')
 module.exports = {
   name: 'embed',
   description: '簡單地創建一個Embed訊息。',
@@ -5,217 +11,128 @@ module.exports = {
   async execute (bot, interaction) {
     await interaction.deferReply()
 
-    await Embed(interaction)
-  }
-}
-async function Embed (interaction) {
-  try {
+    try {
+      const done = new MessageButton()
+        .setLabel('完畢')
+        .setStyle('SUCCESS')
+        .setCustomId('setDone')
 
-    const {
-      MessageEmbed,
-      MessageActionRow,
-      MessageSelectMenu,
-      MessageButton
-    } = require('discord.js')
+      const reject = new MessageButton()
+        .setLabel('取消/刪除')
+        .setStyle('DANGER')
+        .setCustomId('setDelete')
 
-    const done = new MessageButton()
-      .setLabel('Done')
-      .setStyle('SUCCESS')
-      .setCustomId('setDone')
+      let name = [
+        'Message',
+        'Title',
+        'Description',
+        'URL',
+        'Color',
+        'Image',
+        'Thumbnail',
+        'Footer'
+      ]
+      let desc = [
+        '獨立於 Embed 之外的一般訊息',
+        'Embed 的標題',
+        'Embed 的內容',
+        'Embed 標題的超連結',
+        'Embed 的顏色',
+        'Embed 的圖片',
+        'Embed 的縮略圖',
+        'Embed 的頁腳'
+      ]
+      let value = [
+        'setContent',
+        'setTitle',
+        'setDescription',
+        'setURL',
+        'setColor',
+        'setImage',
+        'setThumbnail',
+        'setFooter'
+      ]
 
-    const reject = new MessageButton()
-      .setLabel('Cancel/Delete')
-      .setStyle('DANGER')
-      .setCustomId('setDelete')
+      let menuOptions = []
 
-    let name = [
-      'Message',
-      'Title',
-      'Description',
-      'URL',
-      'Color',
-      'Image',
-      'Thumbnail',
-      'Footer'
-    ]
-    let desc = [
-      'Message outside of the embed',
-      'Title of the embed',
-      'Description of the embed',
-      'URL in the title in the embed (hyperlink for title)',
-      'Color of the embed',
-      'Image in the embed',
-      'Thumbnail in the embed',
-      'Footer of the embed'
-    ]
-    let value = [
-      'setContent',
-      'setTitle',
-      'setDescription',
-      'setURL',
-      'setColor',
-      'setImage',
-      'setThumbnail',
-      'setFooter'
-    ]
+      for (let i = 0; i < name.length; i++) {
+        let dataopt = {
+          label: name[i],
+          description: desc[i],
+          value: value[i]
+        }
 
-    let menuOptions = []
-
-    for (let i = 0; i < name.length; i++) {
-      let dataopt = {
-        label: name[i],
-        description: desc[i],
-        value: value[i]
+        menuOptions.push(dataopt)
       }
 
-      menuOptions.push(dataopt)
-    }
+      let slct = new MessageSelectMenu()
+        .setMaxValues(1)
+        .setCustomId('embed-creator')
+        .setPlaceholder('Embed 設定選項')
+        .addOptions([menuOptions])
 
-    let slct = new MessageSelectMenu()
-      .setMaxValues(1)
-      .setCustomId('embed-creator')
-      .setPlaceholder('Embed Creation Options')
-      .addOptions([menuOptions])
+      const row = new MessageActionRow().addComponents([done, reject])
 
-    const row = new MessageActionRow().addComponents([done, reject])
+      const row2 = new MessageActionRow().addComponents([slct])
 
-    const row2 = new MessageActionRow().addComponents([slct])
+      const embed = new MessageEmbed()
+        .setTitle('Embed 創建工具')
+        .setDescription(
+          '從選擇菜單中調整 ***設定*** Embed 創建工具 將為您創建一則 Embed 訊息\n\n這是一則已完成的 Embed。'
+        )
+        .setImage(
+          'https://media.discordapp.net/attachments/867344516600037396/879238983492710450/unknown.png'
+        )
+        .setColor('#075FFF')
+        .setFooter('CC-OSV')
 
-    const embed = new MessageEmbed()
-      .setTitle(options.embedTitle || 'Embed Creator')
-      .setDescription(
-        'Select any ***option*** from the Select Menu in this message and i will **collect all informations and create a embed** for you using that data.\n\nThis is a completed embed.'
-      )
-      .setImage(
-        'https://media.discordapp.net/attachments/867344516600037396/879238983492710450/unknown.png'
-      )
-      .setColor(options.embedColor || '#075FFF')
-      .setFooter('CC-OSV')
+      interaction.editReply({ embeds: [embed], components: [row2, row] })
 
-    interaction.editReply({ embeds: [embed], components: [row2, row] })
+      const emb = new MessageEmbed().setFooter('CC-OSV').setColor('#2F3136')
 
-    const emb = new MessageEmbed().setFooter('CC-OSV').setColor('#2F3136')
+      interaction.channel
+        .send({ content: '***預覽***', embeds: [emb] })
+        .then(async a => {
+          let lel = await interaction.fetchReply()
+          let e = await interaction.fetchReply()
+          let membed = await interaction.channel.messages.fetch(a.id)
 
-    interaction.channel
-      .send({ content: '***Preview***', embeds: [emb] })
-      .then(async a => {
-        let lel = await interaction.fetchReply()
-        let e = await interaction.fetchReply()
-        let membed = await interaction.channel.messages.fetch(a.id)
+          let filter = m => m.user.id === interaction.user.id
+          let collector = e.createMessageComponentCollector({
+            filter,
+            type: 'SELECT_MENU',
+            time: 600000
+          })
 
-        let filter = m => m.user.id === interaction.user.id
-        let collector = e.createMessageComponentCollector({
-          filter,
-          type: 'SELECT_MENU',
-          time: 600000
-        })
+          collector.on('collect', async button => {
+            if (button.customId && button.customId === 'setDelete') {
+              button.reply({ content: '刪除中...', ephemeral: true })
 
-        collector.on('collect', async button => {
-          if (button.customId && button.customId === 'setDelete') {
-            button.reply({ content: 'Deleting...', ephemeral: true })
+              membed.delete()
+              e.delete()
+              interaction.delete()
+            } else if (button.customId && button.customId === 'setDone') {
+              button.reply({ content: '完畢 👍', ephemeral: true })
 
-            membed.delete()
-            e.delete()
-            interaction.delete()
-          } else if (button.customId && button.customId === 'setDone') {
-            button.reply({ content: 'Done 👍', ephemeral: true })
+              interaction.channel.send({
+                content: membed.content,
+                embeds: [membed.embeds[0]]
+              })
+              membed.delete()
+              e.delete()
+            } else if (button.values[0] === 'setContent') {
+              button.reply({
+                content: '請輸入您想顯示的「獨立於 Embed 之外的一般訊息」。',
+                ephemeral: true
+              })
+              let filter = m => interaction.user.id === m.author.id
+              let titleclr = button.channel.createMessageCollector({
+                filter,
+                time: 30000,
+                max: 1
+              })
 
-            interaction.channel.send({
-              content: membed.content,
-              embeds: [membed.embeds[0]]
-            })
-            membed.delete()
-            e.delete()
-          } else if (button.values[0] === 'setContent') {
-            button.reply({
-              content:
-                'Tell me what text you want for message outside of embed',
-              ephemeral: true
-            })
-            let filter = m => interaction.user.id === m.author.id
-            let titleclr = button.channel.createMessageCollector({
-              filter,
-              time: 30000,
-              max: 1
-            })
-
-            titleclr.on('collect', async m => {
-              const url = membed.embeds[0].image
-                ? membed.embeds[0].image.url
-                : ''
-
-              let msg = new MessageEmbed()
-                .setTitle(membed.embeds[0].title || '')
-                .setDescription(membed.embeds[0].description || '')
-                .setColor(membed.embeds[0].color || '#36393F')
-                .setFooter(membed.embeds[0].footer.text || '')
-                .setImage(url)
-                .setURL(membed.embeds[0].url || '')
-                .setThumbnail(
-                  membed.embeds[0].thumbnail
-                    ? membed.embeds[0].thumbnail.url
-                    : ''
-                )
-              titleclr.stop()
-              m.delete()
-
-              membed.edit({ content: m.content, embeds: [msg] })
-            })
-          } else if (button.values[0] === 'setThumbnail') {
-            button.reply({
-              content:
-                'Tell me what image you want for embed thumbnail (small image at top right)',
-              ephemeral: true
-            })
-            let filter = m => interaction.user.id === m.author.id
-            let titleclr = button.channel.createMessageCollector({
-              filter,
-              time: 30000,
-              max: 1
-            })
-
-            titleclr.on('collect', async m => {
-              const url = membed.embeds[0].image
-                ? membed.embeds[0].image.url
-                : ''
-
-              let isthumb =
-                m.content.match(
-                  /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gim
-                ) != null ||
-                m.attachments.first().url ||
-                ''
-              if (!isthumb)
-                return interaction.reply(
-                  'This is not a image url. Please provide a image url or attachment.'
-                )
-
-              let msg = new MessageEmbed()
-                .setTitle(membed.embeds[0].title || '')
-                .setDescription(membed.embeds[0].description || '')
-                .setColor(membed.embeds[0].color || '#2F3136')
-                .setURL(membed.embeds[0].url || '')
-                .setFooter(membed.embeds[0].footer.text || '')
-                .setImage(url)
-                .setThumbnail(m.content || m.attachments.first().url || '')
-              titleclr.stop()
-              m.delete()
-
-              membed.edit({ content: membed.content, embeds: [msg] })
-            })
-          } else if (button.values[0] === 'setColor') {
-            button.reply({
-              content: 'Tell me what color you want for embed',
-              ephemeral: true
-            })
-            let filter = m => interaction.user.id === m.author.id
-            let titleclr = button.channel.createMessageCollector({
-              filter,
-              time: 30000
-            })
-
-            titleclr.on('collect', async m => {
-              if (/^#[0-9A-F]{6}$/i.test(m.content)) {
+              titleclr.on('collect', async m => {
                 const url = membed.embeds[0].image
                   ? membed.embeds[0].image.url
                   : ''
@@ -223,10 +140,124 @@ async function Embed (interaction) {
                 let msg = new MessageEmbed()
                   .setTitle(membed.embeds[0].title || '')
                   .setDescription(membed.embeds[0].description || '')
-                  .setColor(`${m.content}`)
+                  .setColor(membed.embeds[0].color || '#36393F')
+                  .setFooter(membed.embeds[0].footer.text || '')
+                  .setImage(url)
+                  .setURL(membed.embeds[0].url || '')
+                  .setThumbnail(
+                    membed.embeds[0].thumbnail
+                      ? membed.embeds[0].thumbnail.url
+                      : ''
+                  )
+                titleclr.stop()
+                m.delete()
+
+                membed.edit({ content: m.content, embeds: [msg] })
+              })
+            } else if (button.values[0] === 'setThumbnail') {
+              button.reply({
+                content:
+                  '請輸入您想顯示的「Embed 的縮略圖（右上角的小圖片）」。',
+                ephemeral: true
+              })
+              let filter = m => interaction.user.id === m.author.id
+              let titleclr = button.channel.createMessageCollector({
+                filter,
+                time: 30000,
+                max: 1
+              })
+
+              titleclr.on('collect', async m => {
+                const url = membed.embeds[0].image
+                  ? membed.embeds[0].image.url
+                  : ''
+
+                let isthumb =
+                  m.content.match(
+                    /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gim
+                  ) != null ||
+                  m.attachments.first().url ||
+                  ''
+                if (!isthumb)
+                  return interaction.reply(
+                    '這不是一個可使用的圖像連結。請嘗試重新輸入。'
+                  )
+
+                let msg = new MessageEmbed()
+                  .setTitle(membed.embeds[0].title || '')
+                  .setDescription(membed.embeds[0].description || '')
+                  .setColor(membed.embeds[0].color || '#2F3136')
                   .setURL(membed.embeds[0].url || '')
                   .setFooter(membed.embeds[0].footer.text || '')
                   .setImage(url)
+                  .setThumbnail(m.content || m.attachments.first().url || '')
+                titleclr.stop()
+                m.delete()
+
+                membed.edit({ content: membed.content, embeds: [msg] })
+              })
+            } else if (button.values[0] === 'setColor') {
+              button.reply({
+                content: '請輸入您想顯示的「Embed 的顏色」。',
+                ephemeral: true
+              })
+              let filter = m => interaction.user.id === m.author.id
+              let titleclr = button.channel.createMessageCollector({
+                filter,
+                time: 30000
+              })
+
+              titleclr.on('collect', async m => {
+                if (/^#[0-9A-F]{6}$/i.test(m.content)) {
+                  const url = membed.embeds[0].image
+                    ? membed.embeds[0].image.url
+                    : ''
+
+                  let msg = new MessageEmbed()
+                    .setTitle(membed.embeds[0].title || '')
+                    .setDescription(membed.embeds[0].description || '')
+                    .setColor(`${m.content}`)
+                    .setURL(membed.embeds[0].url || '')
+                    .setFooter(membed.embeds[0].footer.text || '')
+                    .setImage(url)
+                    .setThumbnail(
+                      membed.embeds[0].thumbnail
+                        ? membed.embeds[0].thumbnail.url
+                        : ''
+                    )
+
+                  m.delete()
+                  titleclr.stop()
+                  membed.edit({ content: membed.content, embeds: [msg] })
+                } else {
+                  interaction.reply(
+                    '請給我一個有效的十六進制代碼（Hex code）。'
+                  )
+                }
+              })
+            } else if (button.values[0] === 'setURL') {
+              button.reply({
+                content: '請輸入您想顯示的「Embed 標題的超連結」。',
+                ephemeral: true
+              })
+              let filter = m => interaction.user.id === m.author.id
+              let titleclr = button.channel.createMessageCollector({
+                filter,
+                time: 30000,
+                max: 1
+              })
+
+              titleclr.on('collect', async m => {
+                const url = membed.embeds[0].image
+                  ? membed.embeds[0].image.url
+                  : ''
+                let msg = new MessageEmbed()
+                  .setTitle(membed.embeds[0].title || '')
+                  .setURL(m.content)
+                  .setDescription(membed.embeds[0].description || '')
+                  .setColor(membed.embeds[0].color || '#2F3136')
+                  .setImage(url || '')
+                  .setFooter(membed.embeds[0].footer.text || '')
                   .setThumbnail(
                     membed.embeds[0].thumbnail
                       ? membed.embeds[0].thumbnail.url
@@ -236,204 +267,168 @@ async function Embed (interaction) {
                 m.delete()
                 titleclr.stop()
                 membed.edit({ content: membed.content, embeds: [msg] })
-              } else {
-                interaction.reply('Please give me a valid hex code')
-              }
-            })
-          } else if (button.values[0] === 'setURL') {
-            button.reply({
-              content:
-                'Tell me what URL you want for embed title (hyperlink for embed title)',
-              ephemeral: true
-            })
-            let filter = m => interaction.user.id === m.author.id
-            let titleclr = button.channel.createMessageCollector({
-              filter,
-              time: 30000,
-              max: 1
-            })
+              })
+            } else if (button.values[0] === 'setImage') {
+              button.reply({
+                content: '請輸入您想顯示的「Embed 的圖片」。',
+                ephemeral: true
+              })
+              let filter = m => interaction.user.id === m.author.id
+              let titleclr = button.channel.createMessageCollector({
+                filter,
+                time: 30000,
+                max: 1
+              })
 
-            titleclr.on('collect', async m => {
-              const url = membed.embeds[0].image
-                ? membed.embeds[0].image.url
-                : ''
-              let msg = new MessageEmbed()
-                .setTitle(membed.embeds[0].title || '')
-                .setURL(m.content)
-                .setDescription(membed.embeds[0].description || '')
-                .setColor(membed.embeds[0].color || '#2F3136')
-                .setImage(url || '')
-                .setFooter(membed.embeds[0].footer.text || '')
-                .setThumbnail(
-                  membed.embeds[0].thumbnail
-                    ? membed.embeds[0].thumbnail.url
-                    : ''
-                )
+              titleclr.on('collect', async m => {
+                let isthumb =
+                  m.content.match(
+                    /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gim
+                  ) != null ||
+                  m.attachments.first().url ||
+                  ''
+                if (!isthumb)
+                  return interaction.reply(
+                    '這不是一個有效的連結。請嘗試重新輸入。'
+                  )
 
-              m.delete()
-              titleclr.stop()
-              membed.edit({ content: membed.content, embeds: [msg] })
-            })
-          } else if (button.values[0] === 'setImage') {
-            button.reply({
-              content: 'Tell me what image you want for embed',
-              ephemeral: true
-            })
-            let filter = m => interaction.user.id === m.author.id
-            let titleclr = button.channel.createMessageCollector({
-              filter,
-              time: 30000,
-              max: 1
-            })
+                let msg = new MessageEmbed()
+                  .setTitle(membed.embeds[0].title || '')
+                  .setDescription(membed.embeds[0].description || '')
+                  .setColor(membed.embeds[0].color || '#2F3136')
+                  .setFooter(membed.embeds[0].footer.text || '')
+                  .setImage(m.content || m.attachments.first().url)
+                  .setURL(membed.embeds[0].url)
+                  .setThumbnail(
+                    membed.embeds[0].thumbnail
+                      ? membed.embeds[0].thumbnail.url
+                      : ''
+                  )
 
-            titleclr.on('collect', async m => {
-              let isthumb =
-                m.content.match(
-                  /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gim
-                ) != null ||
-                m.attachments.first().url ||
-                ''
-              if (!isthumb)
-                return interaction.reply(
-                  'This is not a image url. Please provide a image url or attachment.'
-                )
+                m.delete()
+                titleclr.stop()
+                membed.edit({ content: membed.content, embeds: [msg] })
+              })
+            } else if (button.values[0] === 'setTitle') {
+              button.reply({
+                content: '請輸入您想顯示的「Embed 的標題」。',
+                ephemeral: true
+              })
+              let filter = m => interaction.user.id === m.author.id
+              let titleclr = button.channel.createMessageCollector({
+                filter,
+                time: 30000,
+                max: 1
+              })
 
-              let msg = new MessageEmbed()
-                .setTitle(membed.embeds[0].title || '')
-                .setDescription(membed.embeds[0].description || '')
-                .setColor(membed.embeds[0].color || '#2F3136')
-                .setFooter(membed.embeds[0].footer.text || '')
-                .setImage(m.content || m.attachments.first().url)
-                .setURL(membed.embeds[0].url)
-                .setThumbnail(
-                  membed.embeds[0].thumbnail
-                    ? membed.embeds[0].thumbnail.url
-                    : ''
-                )
+              titleclr.on('collect', async m => {
+                const url = membed.embeds[0].image
+                  ? membed.embeds[0].image.url
+                  : ''
+                let msg = new MessageEmbed()
+                  .setTitle(m.content)
+                  .setURL(membed.embeds[0].url || '')
+                  .setDescription(membed.embeds[0].description || '')
+                  .setColor(membed.embeds[0].color || '#2F3136')
+                  .setThumbnail(
+                    membed.embeds[0].thumbnail
+                      ? membed.embeds[0].thumbnail.url
+                      : ''
+                  )
+                  .setImage(url || '')
+                  .setFooter(membed.embeds[0].footer.text || '')
+                m.delete()
+                titleclr.stop()
 
-              m.delete()
-              titleclr.stop()
-              membed.edit({ content: membed.content, embeds: [msg] })
-            })
-          } else if (button.values[0] === 'setTitle') {
-            button.reply({
-              content: 'Tell me what text you want for embed title',
-              ephemeral: true
-            })
-            let filter = m => interaction.user.id === m.author.id
-            let titleclr = button.channel.createMessageCollector({
-              filter,
-              time: 30000,
-              max: 1
-            })
+                membed.edit({ content: membed.content, embeds: [msg] })
+              })
+            } else if (button.values[0] === 'setDescription') {
+              button.reply({
+                content: '請輸入您想顯示的「Embed 的內容」。',
+                ephemeral: true
+              })
+              let filter = m => interaction.user.id === m.author.id
+              let titleclr = button.channel.createMessageCollector({
+                filter,
+                time: 30000,
+                max: 1
+              })
 
-            titleclr.on('collect', async m => {
-              const url = membed.embeds[0].image
-                ? membed.embeds[0].image.url
-                : ''
-              let msg = new MessageEmbed()
-                .setTitle(m.content)
-                .setURL(membed.embeds[0].url || '')
-                .setDescription(membed.embeds[0].description || '')
-                .setColor(membed.embeds[0].color || '#2F3136')
-                .setThumbnail(
-                  membed.embeds[0].thumbnail
-                    ? membed.embeds[0].thumbnail.url
-                    : ''
-                )
-                .setImage(url || '')
-                .setFooter(membed.embeds[0].footer.text || '')
-              m.delete()
-              titleclr.stop()
+              titleclr.on('collect', async m => {
+                const url = membed.embeds[0].image
+                  ? membed.embeds[0].image.url
+                  : ''
 
-              membed.edit({ content: membed.content, embeds: [msg] })
-            })
-          } else if (button.values[0] === 'setDescription') {
-            button.reply({
-              content: 'Tell me what text you want for embed description',
-              ephemeral: true
-            })
-            let filter = m => interaction.user.id === m.author.id
-            let titleclr = button.channel.createMessageCollector({
-              filter,
-              time: 30000,
-              max: 1
-            })
+                let msg = new MessageEmbed()
+                  .setTitle(membed.embeds[0].title || '')
+                  .setURL(membed.embeds[0].url || '')
+                  .setDescription(m.content)
+                  .setThumbnail(
+                    membed.embeds[0].thumbnail
+                      ? membed.embeds[0].thumbnail.url
+                      : ''
+                  )
+                  .setColor(membed.embeds[0].color || '#2F3136')
+                  .setImage(url || '')
+                  .setFooter(membed.embeds[0].footer.text || '')
+                m.delete()
+                titleclr.stop()
+                membed.edit({ content: membed.content, embeds: [msg] })
+              })
+            } else if (button.values[0] === 'setFooter') {
+              button.reply({
+                content: '請輸入您想顯示的「Embed 的頁腳」。',
+                ephemeral: true
+              })
+              let filter = m => interaction.user.id === m.author.id
+              let titleclr = button.channel.createMessageCollector({
+                filter,
+                time: 30000,
+                max: 1
+              })
 
-            titleclr.on('collect', async m => {
-              const url = membed.embeds[0].image
-                ? membed.embeds[0].image.url
-                : ''
+              titleclr.on('collect', async m => {
+                const url = membed.embeds[0].image
+                  ? membed.embeds[0].image.url
+                  : ''
 
-              let msg = new MessageEmbed()
-                .setTitle(membed.embeds[0].title || '')
-                .setURL(membed.embeds[0].url || '')
-                .setDescription(m.content)
-                .setThumbnail(
-                  membed.embeds[0].thumbnail
-                    ? membed.embeds[0].thumbnail.url
-                    : ''
-                )
-                .setColor(membed.embeds[0].color || '#2F3136')
-                .setImage(url || '')
-                .setFooter(membed.embeds[0].footer.text || '')
-              m.delete()
-              titleclr.stop()
-              membed.edit({ content: membed.content, embeds: [msg] })
-            })
-          } else if (button.values[0] === 'setFooter') {
-            button.reply({
-              content: 'Tell me what text you want for embed footer',
-              ephemeral: true
-            })
-            let filter = m => interaction.user.id === m.author.id
-            let titleclr = button.channel.createMessageCollector({
-              filter,
-              time: 30000,
-              max: 1
-            })
+                let msg = new MessageEmbed()
+                  .setTitle(membed.embeds[0].title || '')
+                  .setURL(membed.embeds[0].url || '')
+                  .setThumbnail(
+                    membed.embeds[0].thumbnail
+                      ? membed.embeds[0].thumbnail.url
+                      : ''
+                  )
+                  .setDescription(membed.embeds[0].description || '')
+                  .setColor(membed.embeds[0].color || '#2F3136')
+                  .setFooter(m.content || '')
+                  .setImage(url || '')
 
-            titleclr.on('collect', async m => {
-              const url = membed.embeds[0].image
-                ? membed.embeds[0].image.url
-                : ''
+                m.delete()
 
-              let msg = new MessageEmbed()
-                .setTitle(membed.embeds[0].title || '')
-                .setURL(membed.embeds[0].url || '')
-                .setThumbnail(
-                  membed.embeds[0].thumbnail
-                    ? membed.embeds[0].thumbnail.url
-                    : ''
-                )
-                .setDescription(membed.embeds[0].description || '')
-                .setColor(membed.embeds[0].color || '#2F3136')
-                .setFooter(m.content || '')
-                .setImage(url || '')
+                titleclr.stop()
 
-              m.delete()
+                membed.edit({ content: membed.content, embeds: [msg] })
+              })
+            }
+          })
+          collector.on('end', async (collected, reason) => {
+            if (reason === 'time') {
+              const content = new MessageButton()
+                .setLabel('已逾時。')
+                .setStyle('DANGER')
+                .setCustomId('timeout|91817623842')
+                .setDisabled()
 
-              titleclr.stop()
+              const row = new MessageActionRow().addComponents([content])
 
-              membed.edit({ content: membed.content, embeds: [msg] })
-            })
-          }
+              e.edit({ embeds: [lel.embeds[0]], components: [row] })
+            }
+          })
         })
-        collector.on('end', async (collected, reason) => {
-          if (reason === 'time') {
-            const content = new MessageButton()
-              .setLabel('Timeout')
-              .setStyle('DANGER')
-              .setCustomId('timeout|91817623842')
-              .setDisabled()
-
-            const row = new MessageActionRow().addComponents([content])
-
-            e.edit({ embeds: [lel.embeds[0]], components: [row] })
-          }
-        })
-      })
-  } catch (err) {
-    console.log(`Error Occured. | embedCreate | Error: ${err}`)
+    } catch (err) {
+      console.log(`Error Occured. | embedCreate | Error: ${err}`)
+    }
   }
 }
