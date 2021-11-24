@@ -179,7 +179,7 @@ module.exports = {
                   m.attachments.first().url ||
                   ''
                 if (!isthumb)
-                  return interaction.reply(
+                  return interaction.followUp(
                     '這不是一個可使用的圖像連結。請嘗試重新輸入。'
                   )
 
@@ -230,7 +230,7 @@ module.exports = {
                   titleclr.stop()
                   membed.edit({ content: membed.content, embeds: [msg] })
                 } else {
-                  interaction.reply(
+                  interaction.followUp(
                     '請給我一個有效的十六進制代碼（Hex code）。'
                   )
                 }
@@ -288,7 +288,7 @@ module.exports = {
                   m.attachments.first().url ||
                   ''
                 if (!isthumb)
-                  return interaction.reply(
+                  return interaction.followUp(
                     '這不是一個有效的連結。請嘗試重新輸入。'
                   )
 
