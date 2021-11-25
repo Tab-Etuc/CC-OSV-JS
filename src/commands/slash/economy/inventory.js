@@ -1,12 +1,12 @@
 const { MessageEmbed } = require('discord.js')
-const { fetchUser } = require('../../../models/economy/UserManager')
+const UserManager = require('../../../models/economy/UserManager')
 
 module.exports = {
   name: '背包',
   description: '查看您的背包。',
   category: '經濟',
   async execute (bot, interaction) {
-    const user = await fetchUser(
+    const user = await UserManager.fetchUser(
       bot,
       interaction.member.id,
       interaction.guild.id
