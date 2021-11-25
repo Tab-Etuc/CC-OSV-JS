@@ -72,7 +72,7 @@ module.exports = {
       // chat level
       let levelData = await Users.findOne({
         guildId: message.guildId,
-        userId: message.author.id,
+        userId: message.author.id
       })
       let rankData = await Prizes.findOne({
         guildId: message.guildId
@@ -150,11 +150,7 @@ module.exports = {
         '好喔'
       )
 
-      let substringArray = bot.utils.get_substrings_between(
-        message.content,
-        ':',
-        ':'
-      )
+      let substringArray = get_substrings_between(message.content, ':', ':')
       // 如果不是 NQN 模式的處理
       if (!substringArray.length) {
         if (C_msg === message.content) return
@@ -238,4 +234,26 @@ module.exports = {
       console.log(error)
     }
   }
+}
+function get_substrings_between (str, startDelimiter, endDelimiter) {
+  var contents = []
+  var startDelimiterLength = startDelimiter.length
+  var endDelimiterLength = endDelimiter.length
+  var startFrom = (contentStart = contentEnd = 0)
+
+  while (false !== (contentStart = strpos(str, startDelimiter, startFrom))) {
+    contentStart += startDelimiterLength
+    contentEnd = strpos(str, endDelimiter, contentStart)
+    if (false === contentEnd) {
+      break
+    }
+    contents.push(str.substr(contentStart, contentEnd - contentStart))
+    startFrom = contentEnd + endDelimiterLength
+  }
+
+  return contents
+}
+function strpos (haystack, needle, offset) {
+  var i = (haystack + '').indexOf(needle, offset || 0)
+  return i === -1 ? false : i
 }
