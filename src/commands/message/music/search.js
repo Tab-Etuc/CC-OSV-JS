@@ -1,5 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 const _ = require('lodash')
+const Pagination = require('../models/pagination')
+
 module.exports = {
   name: 'search',
   description: '🔎播放基於查詢的歌曲結果',
@@ -85,7 +87,7 @@ module.exports = {
 
       if (!Pages.length || Pages.length === 1)
         return message.channel.send({ embeds: [Pages[0]] })
-      else bot.Pagination(message, Pages)
+      else Pagination(message, Pages)
 
       let w = a => new Promise(r => setInterval(r, a))
       await w(500) //waits 500ms cuz needed to wait for the above song search embed to send ._.
