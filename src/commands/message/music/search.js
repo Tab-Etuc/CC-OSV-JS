@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 const _ = require('lodash')
-const Pagination = require('../models/pagination')
+const Pagination = require('../../../models/pagination')
 
 module.exports = {
   name: 'search',
