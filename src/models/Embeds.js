@@ -1,153 +1,87 @@
 const { MessageEmbed, Interaction } = require('discord.js')
+class Embeds {
+  /**
+   * Returns a custom embed
+   * @param {Interaction} interaction
+   */
+  baseEmbed (interaction) {
+    if (!interaction) {
+      throw Error("'interaction' must be passed down as param! (baseEmbed)")
+    }
 
-/**
- * Returns a custom embed
- * @param {Interaction} interaction
- */
-function baseEmbed (interaction) {
-  if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (baseEmbed)")
+    const avatar = interaction.user?.displayAvatarURL({ dynamic: true })
+    const tag = interaction.user?.tag
+
+    return new MessageEmbed()
+      .setFooter(tag, avatar)
+      .setColor(interaction.guild.me.displayColor || '#00FFFF')
+      .setTimestamp()
   }
 
-  const avatar = interaction.user?.displayAvatarURL({ dynamic: true })
-  const tag = interaction.user?.tag
-
-  return new MessageEmbed()
-    .setFooter(tag, avatar)
-    .setColor(interaction.guild.me.displayColor || '#00FFFF')
-    .setTimestamp()
-}
-
-/**
- * Returns a custom embed
- * @param {Interaction} interaction
- */
-function rootEmbed (interaction) {
-  if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (baseEmbed)")
+  /**
+   * Returns a custom embed
+   * @param {Interaction} interaction
+   */
+  rootEmbed (interaction) {
+    return new MessageEmbed().setColor(
+      interaction.guild.me.displayColor || '#00FFFF'
+    )
   }
 
-  return new MessageEmbed().setColor(
-    interaction.guild.me.displayColor || '#00FFFF'
-  )
-}
-
-/**
- * Returns a custom embed
- * @param {Interaction} interaction
- * @param {string} text
- */
-function infoMessage (interaction, text) {
-  if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (InfoMessage)")
+  /**
+   * Returns a custom embed
+   * @param {Interaction} interaction
+   * @param {string} text
+   */
+  infoMessage (interaction, text) {
+    return interaction
+      .editReply({
+        embeds: [
+          new MessageEmbed()
+            .setDescription(text)
+            .setColor(interaction.guild.me.displayColor || '#00FFFF')
+        ],
+        allowedMentions: { repliedUser: false }
+      })
+      .catch(console.error)
   }
 
-  if (!text) {
-    throw Error("'text' must be passed down as param! (InfoMessage)")
+  /**
+   * Returns a custom embed
+   * @param {Interaction} interaction
+   * @param {string} text
+   */
+  warnMessage (interaction, text) {
+    return interaction
+      .editReply({
+        ephemeral: true,
+        embeds: [new MessageEmbed().setDescription(text).setColor('ORANGE')],
+        allowedMentions: { repliedUser: false }
+      })
+      .catch(console.error)
   }
 
-  const embedI = new MessageEmbed()
-    .setDescription(text)
-    .setColor(interaction.guild.me.displayColor || '#00FFFF')
-
-  return interaction
-    .editReply({ embeds: [embedI], allowedMentions: { repliedUser: false } })
-    .catch(console.error)
-}
-
-/**
- * Returns a custom embed
- * @param {Interaction} interaction
- * @param {string} text
- */
-function warnMessage (interaction, text) {
-  if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (WarnMessage)")
+  /**
+   * Returns a custom embed
+   * @param {Interaction} interaction
+   * @param {string} text
+   */
+  errorMessage (interaction, text) {
+    return interaction
+      .editReply({
+        ephemeral: true,
+        embeds: [new MessageEmbed().setDescription(text).setColor('RED')],
+        allowedMentions: { repliedUser: false }
+      })
+      .catch(console.error)
   }
 
-  if (!text) {
-    throw Error("'text' must be passed down as param! (WarnMessage)")
-  }
-
-  const embedW = new MessageEmbed().setDescription(text).setColor('ORANGE')
-
-  return interaction
-    .editReply({
-      ephemeral: true,
-      embeds: [embedW],
-      allowedMentions: { repliedUser: false }
+  sendTime (bot, Channel, msg) {
+    Channel.send({
+      embeds: [
+        new MessageEmbed().setColor(bot.config.EmbedColor).setDescription(msg)
+      ]
     })
-    .catch(console.error)
-}
-
-/**
- * Returns a custom embed
- * @param {Interaction} interaction
- * @param {string} text
- */
-function errorMessage (interaction, text) {
-  if (!interaction) {
-    throw Error("'interaction' must be passed down as param! (ErrorMessage)")
   }
-
-  if (!text) {
-    throw Error("'text' must be passed down as param! (ErrorMessage)")
-  }
-
-  const embedE = new MessageEmbed().setDescription(text).setColor('RED')
-
-  return interaction
-    .editReply({
-      ephemeral: true,
-      embeds: [embedE],
-      allowedMentions: { repliedUser: false }
-    })
-    .catch(console.error)
 }
-
-/**
- * Send a custom embed to queue textChannel
- * @param {DJS.Client} bot
- * @param {object} queue
- * @param {string} text
- * @param {string | number} color
- */
-function queueMessage (bot, queue, text, color) {
-  if (!bot) {
-    throw Error("'bot' must be passed down as param! (queueMessage)")
-  }
-
-  if (!queue) {
-    throw Error("'queue' must be passed down as param! (queueMessage)")
-  }
-
-  if (!text) {
-    throw Error("'text' must be passed down as param! (queueMessage)")
-  }
-
-  if (!bot.utils.havePermissions(queue.metadata.channel))
-    return queue.metadata.channel.send({ content: `**$text}**` })
-
-  let colour = queue.guild.me.displayColor || '#00FFFF'
-  if (color) colour = color
-
-  const embedQ = new MessageEmbed().setDescription(text).setColor(colour)
-
-  return queue.metadata.channel.send({ embeds: [embedQ] })
-}
-function sendTime (bot, Channel, msg) {
-  let embed = new MessageEmbed()
-    .setColor(bot.config.EmbedColor)
-    .setDescription(msg)
-
-  Channel.send({ embeds: [embed] })
-}
-module.exports = {
-  baseEmbed,
-  rootEmbed,
-  infoMessage,
-  warnMessage,
-  errorMessage,
-  queueMessage,
-  sendTime
-}
+module.exports = new Embeds()
