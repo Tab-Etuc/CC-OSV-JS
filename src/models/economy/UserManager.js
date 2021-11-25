@@ -1,4 +1,4 @@
-const Users = require('../models/mongoDB/Users')
+const Users = require('../mongoDB/Users')
 class UserManager {
   /**
    *
