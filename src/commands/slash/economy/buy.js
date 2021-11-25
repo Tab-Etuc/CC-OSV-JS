@@ -1,5 +1,5 @@
 const itemss = require('../../../models/economy/items')
-const { fetchUser } = require('../../../models/economy/UserManager')
+const UserManager = require('../../../models/economy/UserManager')
 
 module.exports = {
   name: '購買',
@@ -20,7 +20,7 @@ module.exports = {
     }
   ],
   async execute (bot, interaction) {
-    let user = await fetchUser(bot, interaction.member.id, interaction.guild.id)
+    let user = await UserManager.fetchUser(bot, interaction.member.id, interaction.guild.id)
     const arg = interaction.options.getString('商品', false)
     const item = itemss.find(
       x =>
