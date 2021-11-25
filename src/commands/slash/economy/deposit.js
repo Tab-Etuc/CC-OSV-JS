@@ -1,4 +1,4 @@
-const { fetchUser } = require('../../../models/economy/UserManager')
+const UserManager = require('../../../models/economy/UserManager')
 
 module.exports = {
   name: '存款',
@@ -14,7 +14,7 @@ module.exports = {
     }
   ],
   async execute (bot, interaction) {
-    let data = await fetchUser(bot, interaction.member.id, interaction.guild.id)
+    let data = await UserManager.fetchUser(bot, interaction.member.id, interaction.guild.id)
     const arg = interaction.options.getString('金額', false)
     if (
       arg.toLowerCase() === 'all' ||
