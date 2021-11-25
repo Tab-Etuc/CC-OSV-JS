@@ -33,7 +33,7 @@ class Logger {
         bot.channels.cache.get(channelId) ||
         (await bot.channels.fetch(channelId))
 
-      if (!channel || !havePermissions(channel)) {
+      if (!channel) {
         return error('錯誤日誌', error?.stack || `${error}`)
       }
 
