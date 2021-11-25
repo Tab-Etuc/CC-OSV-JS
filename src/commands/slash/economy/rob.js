@@ -1,4 +1,4 @@
-const { fetchUser } = require('../../../models/economy/UserManager')
+const UserManager = require('../../../models/economy/UserManager')
 
 module.exports = {
   name: '搶劫',
@@ -16,7 +16,7 @@ module.exports = {
     const member =
       interaction.options.getString('指令', false) || interaction.member
 
-    const user = await fetchUser(
+    const user = await UserManager.fetchUser(
       bot,
       interaction.member.id,
       interaction.guild.id
@@ -27,7 +27,7 @@ module.exports = {
         `您不能搶劫一個機器人。\n\`您不會覺得能靠搶劫身無分文的機器人發家致富...吧？\``
       )
 
-    const robbedUser = await fetchUser(bot, member.id, member.guildId)
+    const robbedUser = await UserManager.fetchUser(bot, member.id, member.guildId)
     if (robbedUser.coinsInWallet < 1000) {
       return interaction.reply('他剩的錢不多了，放過他吧！')
     }
