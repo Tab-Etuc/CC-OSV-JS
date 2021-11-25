@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js')
+const ProgressBar = require('../../../models/ProgressBar')
 
 module.exports = {
   name: 'nowplaying',
@@ -34,7 +35,7 @@ module.exports = {
       .addField(
         '持續時間',
         `${
-          bot.ProgressBar(player.position, player.queue.current.duration, 15)
+          ProgressBar(player.position, player.queue.current.duration, 15)
             .Bar
         } \`${bot.ms(player.position, {
           colonNotation: true
