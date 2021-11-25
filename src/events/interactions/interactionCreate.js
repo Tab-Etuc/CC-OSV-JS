@@ -88,7 +88,7 @@ module.exports = {
           interaction,
           '發生了一點錯誤。抱歉為您帶來糟糕的體驗。'
         )
-        return bot.utils.sendErrorLog(bot, err, 'error')
+        return bot.logger.sendErrorLog(bot, err, 'error')
       }
       // 按鈕
     } else if (interaction.isButton()) {
