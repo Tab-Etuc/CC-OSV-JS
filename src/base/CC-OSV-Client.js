@@ -6,7 +6,6 @@ const {
   MessageButton
 } = require('discord.js')
 const { Manager } = require('erela.js')
-const Users = require('../models/mongoDB/Users')
 const prettyMilliseconds = require('pretty-ms')
 const spotify = require('better-erela.js-spotify').default
 const apple = require('erela.js-apple')
@@ -37,59 +36,13 @@ class CCOSV extends Client {
     this.utils = require('../models/Functions')
     this.say = require('../models/Embeds')
     this.config = require('../config')
-    this.ProgressBar = require('../models/ProgressBar')
-    this.Pagination = require('../models/pagination')
     this.ms = prettyMilliseconds
 
     this.getLavalink = getLavalink
     this.getChannel = getChannel
     this.build()
   }
-  /**
-   *
-   * @param {string} userId - A discord user ID.
-   * @param {string} guildId - A discord guild Id.
-   */
-
-  fetchUser (bot, userId, guildId) {
-    const someone = bot.users.cache.get(userId)
-    if (!someone || someone.bot) return false
-    const user = Users.findOne({ userId: userId, guildId: guildId })
-    if (!user) {
-      const newUser = new Users({
-        guildId: message.guildId,
-        userId: message.author.id,
-        userName: message.user.username
-      }).save()
-      return newUser
-    }
-    return user
-  }
-
-  /**
-   *
-   * @param {string} userId - A discord user ID.
-   * @param {string} guildId - A discord guild Id.
-   * @param {number} amount - Amount of coins to give.
-   */
-
-  give (bot, userId, guildId, amount) {
-    const someone = bot.users.cache.get(userId)
-    if (!someone || someone.bot) return false
-    let user = Users.findOne({ userId: userId, guildId: guildId })
-    if (!user) {
-      const newUser = new Users({
-        guildId: message.guildId,
-        userId: message.author.id,
-        userName: message.user.username,
-        coinsInWallet: parseInt(amount)
-      }).save()
-      return newUser
-    }
-    user.coinsInWallet += parseInt(amount)
-    user.save()
-    return user
-  }
+  
 
   build () {
     let bot = this
