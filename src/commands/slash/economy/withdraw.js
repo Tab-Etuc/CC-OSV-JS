@@ -1,3 +1,5 @@
+const { fetchUser } = require('../../../models/economy/UserManager')
+
 module.exports = {
     name: "提款",
     description: "從銀行取出現金。",
@@ -9,7 +11,7 @@ module.exports = {
         required: true,
     }],
     async execute(bot, interaction) {
-        let data = await bot.fetchUser(bot, interaction.member.id, interaction.guild.id);
+        let data = await fetchUser(bot, interaction.member.id, interaction.guild.id);
         const arg = interaction.options.getString("金額", false);
         if (arg.toLowerCase() === 'all' || arg === '全部' || arg === '全' || arg === '所有' || arg === 'a' || arg === 'ＡＬＬ' || arg === 'ａｌｌ' || arg === 'ａ') {
             data.coinsInWallet += data.coinsInBank;
