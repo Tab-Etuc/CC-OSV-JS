@@ -1,4 +1,3 @@
-const Discord = require('discord.js')
 async function dropdownPages(message, options = []) {
   let { MessageActionRow, MessageSelectMenu } = require('discord.js')
   try {
