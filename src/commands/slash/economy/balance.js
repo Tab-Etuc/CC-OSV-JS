@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const Users = require('../../../models/mongoDB/Users')
+const { fetchUser } = require('../../../models/economy/UserManager')
 
 module.exports = {
   name: '餘額',
@@ -16,7 +16,7 @@ module.exports = {
   async execute (bot, interaction) {
     const member =
       interaction.options.getString('指令', false) || interaction.member
-    let user = await bot.fetchUser(bot, member.id, interaction.guild.id)
+    let user = await fetchUser(bot, member.id, interaction.guild.id)
 
     const embed = new MessageEmbed()
       .setTitle(`${member.user.username}'s Balance`)
