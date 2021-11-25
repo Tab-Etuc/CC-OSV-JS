@@ -1,3 +1,5 @@
+const { fetchUser } = require('./UserManager')
+
 const array = [
   {
     name: '餅乾',
@@ -41,7 +43,7 @@ const array = [
     keep: true,
     run: async (bot, message, args) => {
       const fishAmount = Math.round(Math.random() * 1) + 1
-      const data = await bot.fetchUser(bot, message.author.id, message.guildId)
+      const data = await fetchUser(bot, message.author.id, message.guildId)
       message.channel.send(
         `You went fishing and came back with **${fishAmount}** fish 🐟`
       )
@@ -88,7 +90,7 @@ const array = [
     keep: true,
     run: async (bot, message, args) => {
       const deerAmount = Math.round(Math.random() * 1) + 1
-      const data = await bot.fetchUser(bot, message.author.id, message.guildId)
+      const data = await fetchUser(bot, message.author.id, message.guildId)
       message.channel.send(
         `You went hunting and came back with **${deerAmount}** deer 🦌`
       )
@@ -135,7 +137,7 @@ const array = [
     keep: true,
     run: async (bot, message, args) => {
       const gemAmount = Math.round(Math.random() * 1) + 1
-      const data = await bot.fetchUser(bot, message.author.id, message.guildId)
+      const data = await fetchUser(bot, message.author.id, message.guildId)
       message.channel.send(
         `You went mining and came back with **${gemAmount}** gem 💎`
       )
@@ -182,7 +184,7 @@ const array = [
     keep: true,
     run: async (bot, message, args) => {
       const treeAmount = Math.round(Math.random() * 1) + 1
-      const data = await bot.fetchUser(bot, message.author.id, message.guildId)
+      const data = await fetchUser(bot, message.author.id, message.guildId)
       message.channel.send(
         `您走進了樹林並把其中**${treeAmount}**棵倒楣的樹🌲砍了下來。`
       )
