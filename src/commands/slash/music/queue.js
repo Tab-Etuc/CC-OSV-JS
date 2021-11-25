@@ -1,5 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 const _ = require('lodash')
+const Pagination = require('../../../models/pagination')
+const ProgressBar = require('../../../models/ProgressBar')
 
 module.exports = {
   name: 'queue',
@@ -47,7 +49,7 @@ module.exports = {
           .addField(
             '持續時間',
             `${
-              bot.ProgressBar(
+              ProgressBar(
                 player.position,
                 player.queue.current.duration,
                 15
@@ -97,7 +99,7 @@ module.exports = {
           .addField(
             '當前之歌曲持續時間:',
             `${
-              bot.ProgressBar(
+              ProgressBar(
                 player.position,
                 player.queue.current.duration,
                 15
@@ -115,9 +117,9 @@ module.exports = {
 
       if (!Pages.length || Pages.length === 1)
         return interaction.editReply({ embeds: [Pages[0]] })
-      else bot.Pagination(interaction, Pages)
+      else Pagination(interaction, Pages)
     } catch (error) {
-      bot.utils.sendErrorLog(bot, error, 'error')
+      bot.logger.sendErrorLog(bot, error, 'error')
     }
   }
 }
