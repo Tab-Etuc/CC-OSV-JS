@@ -81,7 +81,7 @@ module.exports = {
           let emb = bot
             .Embed()
             .setAuthor(`暫停！`, bot.config.iconURL)
-            .setDescription(`語音頻道空無一人，音樂已暫停！`)
+            .setDescription(`語音頻道空無一人，音樂已暫停！\n註：請勿於音樂尚未播放結束時移動BOT所在之語音頻道。`)
           await bot.channels.cache
             .get(player.textChannel)
             .send({ embeds: [emb] })
