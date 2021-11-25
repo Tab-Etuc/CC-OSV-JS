@@ -47,7 +47,7 @@ module.exports = {
 **核心數：** ${os.cpus().length}
 **速度：** ${core.speed} MHz
 **位元：** ${os.arch()}
-**作業系統：** ${bot.utils.toCapitalize(process.platform)}`
+**作業系統：** ${toCapitalize(process.platform)}`
       )
     return interaction.reply({
       ephemeral: true,
@@ -55,4 +55,19 @@ module.exports = {
       allowedMentions: { repliedUser: false }
     })
   }
+}
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+ function toCapitalize (str) {
+  if (str === null || str === '') {
+    return false
+  } else {
+    str = str.toString()
+  }
+
+  return str.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  })
 }
