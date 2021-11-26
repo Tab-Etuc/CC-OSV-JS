@@ -86,6 +86,7 @@ class Logger {
       console.error({ error })
       console.error(e)
     }
+    
   }
   /**
    * @param {string} type
