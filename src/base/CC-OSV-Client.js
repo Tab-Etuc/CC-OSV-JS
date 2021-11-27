@@ -59,16 +59,16 @@ class CCOSV extends Client {
         id: process.env.Discord_ClientID,
         secret: process.env.Discord_ClientSecret
       },
-      redirectUri: 'https://discord-cc-bot-js.herokuapp.com/discord/callback',
-      domain: 'https://discord-cc-bot-js.herokuapp.com/',
+      redirectUri: process.env.DOMAIN　+ '/discord/callback',
+      domain: process.env.DOMAIN,
       bot: this,
       theme: DarkDashboard({
         information: {
           createdBy: 'CC_#8844',
           websiteTitle: 'CC-OSV',
           websiteName: 'CC-OSV Dashboard',
-          websiteUrl: 'https://discord-cc-bot-js.herokuapp.com/',
-          dashboardUrl: 'https://discord-cc-bot-js.herokuapp.com/',
+          websiteUrl: process.env.DOMAIN,
+          dashboardUrl: process.env.DOMAIN,
           supportServer: 'https://discord.gg/yYq4UgRRzz',
           imageFavicon: 'https://imgur.com/IrttPgS.png',
           iconURL: 'https://imgur.com/IrttPgS.png',

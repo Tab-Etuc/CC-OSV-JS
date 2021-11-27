@@ -83,9 +83,11 @@ class Dashboard {
 
     let sessionData = {
       secret: config.cookiesSecret || 'total_secret_cookie_secret',
-    //   store: MongoStore.create({
-    //     mongoUrl: process.env.MONGODB,
-    //   }),
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGODB,
+        dbName: 'test-app',
+        touchAfter: 24 * 3600
+      }),
       resave: true,
       saveUninitialized: true,
       cookie: {
