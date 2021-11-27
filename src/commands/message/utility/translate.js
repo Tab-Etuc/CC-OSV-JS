@@ -37,15 +37,12 @@ module.exports = {
       )
       .catch(console.error)
     msg = JSON.parse(msg.req.res.text)
-
     if (
-      (msg,
-      msg[1][0][1][0],
-      msg[1][0][1][0] !==
+      msg[1][0][1][0] != undefined &&
+      msg[1][0][1][0] !=
         message.content
           .slice(GuildDB.prefix.length)
-          .replace(/翻譯|tr|translate/gi, ''),
-      msg[1][0][1][0] !== '')
+          .replace(/翻譯|tr|translate/gi, '')
     )
       return message.channel.send(msg[1][0][1][0]).catch(console.error)
     else {
@@ -54,16 +51,13 @@ module.exports = {
         .replace(/翻譯|tr|translate/gi, '')
       translate(msg_, { to: 'zh-tw' })
         .then(res => {
-          res
-            ? res
-            : message.content
-                .slice(GuildDB.prefix.length)
-                .replace(/翻譯|tr|translate/gi, '')
+          if (res == undefined)
+            res = message.content
+              .slice(GuildDB.prefix.length)
+              .replace(/翻譯|tr|translate/gi, '')
           return message.channel.send(res)
         })
-        .catch(err => {
-          console.error(err)
-        })
+        .catch(console.error)
     }
   }
 }
