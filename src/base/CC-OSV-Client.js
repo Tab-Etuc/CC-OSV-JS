@@ -56,8 +56,8 @@ class CCOSV extends Client {
     const Dashboard = new DBD.Dashboard({
       port: process.env.PORT,
       client: {
-        id: '893700228195184661',
-        secret: '2XzdCjWUOMK_4SBsAayBsBqp69-gBLZL'
+        id: process.env.Discord_ClientID,
+        secret: process.env.Discord_ClientSecret
       },
       redirectUri: 'https://discord-cc-bot-js.herokuapp.com/discord/callback',
       domain: 'https://discord-cc-bot-js.herokuapp.com/',
