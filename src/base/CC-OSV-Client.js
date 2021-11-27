@@ -54,21 +54,21 @@ class CCOSV extends Client {
   build () {
     let bot = this
     const Dashboard = new DBD.Dashboard({
-      port: 3000,
+      port: process.env.PORT,
       client: {
         id: '893700228195184661',
         secret: '2XzdCjWUOMK_4SBsAayBsBqp69-gBLZL'
       },
-      redirectUri: 'http://localhost:3000/discord/callback',
-      domain: 'http://localhost:3000',
+      redirectUri: 'https://discord-cc-bot-js.herokuapp.com/discord/callback',
+      domain: 'https://discord-cc-bot-js.herokuapp.com/',
       bot: this,
       theme: DarkDashboard({
         information: {
           createdBy: 'CC_#8844',
           websiteTitle: 'CC-OSV',
           websiteName: 'CC-OSV Dashboard',
-          websiteUrl: 'http://localhost:3000/',
-          dashboardUrl: 'http://localhost:3000/',
+          websiteUrl: 'https://discord-cc-bot-js.herokuapp.com/',
+          dashboardUrl: 'https://discord-cc-bot-js.herokuapp.com/',
           supportServer: 'https://discord.gg/yYq4UgRRzz',
           imageFavicon: 'https://imgur.com/IrttPgS.png',
           iconURL: 'https://imgur.com/IrttPgS.png',
@@ -283,7 +283,7 @@ class CCOSV extends Client {
               optionId: 'Role',
               optionName: '欲給予的身分組',
               optionDescription: '',
-              optionType: DBD.formTypes.rolesMultiSelect(false),
+              optionType: DBD.formTypes.rolesSelect(false, false),
               getActualSet: async ({ guild }) => {
                 return currencyNames[guild.id] || null
               },
