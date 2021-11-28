@@ -6,6 +6,8 @@ module.exports = {
   description: '查看您的背包。',
   category: '經濟',
   async execute (bot, interaction) {
+    await interaction.deferReply()
+
     const user = await UserManager.fetchUser(
       bot,
       interaction.member.id,
@@ -20,7 +22,7 @@ module.exports = {
 
     let item = user.items.slice(0, 5)
     if (item.length < 1) {
-      return interaction.reply('您的背包內空無一物。||根本笑死||')
+      return interaction.editReply('您的背包內空無一物。||根本笑死||')
     }
     const items = item.map(
       x => `**${x.name}** - ${x.amount.toLocaleString()}\n${x.description}`
@@ -29,6 +31,6 @@ module.exports = {
       .setTitle(`${interaction.user?.tag} 的背包`)
       .setDescription(`${items.join('\n\n')}`)
       .setColor('RANDOM')
-    interaction.reply(embed)
+    interaction.editReply(embed)
   }
 }
