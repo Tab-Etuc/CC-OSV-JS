@@ -59,7 +59,7 @@ class CCOSV extends Client {
         id: process.env.Discord_ClientID,
         secret: process.env.Discord_ClientSecret
       },
-      redirectUri: process.env.DOMAIN　+ '/discord/callback',
+      redirectUri: process.env.DOMAIN + '/discord/callback',
       domain: process.env.DOMAIN,
       bot: this,
       theme: DarkDashboard({
@@ -78,7 +78,7 @@ class CCOSV extends Client {
         },
         invite: {
           client_id: '893700228195184661',
-          redirectUri: 'http://localhost:3000/close',
+          redirectUri: process.env.DOMAIN + '/close',
           permissions: '8'
         },
         index: {
@@ -111,20 +111,212 @@ class CCOSV extends Client {
         },
         commands: {
           categoryOne: {
-            category: `指令列表`,
-            subTitle: `所有CC-OSV的指令介紹。`,
+            category: `實用`,
+            subTitle: `關於實用類別的所有指令。`,
             list: [
               {
                 commandName: '幫助',
                 commandUsage: '/help',
-                commandDescription: '獲取CC-OSV相關資訊。',
+                commandDescription: '列出可使用的指令列表和使用教學。',
                 commandAlias: '實用'
               },
               {
-                commandName: '2nd command',
-                commandUsage: 'oto.nd <arg> <arg2> [op]',
-                commandDescription: 'Lorem ipsum dolor sth, arg sth arg2 stuff',
-                commandAlias: 'Alias'
+                commandName: '計算機',
+                commandUsage: '/計算機',
+                commandDescription: '使用一個以按鈕操作的計算機。',
+                commandAlias: '實用'
+              },
+              {
+                commandName: '創建 Embed',
+                commandUsage: '/embed',
+                commandDescription: '簡單地創建一個Embed訊息。',
+                commandAlias: '實用'
+              },
+              {
+                commandName: '禁言',
+                commandUsage: '/mute',
+                commandDescription: '使一位對象失去發言權限。',
+                commandAlias: '實用'
+              },
+              {
+                commandName: '連線品質',
+                commandUsage: '/ping',
+                commandDescription: '🏓展示Bot的延遲',
+                commandAlias: '實用'
+              },
+              {
+                commandName: 'prize',
+                commandUsage: '/prize <新增|移除> [等級] [身分組]',
+                commandDescription: '新增或移除於玩家升等時所賦予之身分組。',
+                commandAlias: '實用'
+              },
+              {
+                commandName: 'prizelist',
+                commandUsage: '/prizelist',
+                commandDescription: '展示您在升等時會得到的身分組。',
+                commandAlias: '實用'
+              },
+              {
+                commandName: '清除',
+                commandUsage: '/purge <數量>',
+                commandDescription: '清除指定數量的訊息。',
+                commandAlias: '實用'
+              },
+              {
+                commandName: 'rank',
+                commandUsage: '/rank',
+                commandDescription: '顯示您的聊天等級。',
+                commandAlias: '實用'
+              },
+              {
+                commandName: '排行榜',
+                commandUsage: '/排行榜 <資產|聊天等級>',
+                commandDescription: '查看伺服器中的(等級/經濟)排行榜。',
+                commandAlias: '實用'
+              },
+              {
+                commandName: '上線時間',
+                commandUsage: '/uptime',
+                commandDescription: '顯示CC-OSV自上次更新歷經了多少時間。',
+                commandAlias: '實用'
+              }
+            ]
+          },
+          categoryTwo: {
+            category: `音樂`,
+            subTitle: `關於音樂類別的所有指令。`,
+            list: [
+              {
+                commandName: '循環',
+                commandUsage: '/loop',
+                commandDescription: '🔂循環當前的歌曲。',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '循環播放列',
+                commandUsage: '/loopqueue',
+                commandDescription: '🔂循環整個播放列',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '正在播放',
+                commandUsage: '/nowplaying',
+                commandDescription: '🎵查看目前正在播放的歌曲',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '暫停',
+                commandUsage: '/pause',
+                commandDescription: '⏸暫停音樂。',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '播放',
+                commandUsage: '/play <歌曲>',
+                commandDescription: '🎵播放音樂。',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '播放列',
+                commandUsage: '/queue',
+                commandDescription: '🎵顯示所有目前播放列中的歌曲',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '移除',
+                commandUsage: '/remove <編號>',
+                commandDescription: '🎵從播放列中移除一首歌',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '重新播放',
+                commandUsage: '/resume',
+                commandDescription: '🔂重新播放音樂。',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '搜尋',
+                commandUsage: '/search <歌曲名>',
+                commandDescription: '🔎播放基於查詢的歌曲結果',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '跳過',
+                commandUsage: '/skip <位置>',
+                commandDescription: '🎵跳過當前的曲目。',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '停止',
+                commandUsage: '/stop',
+                commandDescription: '🎵停止播放歌曲。',
+                commandAlias: '音樂'
+              },
+              {
+                commandName: '音量',
+                commandUsage: '/volume <音量>',
+                commandDescription: '🔉查看或變更播放音量。當前的曲目。',
+                commandAlias: '音樂'
+              }
+            ]
+          },
+          categoryThree: {
+            category: `樂趣`,
+            subTitle: `關於樂趣類別的所有指令。`,
+            list: [
+              {
+                commandName: '井字遊戲',
+                commandUsage: '/井字遊戲 <玩家>',
+                commandDescription: '遊玩一局井字遊戲。',
+                commandAlias: '樂趣'
+              }
+            ]
+          },
+          categoryFour: {
+            category: `經濟`,
+            subTitle: `關於經濟類別的所有指令。`,
+            list: [
+              {
+                commandName: '餘額',
+                commandUsage: '/餘額 [玩家]',
+                commandDescription: '查看您的餘額。',
+                commandAlias: '經濟'
+              },
+              {
+                commandName: '購買',
+                commandUsage: '/購買 <商品> [數量]',
+                commandDescription: '購買市廛上的商品。',
+                commandAlias: '經濟'
+              },
+              {
+                commandName: '存款',
+                commandUsage: '/存款 <金額>',
+                commandDescription: '將您的現金存入銀行。',
+                commandAlias: '經濟'
+              },
+              {
+                commandName: '背包',
+                commandUsage: '/背包',
+                commandDescription: '查看您的背包。',
+                commandAlias: '經濟'
+              },
+              {
+                commandName: '搶劫',
+                commandUsage: '/搶劫 <玩家>',
+                commandDescription: '試圖搶某人的錢。',
+                commandAlias: '經濟'
+              },
+              {
+                commandName: '商店',
+                commandUsage: '/商店',
+                commandDescription: '前往市廛，採購琳瑯滿目的商品。',
+                commandAlias: '經濟'
+              },
+              {
+                commandName: '提款',
+                commandUsage: '/提款 <金額>',
+                commandDescription: '從銀行取出現金。',
+                commandAlias: '經濟'
               }
             ]
           }
@@ -174,7 +366,7 @@ class CCOSV extends Client {
           ]
         },
         {
-          categoryId: 'setup',
+          categoryId: 'nickname',
           categoryName: '暱稱',
           categoryDescription: '暱稱。',
           categoryOptionsList: [
@@ -296,7 +488,13 @@ class CCOSV extends Client {
               optionId: 'MsgToSend',
               optionName: '欲發送的訊息',
               optionDescription: '',
-              optionType: DBD.formTypes.input('您獲得了{role}身分組。', 1, 16, false, true),
+              optionType: DBD.formTypes.input(
+                '您獲得了{role}身分組。',
+                1,
+                16,
+                false,
+                true
+              ),
               getActualSet: async ({ guild }) => {
                 return currencyNames[guild.id] || null
               },
