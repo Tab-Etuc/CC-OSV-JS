@@ -20,6 +20,8 @@ module.exports = {
     }
   ],
   async execute (bot, interaction) {
+    await interaction.deferReply()
+
     let user = await UserManager.fetchUser(bot, interaction.member.id, interaction.guild.id)
     const arg = interaction.options.getString('商品', false)
     const item = itemss.find(
@@ -34,10 +36,10 @@ module.exports = {
           `${arg.toString().toLowerCase()} ${arg.toString().toLowerCase()}`
     )
     if (!item) {
-      return interaction.reply('您無法購買不存在的商品。請使用正確的商品ID')
+      return interaction.editReply('您無法購買不存在的商品。請使用正確的商品ID')
     }
     if (item.canBuy == false) {
-      return interaction.reply(':thinking: 您不能購買這項商品。')
+      return interaction.editReply(':thinking: 您不能購買這項商品。')
     }
     let buyAmount = interaction.options
       .getString('數量', false)
@@ -49,7 +51,7 @@ module.exports = {
       item.price > user.coinsInWallet ||
       buyAmount * item.price > user.coinsInWallet
     ) {
-      return interaction.reply('您沒有足夠的金錢購買此商品。')
+      return interaction.editReply('您沒有足夠的金錢購買此商品。')
     }
     let founditem = user.items.find(
       x => x.name.toLowerCase() === item.name.toLowerCase()
@@ -74,7 +76,7 @@ module.exports = {
     }
     user.coinsInWallet -= parseInt(item.price) * parseInt(buyAmount)
     await user.save()
-    interaction.reply(
+    interaction.editReply(
       `感謝您購買 **${parseInt(buyAmount).toLocaleString()}**個\`${item.name}\``
     )
   }
