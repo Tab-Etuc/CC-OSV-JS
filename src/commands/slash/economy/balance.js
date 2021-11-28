@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const  UserManager  = require('../../../models/economy/UserManager')
+const UserManager = require('../../../models/economy/UserManager')
 
 module.exports = {
   name: '餘額',
@@ -14,6 +14,8 @@ module.exports = {
     }
   ],
   async execute (bot, interaction) {
+    await interaction.deferReply()
+
     const member =
       interaction.options.getString('指令', false) || interaction.member
     let user = await UserManager.fetchUser(bot, member.id, interaction.guild.id)
@@ -27,6 +29,6 @@ module.exports = {
         ).toLocaleString()}`
       )
       .setColor('RANDOM')
-    interaction.reply({ embeds: [embed] })
+    interaction.editReply({ embeds: [embed] })
   }
 }
