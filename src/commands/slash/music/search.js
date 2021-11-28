@@ -42,7 +42,7 @@ module.exports = {
         throw new Error(res.exception.interaction)
       }
     } catch (err) {
-      return bot.say.errorMessage(
+      return bot.say.slashError(
         interaction,
         `:x: | **在搜索時出現了錯誤** ${err.interaction}`
       )
@@ -51,12 +51,12 @@ module.exports = {
     switch (res.loadType) {
       case 'NO_MATCHES':
         if (!player.queue.current) player.destroy()
-        return bot.say.errorMessage(interaction, ':x: | **查無結果**')
+        return bot.say.slashError(interaction, ':x: | **查無結果**')
       case 'TRACK_LOADED':
         player.queue.add(res.tracks[0])
         if (!player.playing && !player.paused && !player.queue.length)
           player.play()
-        return bot.say.infoMessage(
+        return bot.say.slashInfo(
           interaction,
           `**已新增至播放列** \`[${res.tracks[0].title}](${res.tracks[0].uri})\`.`
         )
@@ -69,7 +69,7 @@ module.exports = {
           player.queue.size === res.tracks.length
         )
           player.play()
-        return bot.say.infoMessage(
+        return bot.say.slashInfo(
           interaction,
           `**音樂播放清單已新增至播放列**: \n**${res.playlist.name}** \n持續時間: **${res.playlistInfo.length}**`
         )

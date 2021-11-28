@@ -29,22 +29,22 @@ module.exports = {
 
     let player = bot.manager.players.get(interaction.guild.id)
     if (!player)
-      return bot.say.errorMessage(
+      return bot.say.slashError(
         interaction,
         '❌ | **目前沒有播放任何音樂...**'
       )
     if (!arg)
-      return bot.say.infoMessage(
+      return bot.say.slashInfo(
         interaction,
         `🔉 | 當前的音量 \`${player.volume}\`.`
       )
     let vol = parseInt(arg)
     if (!vol || vol < 1 || vol > 100)
-      return bot.say.infoMessage(
+      return bot.say.slashInfo(
         interaction,
         `**請輸入一個數字介於** \`1 - 100\``
       )
     player.setVolume(vol)
-    bot.say.infoMessage(interaction, `🔉 | 音量已設定至 \`${player.volume}\``)
+    bot.say.slashInfo(interaction, `🔉 | 音量已設定至 \`${player.volume}\``)
   }
 }

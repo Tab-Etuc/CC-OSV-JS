@@ -42,10 +42,10 @@ module.exports = {
     try {
       if (res.loadType === 'LOAD_FAILED') {
         if (!player.queue.current) player.destroy()
-        return bot.say.errorMessage(interaction, `:x: | **在查詢時出了錯誤**`)
+        return bot.say.slashError(interaction, `:x: | **在查詢時出了錯誤**`)
       }
     } catch (err) {
-      return bot.say.errorMessage(
+      return bot.say.slashError(
         interaction,
         `在查詢時出了錯誤: ${err.interaction}`
       )
@@ -53,7 +53,7 @@ module.exports = {
     switch (res.loadType) {
       case 'NO_MATCHES':
         if (!player.queue.current) player.destroy()
-        return bot.say.errorMessage(
+        return bot.say.slashError(
           interaction,
           '❌ | **查無結果。**您可以嘗試重新輸入指令。'
         )

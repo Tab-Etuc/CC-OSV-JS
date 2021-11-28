@@ -2,7 +2,7 @@ const Guilds = require('../../models/mongoDB/Guilds.js')
 const Users = require('../../models/mongoDB/Users.js')
 const Prizes = require('../../models/mongoDB/Prizes.js')
 
-const Controller = require('../../models/Controller')
+const Controller = require('../../models/music/Controller')
 
 module.exports = {
   name: 'interactionCreate',
@@ -75,7 +75,7 @@ module.exports = {
         //   (command.category === 'botowner' || command.ownerOnly === true) &&
         //   !process.env.OWNER.includes(interaction?.user.id)
         // )
-        //   return bot.say.errorMessage(
+        //   return bot.say.slashError(
         //     interaction,
         //     '此指令只允許機器人擁有者使用。'
         //   )
@@ -84,7 +84,7 @@ module.exports = {
         GuildData.CommandsRan++
         await GuildData.save()
       } catch (err) {
-        bot.say.errorMessage(
+        bot.say.slashError(
           interaction,
           '發生了一點錯誤。抱歉為您帶來糟糕的體驗。'
         )

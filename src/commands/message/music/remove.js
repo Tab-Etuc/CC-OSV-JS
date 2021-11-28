@@ -21,13 +21,13 @@ module.exports = {
     let player = await bot.manager.players.get(message.guild.id)
     const song = player.queue.slice(args[0] - 1, 1)
     if (!player)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **目前沒有播放任何音樂...**'
       )
     if (!message.member.voice.channel)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **您必須在語音通道中使用此指令！**'
@@ -36,7 +36,7 @@ module.exports = {
       message.guild.me.voice.channel &&
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     )
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **您必須和我在相同的語音通道以使用此指令！**'

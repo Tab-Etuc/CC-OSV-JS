@@ -18,7 +18,7 @@ module.exports = {
    */
   run: async (bot, message, args, GuildDB) => {
     if (!message.member.voice.channel)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **您必須在語音通道中使用此指令！**'
@@ -27,14 +27,14 @@ module.exports = {
       message.guild.me.voice.channel &&
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     )
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **您必須和我在相同的語音通道以使用此指令！**'
       )
     let SearchString = args.join(' ')
     if (!SearchString)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         `**用法 - **\`${GuildDB.prefix}play [歌曲]\``
@@ -43,7 +43,7 @@ module.exports = {
 
     let node = await bot.getLavalink(bot)
     if (!node || !node.connected) {
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **Lavalink伺服器重新連線中，請稍後再試。**'
@@ -56,19 +56,19 @@ module.exports = {
     try {
       if (res.loadType === 'LOAD_FAILED') {
         if (!player.queue.current) player.destroy()
-        return bot.say.sendTime(
+        return bot.say.msgEmbed(
           bot,
           message.channel,
           `:x: | **在查詢時出了錯誤**`
         )
       }
     } catch (err) {
-      return bot.say.sendTime(bot, message.channel, `在查詢時出了錯誤: ${err}`)
+      return bot.say.msgEmbed(bot, message.channel, `在查詢時出了錯誤: ${err}`)
     }
     switch (res.loadType) {
       case 'NO_MATCHES':
         if (!player.queue.current) player.destroy()
-        return bot.say.sendTime(
+        return bot.say.msgEmbed(
           bot,
           message.channel,
           '❌ | **查無結果。**您可以嘗試重新輸入指令。'
@@ -116,7 +116,7 @@ module.exports = {
           })}\``,
           false
         )
-        return Searching.edit({ content: ':notes:', embeds: [SongAdded] })
+        return Searching.edit({ content: '<a:V_:858154997640331274>', embeds: [SongAdded] })
       case 'SEARCH_RESULT':
         player.queue.add(res.tracks[0])
 
@@ -172,7 +172,7 @@ module.exports = {
               `${player.queue.size - 0}`,
               true
             )
-          Searching.edit({ content: ':notes:', embeds: [SongAddedEmbed] })
+          Searching.edit({ content: '<a:V_:858154997640331274>', embeds: [SongAddedEmbed] })
         }
     }
   }

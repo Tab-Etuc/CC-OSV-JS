@@ -17,13 +17,13 @@ module.exports = {
   run: async (bot, message, args, GuildDB) => {
     let player = await bot.manager.get(message.guild.id)
     if (!player)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **目前沒有播放任何音樂...**'
       )
     if (!message.member.voice.channel)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **您必須在語音通道中使用此指令！**'
@@ -32,14 +32,14 @@ module.exports = {
       message.guild.me.voice.channel &&
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     )
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **您必須和我在相同的語音通道以使用此指令！**'
       )
 
     if (player.playing)
-      return bot.say.sendTime(bot, message.channel, '❌ | **歌曲播放中！**')
+      return bot.say.msgEmbed(bot, message.channel, '❌ | **歌曲播放中！**')
     player.pause(false)
     await message.react('✅')
   }

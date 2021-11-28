@@ -65,8 +65,7 @@ class Logger {
 
       if (typeof stack === 'string' && stack.length >= 4096) {
         console.error(stack)
-        stack =
-          '錯誤的內容太長ㄌ'
+        stack = '錯誤的內容太長ㄌ'
       }
 
       const { codeBlock } = require('@discordjs/builders')
@@ -86,7 +85,6 @@ class Logger {
       console.error({ error })
       console.error(e)
     }
-    
   }
   /**
    * @param {string} type

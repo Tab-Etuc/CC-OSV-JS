@@ -31,14 +31,13 @@ module.exports = {
     let muterole = guild.roles.cache.find(muterole => muterole.name === 'muted')
 
     if (!muterole) {
-      console.log('888')
       try {
         muterole = await guild.roles.create({
           name: 'muted',
           color: '#000000',
           permissions: [],
 
-          reason: `${interaction.member.user.username} 使用了 禁言 指令。`
+          reason: `${interaction.member.user.username} 使用了 \`/mute\` 指令。`
         })
         interaction.guild.channels.cache.forEach(async channel => {
           await channel.overwritePermissions(muterole, {

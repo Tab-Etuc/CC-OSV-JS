@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 const _ = require('lodash')
-const Pagination = require('../../../models/pagination')
+const Pagination = require('../../../models/music/pagination')
 
 module.exports = {
   name: 'search',
@@ -21,7 +21,7 @@ module.exports = {
   run: async (bot, message, args, GuildDB) => {
     let awaitchannel = bot.channels.cache.get(message.channelId) /// thanks Reyansh for this idea ;-;
     if (!message.member.voice.channel)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **您必須在語音通道中使用此指令！**'
@@ -30,7 +30,7 @@ module.exports = {
       message.guild.me.voice.channel &&
       message.member.voice.channel.id !== message.guild.me.voice.channel.id
     )
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **您必須和我在相同的語音通道以使用此指令！**'
@@ -38,14 +38,14 @@ module.exports = {
 
     let SearchString = args.join(' ')
     if (!SearchString)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         `**用法 - **\`${GuildDB.prefix}SearchString [搜索詞]\``
       )
     let node = await bot.getLavalink(bot)
     if (!node || !node.connected) {
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **Lavalink伺服器重新連線中，請稍後再試。**'
@@ -60,7 +60,7 @@ module.exports = {
 
     let Searched = await player.search(SearchString, message.author)
     if (Searched.loadType == 'NO_MATCHES')
-      return bot.sendTime(bot, message.channel, '沒有找到結果: ' + SearchString)
+      return bot.msgEmbed(bot, message.channel, '沒有找到結果: ' + SearchString)
     else {
       Searched.tracks = Searched.tracks.map((s, i) => {
         s.index = i
@@ -106,10 +106,10 @@ module.exports = {
       let SongIDmsg = SongID.first()
 
       if (!parseInt(SongIDmsg.content))
-        return bot.sendTime(bot, message.channel, '請輸入正確的編號。')
+        return bot.msgEmbed(bot, message.channel, '請輸入正確的編號。')
       let Song = Searched.tracks[parseInt(SongIDmsg.content) - 1]
       if (!Song)
-        return bot.sendTime(
+        return bot.msgEmbed(
           bot,
           message.channel,
           '出現了一些錯誤，請嘗試再次輸入指令'

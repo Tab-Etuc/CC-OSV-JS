@@ -1,6 +1,6 @@
 /**
  *
- * @param {import("../base/CC-OSV-Client")} bot
+ * @param {import("../../base/CC-OSV-Client")} bot
  * @returns {import("erela.js").Node | undefined}
  */
  module.exports = async (bot, interaction) => {
@@ -9,7 +9,7 @@
         const node = bot.manager.nodes.array()[i];
         if (node.connected) return resolve(node);
       }
-      bot.say.errorMessage(
+      bot.say.slashError(
         interaction,
         '❌ | **Lavalink伺服器重新連線中，請稍後再試。**'
       )

@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const ProgressBar = require('../../../models/ProgressBar')
+const ProgressBar = require('../../../models/music/ProgressBar')
 
 module.exports = {
   name: 'nowplaying',
@@ -20,7 +20,7 @@ module.exports = {
 
     let player = bot.manager.players.get(interaction.guild.id);
     if (!player)
-      return bot.say.errorMessage(
+      return bot.say.slashError(
         interaction,
         '❌ | **目前沒有播放任何音樂...**'
       )

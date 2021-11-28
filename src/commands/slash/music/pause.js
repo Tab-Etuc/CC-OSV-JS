@@ -20,12 +20,12 @@ module.exports = {
 
     let player = bot.manager.players.get(interaction.guild.id)
     if (!player)
-      return bot.say.errorMessage(
+      return bot.say.slashError(
         interaction,
         '❌ | **目前沒有播放任何音樂...**'
       )
-    if (player.paused) return bot.say.errorMessage(interaction, '音樂暫停中！')
+    if (player.paused) return bot.say.slashError(interaction, '音樂暫停中！')
     player.pause(true)
-    bot.say.infoMessage(interaction, '**⏸ 已暫停！**')
+    bot.say.slashInfo(interaction, '**⏸ 已暫停！**')
   }
 }

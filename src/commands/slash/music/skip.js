@@ -32,7 +32,7 @@ module.exports = {
     let player = bot.manager.players.get(interaction.guild.id)
 
     if (!player)
-      return bot.say.errorMessage(
+      return bot.say.slashError(
         interaction,
         '❌ | **目前沒有播放任何音樂...**'
       )
@@ -41,8 +41,8 @@ module.exports = {
       skipTo !== null &&
       (isNaN(skipTo) || skipTo < 1 || skipTo > player.queue.length)
     )
-      return bot.say.infoMessage(interaction, '❌ | **無效的數字！**')
+      return bot.say.slashInfo(interaction, '❌ | **無效的數字！**')
     player.stop(skipTo)
-    bot.say.infoMessage(interaction, '**已跳過!**')
+    bot.say.slashInfo(interaction, '**已跳過!**')
   }
 }

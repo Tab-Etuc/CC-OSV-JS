@@ -18,16 +18,16 @@ module.exports = {
     if (!channel) return
     let player = await bot.manager.players.get(interaction.guild.id)
     if (!player)
-      return bot.say.errorMessage(
+      return bot.say.slashError(
         interaction,
         '❌ | **目前沒有播放任何音樂...**'
       )
     if (player.trackRepeat) {
       player.setTrackRepeat(false)
-      bot.say.infoMessage(interaction, `🔂 \`關閉\``)
+      bot.say.slashInfo(interaction, `🔂 \`關閉\``)
     } else {
       player.setTrackRepeat(true)
-      bot.say.infoMessage(interaction, `🔂 \`啟用\``)
+      bot.say.slashInfo(interaction, `🔂 \`啟用\``)
     }
   }
 }

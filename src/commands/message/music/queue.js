@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 const _ = require('lodash')
-const Pagination = require('../../../models/pagination')
-const ProgressBar = require('../../../models/ProgressBar')
+const Pagination = require('../../../models/music/pagination')
+const ProgressBar = require('../../../models/music/ProgressBar')
 
 module.exports = {
   name: 'queue',
@@ -22,7 +22,7 @@ module.exports = {
   run: async (bot, message, args, GuildDB) => {
     let player = await bot.manager.get(message.guild.id)
     if (!player)
-      return bot.say.sendTime(
+      return bot.say.msgEmbed(
         bot,
         message.channel,
         '❌ | **目前沒有播放任何音樂...**'

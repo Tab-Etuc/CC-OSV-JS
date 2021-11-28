@@ -11,8 +11,8 @@ const spotify = require('better-erela.js-spotify').default
 const apple = require('erela.js-apple')
 const deezer = require('erela.js-deezer')
 const facebook = require('erela.js-facebook')
-const getLavalink = require('../models/getLavalink')
-const getChannel = require('../models/getChannel')
+const getLavalink = require('../models/music/getLavalink')
+const getChannel = require('../models/music/getChannel')
 const DBD = require('../dashboard/discord-dashboard/index')
 const DarkDashboard = require('../dashboard/dbd-dark-dashboard/index')
 

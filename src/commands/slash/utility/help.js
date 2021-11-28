@@ -222,7 +222,7 @@ module.exports = {
     if (arg) {
       const cmd = bot.slashCommands.get(arg)
       if (!cmd)
-        return bot.say.warnMessage(interaction, `沒有這個指令： \`${arg}\`.`)
+        return bot.say.slashError(interaction, `沒有這個指令： \`${arg}\`.`)
 
       const cmdUsage = cmd.usage
         ? `\/${cmd.name} ${cmd.usage}`

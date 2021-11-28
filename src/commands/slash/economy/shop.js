@@ -42,8 +42,6 @@ module.exports = {
     // its still possible without embed
     // let pages = ['page1', 'page2', 'page3']
 
-    embedPages(bot, interaction, pages, {
-      slash: true
-    })
+    embedPages(bot, interaction, pages, {})
   }
 }

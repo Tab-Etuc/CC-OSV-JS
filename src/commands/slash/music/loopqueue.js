@@ -19,17 +19,17 @@ module.exports = {
     const channel = await bot.getChannel(bot, interaction)
     if (!channel) return
     if (!player)
-      return bot.say.errorMessage(
+      return bot.say.slashError(
         interaction,
         '❌ | **目前沒有播放任何音樂...**'
       )
 
     if (player.queueRepeat) {
       player.setQueueRepeat(false)
-      bot.say.infoMessage(interaction, `:repeat: **播放列循環** \`關閉\``)
+      bot.say.slashInfo(interaction, `:repeat: **播放列循環** \`關閉\``)
     } else {
       player.setQueueRepeat(true)
-      bot.say.infoMessage(interaction, `:repeat: **播放列循環** \`啟用\``)
+      bot.say.slashInfo(interaction, `:repeat: **播放列循環** \`啟用\``)
     }
   }
 }
