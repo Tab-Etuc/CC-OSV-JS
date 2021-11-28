@@ -220,16 +220,16 @@ module.exports = {
           ? message.member.nickname
           : message.author.username,
         avatar: message.author.displayAvatarURL({ dynamic: true })
-      })
+      }).catch(console.error)
 
-      message.delete().catch(console.error)
+      message.delete()
 
-      webhook.send(NQN_msg).catch(console.error)
+      webhook.send(NQN_msg)
 
       await webhook.edit({
         name: `NQN`,
         avatar: bot.user.displayAvatarURL({ dynamic: true })
-      })
+      }).catch(console.error)
     } catch (error) {
       console.log(error)
     }
