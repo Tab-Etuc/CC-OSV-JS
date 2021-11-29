@@ -7,6 +7,8 @@ module.exports = {
   description: '展示bot資訊',
   category: '實用',
   async execute (bot, interaction) {
+    let MTBS = await bot.getLanguage(interaction.guildId)
+    MTBS = MTBS.commands.utility.InfoMessage.BOTINFO
     const uptime = moment
       .duration(bot.uptime)
       .format(' D [天], H [小時], m [分], s [秒]')
@@ -17,37 +19,37 @@ module.exports = {
 
     const embed = bot.say
       .baseEmbed(interaction)
-      .setAuthor(`${bot.user.username}的資訊`, bot.user.displayAvatarURL())
-      .addField(
-        '__**一般介紹**__',
-        `**Bot Id：** ${bot.user.id}
-**Bot Tag：** ${bot.user.tag}
-**創建於 ：** <t:${createdAt}:F>
-**創建者： [CC_#8844](https:\/\/tab-etuc.github.io)**`
+      .setAuthor(
+        MTBS.author.format(bot.user.username),
+        bot.user.displayAvatarURL()
       )
       .addField(
-        '__**狀態：**__',
-        `**用戶：** ${bot.utils.formatNumber(users)}
-**伺服器：** ${bot.utils.formatNumber(bot.guilds.cache.size)}
-**頻道：** ${bot.utils.formatNumber(bot.channels.cache.size)}
-**指令數：** ${bot.utils.formatNumber(bot.slashCommands.size)}`
+        MTBS.FieldTitleI,
+        MTBS.FieldValueI.format(bot.user.id, bot.user.tag, createdAt)
       )
       .addField(
-        '__**系統介紹**__',
-        `**已使用 記憶體：**  ${(
-          process.memoryUsage().heapUsed /
-          1024 /
-          1024
-        ).toFixed(2)} MB
-**記憶體總數：** ${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB
-**已上線時間：** ${uptime}
-**Node 版本：** ${nodev}
-**Discord.js 版本：** ${version}
-**CPU：** ${core.model}
-**核心數：** ${os.cpus().length}
-**速度：** ${core.speed} MHz
-**位元：** ${os.arch()}
-**作業系統：** ${toCapitalize(process.platform)}`
+        MTBS.FieldTitleII,
+        MTBS.FieldValueII.format(
+          bot.utils.formatNumber(users),
+          bot.utils.formatNumber(bot.guilds.cache.size),
+          bot.utils.formatNumber(bot.channels.cache.size),
+          bot.utils.formatNumber(bot.slashCommands.size)
+        )
+      )
+      .addField(
+        MTBS.FieldTitleIII,
+        MTBS.FieldValueIII.format(
+          (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
+          (os.totalmem() / 1024 / 1024 / 1024).toFixed(2),
+          uptime,
+          nodev,
+          version,
+          core.model,
+          os.cpus().length,
+          core.speed,
+          os.arch(),
+          toCapitalize(process.platform)
+        )
       )
     return interaction.reply({
       ephemeral: true,
@@ -60,7 +62,7 @@ module.exports = {
  * @param {string} str
  * @returns {string}
  */
- function toCapitalize (str) {
+function toCapitalize (str) {
   if (str === null || str === '') {
     return false
   } else {
@@ -70,4 +72,27 @@ module.exports = {
   return str.replace(/\w\S*/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
   })
+}
+
+String.prototype.format = function () {
+  var txt = this.toString()
+  for (var i = 0; i < arguments.length; i++) {
+    var exp = getStringFormatPlaceHolderRegEx(i)
+    arguments[i] = String(arguments[i]).replace(/\$/gm, '♒☯◈∭')
+    txt = txt.replace(exp, arguments[i] == null ? '' : arguments[i])
+    txt = txt.replace(/♒☯◈∭/gm, '$')
+  }
+  return cleanStringFormatResult(txt)
+}
+//讓輸入的字串可以包含{}
+function getStringFormatPlaceHolderRegEx (placeHolderIndex) {
+  return new RegExp('({)?\\{' + placeHolderIndex + '\\}(?!})', 'gm')
+}
+//當format格式有多餘的position時，就不會將多餘的position輸出
+//ex:
+// var fullName = 'Hello. My name is {0} {1} {2}.'.format('firstName', 'lastName');
+// 輸出的 fullName 為 'firstName lastName', 而不會是 'firstName lastName {2}'
+function cleanStringFormatResult (txt) {
+  if (txt == null) return ''
+  return txt.replace(getStringFormatPlaceHolderRegEx('\\d+'), '')
 }
