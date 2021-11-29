@@ -13,6 +13,7 @@ const deezer = require('erela.js-deezer')
 const facebook = require('erela.js-facebook')
 const getLavalink = require('../models/music/getLavalink')
 const getChannel = require('../models/music/getChannel')
+const getLanguage = require('../models/getLanguage')
 const DBD = require('../dashboard/discord-dashboard/index')
 const DarkDashboard = require('../dashboard/dbd-dark-dashboard/index')
 
@@ -48,6 +49,7 @@ class CCOSV extends Client {
 
     this.getLavalink = getLavalink
     this.getChannel = getChannel
+    this.getLanguage = getLanguage
     this.build()
   }
 
