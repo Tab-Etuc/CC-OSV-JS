@@ -17,8 +17,8 @@ module.exports = {
       })
       // 如果沒有伺服器資料，則創建
       if (!GuildData) {
-        let newGuild = new Guilds({
-          guildId: message.guildId,
+        new Guilds({
+          _id: message.guildId,
           prefix: prefix
         }).save()
       }
@@ -80,14 +80,14 @@ module.exports = {
 
       if (!rankData) {
         // 如果沒有伺服器資料，則創建
-        let newRank = new Prizes({
+        new Prizes({
           guildId: message.guildId
         }).save()
       }
 
       if (!levelData) {
         // 如果沒有玩家資料，則創建
-        let newLevel = new Users({
+        new Users({
           guildId: message.guildId,
           userId: message.author.id,
           userName: message.author.username
@@ -215,21 +215,25 @@ module.exports = {
         })
       }
 
-      await webhook.edit({
-        name: message.member.nickname
-          ? message.member.nickname
-          : message.author.username,
-        avatar: message.author.displayAvatarURL({ dynamic: true })
-      }).catch(console.error)
+      await webhook
+        .edit({
+          name: message.member.nickname
+            ? message.member.nickname
+            : message.author.username,
+          avatar: message.author.displayAvatarURL({ dynamic: true })
+        })
+        .catch(console.error)
 
       message.delete()
 
       webhook.send(NQN_msg)
 
-      await webhook.edit({
-        name: `NQN`,
-        avatar: bot.user.displayAvatarURL({ dynamic: true })
-      }).catch(console.error)
+      await webhook
+        .edit({
+          name: `NQN`,
+          avatar: bot.user.displayAvatarURL({ dynamic: true })
+        })
+        .catch(console.error)
     } catch (error) {
       console.log(error)
     }
