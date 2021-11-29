@@ -18,7 +18,7 @@ module.exports = {
       })
       // 如果沒有伺服器資料，則創建
       if (!GuildData) {
-        let newGuild = new Guilds({
+        new Guilds({
           _id: interaction.guildId,
           prefix: bot.config.DefaultPrefix
         }).save()
@@ -29,7 +29,7 @@ module.exports = {
       })
       // 如果沒有伺服器資料，則創建
       if (!rankData) {
-        let newRank = new Prizes({
+        new Prizes({
           guildId: interaction.guildId
         }).save()
       }
@@ -40,7 +40,7 @@ module.exports = {
       })
       // 如果沒有玩家資料，則創建
       if (!userData) {
-        let newLevel = new Users({
+        new Users({
           guildId: interaction.guildId,
           userId: interaction.member.id,
           userName: interaction.member.user.username
