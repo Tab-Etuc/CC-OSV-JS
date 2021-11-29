@@ -48,33 +48,21 @@
     },
     "utility": {
       "Words": {
-          "Preview": "預覽"
+        "Preview": "預覽"
       },
       "InfoMessage": {
-          "PurgeMsgTips": "提示：將`訊息顯示`調成False 來取消發送執行完畢訊息",
-          "PurgeDone": "頻道：{}的 `{integer}` 則訊息已刪除。",
-          "BOTINFO":{
-              "title": "一般介紹",
-              "author": "{bot.user.username}的資訊",
-              "CreatedAt":"創建於：",
-              "Author": "作者：",
-              "Status": "狀態：",
-              "UserCount": "用戶：",
-              "ServerCount": "伺服器：",
-              "ChannelCount": "頻道：",
-              "commandCount": "指令數：",
-              "System": "系統介紹",
-              "UsedMemory": "已使用 記憶體",
-              "Memory": "記憶體總數：",
-              "uptime": "已上線時間：",
-              "NodeVersion": "Node 版本：",
-              "DJSVersion": "Discord.js 版本：",
-              "Core": "中央處理器：",
-              "Cpus": "核心數：",
-              "CoreSpeed": "速度：",
-              "Arch": "位元：",
-              "Platform": "作業系統："
-          }
+        "PurgeMsgTips": "提示：將`訊息顯示`調成False 來取消發送執行完畢訊息",
+        "PurgeDone": "頻道：{}的 `{integer}` 則訊息已刪除。",
+        "BOTINFO": {
+          "title": "一般介紹",
+          "author": "{0}的資訊",
+          "FieldTitleI": "__**一般介紹**__",
+          "FieldTitleII": "__**狀態：**__",
+          "FieldTitleIII": "__**系統介紹**__",
+          "FieldValueI": "**Bot Id：** {0}\n**Bot Tag：** {1}\n**創建於 ：** <t:{2}:F>\n**創建者： [CC_#8844](https://tab-etuc.github.io)**",
+          "FieldValueII": "**用戶：** {0}\n**伺服器：** {1}\n**頻道：** {2}\n**指令數：** {3}",
+          "FieldValueIII": "**已使用 記憶體：**  {0} MB\n**記憶體總數：** {1} GB\n**已上線時間：** {2}\n**Node 版本：** {3}\n**Discord.js 版本：** {4}\n**CPU：** {5}\n**核心數：** {6}\n**速度：** {7} MHz\n**位元：** {8}\n**作業系統：** {9}"
+        }
       }
     }
   }
