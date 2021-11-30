@@ -18,6 +18,7 @@ const DBD = require('../dashboard/discord-dashboard/index')
 const DarkDashboard = require('../dashboard/dbd-dark-dashboard/index')
 
 require('./EpicPlayer')
+require('../models/format')
 require('dotenv').config()
 
 let langsSettings = {}
@@ -630,6 +631,8 @@ class CCOSV extends Client {
 
     return embed
   }
+  
+  
 }
 
 module.exports = CCOSV
