@@ -275,7 +275,8 @@ module.exports = {
                 let isthumb =
                   m.content.match(
                     /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gim
-                  ) != null  ||
+                  ) != null ||
+                  m.attachments.first().url ||
                   ''
                 if (!isthumb) return interaction.followUp(MTBS.WrongImgUrl)
 
@@ -284,7 +285,7 @@ module.exports = {
                   .setDescription(membed.embeds[0].description || '')
                   .setColor(membed.embeds[0].color || '#2F3136')
                   .setFooter(membed.embeds[0].footer.text || '')
-                  .setImage(m.content)
+                  .setImage(m.content || m.attachments.first().url)
                   .setURL(membed.embeds[0].url)
                   .setThumbnail(
                     membed.embeds[0].thumbnail
