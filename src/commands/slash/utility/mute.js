@@ -1,4 +1,3 @@
-const ms = require('ms')
 const { Permissions } = require('discord.js')
 
 module.exports = {
@@ -20,6 +19,7 @@ module.exports = {
     }
   ],
   async execute (bot, interaction) {
+    const MTBS = await bot.getLanguage(interaction.guildId)
     let member = interaction.options.getUser('對象', false)
     let mutetime = interaction.options.getInteger('時長', false)
 
@@ -27,7 +27,7 @@ module.exports = {
     let toMute = guild.members.cache.get(member.id)
 
     if (toMute.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
-      return interaction.reply('對象權限過高，無法執行此動作。')
+      return interaction.reply(MTBS.General.InfoMessage.NoPermission)
     let muterole = guild.roles.cache.find(muterole => muterole.name === 'muted')
 
     if (!muterole) {
@@ -37,7 +37,9 @@ module.exports = {
           color: '#000000',
           permissions: [],
 
-          reason: `${interaction.member.user.username} 使用了 \`/mute\` 指令。`
+          reason: MTBS.commands.utility.Mute.Reason.format(
+            interaction.member.user.username
+          )
         })
         interaction.guild.channels.cache.forEach(async channel => {
           await channel.overwritePermissions(muterole, {
@@ -51,11 +53,15 @@ module.exports = {
     }
 
     await toMute.roles.add(muterole)
-    interaction.reply(`<@${toMute.id}> 已被禁言: ${bot.ms(mutetime)}`)
+    interaction.reply(
+      MTBS.commands.utility.Mute.OnMute.format(toMute.id, bot.ms(mutetime))
+    )
 
     setTimeout(function () {
       toMute.roles.remove(muterole)
-      interaction.followUp(`<@${toMute.id}> 已解除禁言！`)
+      interaction.followUp(
+        MTBS.commands.utility.Mute.OnUnlock.format(toMute.id)
+      )
     }, mutetime)
   }
 }
