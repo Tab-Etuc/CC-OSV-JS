@@ -11,6 +11,8 @@ module.exports = {
   async execute (bot, interaction) {
     await interaction.deferReply()
 
+    const MTBS_ = await bot.getLanguage(interaction.guildId)
+    const MTBS = MTBS_.commands.utility.EmbedCreater
     try {
       const done = new MessageButton()
         .setLabel('完畢')
@@ -32,16 +34,8 @@ module.exports = {
         'Thumbnail',
         'Footer'
       ]
-      let desc = [
-        '獨立於 Embed 之外的一般訊息',
-        'Embed 的標題',
-        'Embed 的內容',
-        'Embed 標題的超連結',
-        'Embed 的顏色',
-        'Embed 的圖片',
-        'Embed 的縮略圖',
-        'Embed 的頁腳'
-      ]
+      let desc = MTBS.desc
+
       let value = [
         'setContent',
         'setTitle',
@@ -68,7 +62,7 @@ module.exports = {
       let slct = new MessageSelectMenu()
         .setMaxValues(1)
         .setCustomId('embed-creator')
-        .setPlaceholder('Embed 設定選項')
+        .setPlaceholder(MTBS.slct)
         .addOptions([menuOptions])
 
       const row = new MessageActionRow().addComponents([done, reject])
@@ -76,10 +70,8 @@ module.exports = {
       const row2 = new MessageActionRow().addComponents([slct])
 
       const embed = new MessageEmbed()
-        .setTitle('Embed 創建工具')
-        .setDescription(
-          '從選擇菜單中調整 ***設定*** Embed 創建工具 將為您創建一則 Embed 訊息\n\n這是一則已完成的 Embed。'
-        )
+        .setTitle(MTBS.Title)
+        .setDescription(MTBS.Description)
         .setImage(
           'https://media.discordapp.net/attachments/867344516600037396/879238983492710450/unknown.png'
         )
@@ -91,7 +83,7 @@ module.exports = {
       const emb = new MessageEmbed().setFooter('CC-OSV').setColor('#2F3136')
 
       interaction.channel
-        .send({ content: '***預覽***', embeds: [emb] })
+        .send({ content: MTBS.Preview, embeds: [emb] })
         .then(async a => {
           let lel = await interaction.fetchReply()
           let e = await interaction.fetchReply()
@@ -106,13 +98,17 @@ module.exports = {
 
           collector.on('collect', async button => {
             if (button.customId && button.customId === 'setDelete') {
-              button.reply({ content: '刪除中...', ephemeral: true })
+              button.reply({ content: MTBS.Deleting, ephemeral: true })
 
               membed.delete()
               e.delete()
               interaction.delete()
             } else if (button.customId && button.customId === 'setDone') {
-              button.reply({ content: '完畢 👍', ephemeral: true })
+              button.reply({
+                content:
+                  MTBS_.General.InfoMessage.Done + '<a:V_:858154997640331274>',
+                ephemeral: true
+              })
 
               interaction.channel.send({
                 content: membed.content,
@@ -122,7 +118,7 @@ module.exports = {
               e.delete()
             } else if (button.values[0] === 'setContent') {
               button.reply({
-                content: '請輸入您想顯示的「獨立於 Embed 之外的一般訊息」。',
+                content: MTBS.TipMessage.format(desc[0]),
                 ephemeral: true
               })
               let filter = m => interaction.user.id === m.author.id
@@ -156,8 +152,7 @@ module.exports = {
               })
             } else if (button.values[0] === 'setThumbnail') {
               button.reply({
-                content:
-                  '請輸入您想顯示的「Embed 的縮略圖（右上角的小圖片）」。',
+                content: MTBS.TipMessage.format(desc[6]) + '（右上角的小圖片）',
                 ephemeral: true
               })
               let filter = m => interaction.user.id === m.author.id
@@ -171,17 +166,15 @@ module.exports = {
                 const url = membed.embeds[0].image
                   ? membed.embeds[0].image.url
                   : ''
-
-                let isthumb =
-                  m.content.match(
-                    /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gim
-                  ) != null ||
-                  m.attachments.first().url ||
-                  ''
-                if (!isthumb)
-                  return interaction.followUp(
-                    '這不是一個可使用的圖像連結。請嘗試重新輸入。'
-                  )
+                try {
+                  let isthumb =
+                    m.content.match(
+                      /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gim
+                    ) != null ||
+                    m.attachments.first().url ||
+                    ''
+                } catch {}
+                if (!isthumb) return interaction.followUp(MTBS.WrongImgUrl)
 
                 let msg = new MessageEmbed()
                   .setTitle(membed.embeds[0].title || '')
@@ -198,7 +191,7 @@ module.exports = {
               })
             } else if (button.values[0] === 'setColor') {
               button.reply({
-                content: '請輸入您想顯示的「Embed 的顏色」。',
+                content: MTBS.TipMessage.format(desc[4]),
                 ephemeral: true
               })
               let filter = m => interaction.user.id === m.author.id
@@ -230,14 +223,12 @@ module.exports = {
                   titleclr.stop()
                   membed.edit({ content: membed.content, embeds: [msg] })
                 } else {
-                  interaction.followUp(
-                    '請給我一個有效的十六進制代碼（Hex code）。'
-                  )
+                  interaction.followUp(MTBS.WrongHex)
                 }
               })
             } else if (button.values[0] === 'setURL') {
               button.reply({
-                content: '請輸入您想顯示的「Embed 標題的超連結」。',
+                content: MTBS.TipMessage.format(desc[3]),
                 ephemeral: true
               })
               let filter = m => interaction.user.id === m.author.id
@@ -270,7 +261,7 @@ module.exports = {
               })
             } else if (button.values[0] === 'setImage') {
               button.reply({
-                content: '請輸入您想顯示的「Embed 的圖片」。',
+                content: MTBS.TipMessage.format(desc[5]),
                 ephemeral: true
               })
               let filter = m => interaction.user.id === m.author.id
@@ -284,20 +275,16 @@ module.exports = {
                 let isthumb =
                   m.content.match(
                     /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gim
-                  ) != null ||
-                  m.attachments.first().url ||
+                  ) != null  ||
                   ''
-                if (!isthumb)
-                  return interaction.followUp(
-                    '這不是一個有效的連結。請嘗試重新輸入。'
-                  )
+                if (!isthumb) return interaction.followUp(MTBS.WrongImgUrl)
 
                 let msg = new MessageEmbed()
                   .setTitle(membed.embeds[0].title || '')
                   .setDescription(membed.embeds[0].description || '')
                   .setColor(membed.embeds[0].color || '#2F3136')
                   .setFooter(membed.embeds[0].footer.text || '')
-                  .setImage(m.content || m.attachments.first().url)
+                  .setImage(m.content)
                   .setURL(membed.embeds[0].url)
                   .setThumbnail(
                     membed.embeds[0].thumbnail
@@ -311,7 +298,7 @@ module.exports = {
               })
             } else if (button.values[0] === 'setTitle') {
               button.reply({
-                content: '請輸入您想顯示的「Embed 的標題」。',
+                content: MTBS.TipMessage.format(desc[1]),
                 ephemeral: true
               })
               let filter = m => interaction.user.id === m.author.id
@@ -344,7 +331,7 @@ module.exports = {
               })
             } else if (button.values[0] === 'setDescription') {
               button.reply({
-                content: '請輸入您想顯示的「Embed 的內容」。',
+                content: MTBS.TipMessage.format(desc[2]),
                 ephemeral: true
               })
               let filter = m => interaction.user.id === m.author.id
@@ -377,7 +364,7 @@ module.exports = {
               })
             } else if (button.values[0] === 'setFooter') {
               button.reply({
-                content: '請輸入您想顯示的「Embed 的頁腳」。',
+                content: MTBS.TipMessage.format(desc[7]),
                 ephemeral: true
               })
               let filter = m => interaction.user.id === m.author.id
@@ -416,7 +403,7 @@ module.exports = {
           collector.on('end', async (collected, reason) => {
             if (reason === 'time') {
               const content = new MessageButton()
-                .setLabel('已逾時。')
+                .setLabel(MTBS_.General.InfoMessage.TimeOut)
                 .setStyle('DANGER')
                 .setCustomId('timeout|91817623842')
                 .setDisabled()
@@ -427,8 +414,6 @@ module.exports = {
             }
           })
         })
-    } catch (err) {
-      console.log(`Error Occured. | embedCreate | Error: ${err}`)
-    }
+    } catch {}
   }
 }
