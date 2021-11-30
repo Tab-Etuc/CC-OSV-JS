@@ -3,8 +3,9 @@
     "InfoMessage": {
       "TimeOut": "已逾時！",
       "WrongID": "請輸入正確的編號。",
-      "Done": "<a:V_:858154997640331274> 執行完畢！",
-      "NoPermission": "· · · ────── ·✘· ────── · · ·\n<@{interaction.member}>, 權限不足!!\n\n✅ 此指令需有「管理員」權限的身分組，才得以使用。\n· · · ────── ·✘· ────── · · ·",
+      "Done": "執行完畢！",
+      "UserNoPermission": "· · · ────── ·✘· ────── · · ·\n<@{interaction.member}>, 權限不足!!\n\n✅ 此指令需有「管理員」權限的身分組，才得以使用。\n· · · ────── ·✘· ────── · · ·",
+      "NoPermission": "對象權限過高，無法執行此動作。",
       "OnUpgrad": "恭喜 <@{message.author.id}> 升級\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ\n您現在是等級 {levelData.level}\n繼續聊天可解鎖更多等級身份\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ",
       "OnUpgradAndGiveRole": "恭喜 <@{message.author.id}> 升級\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ\n您現在是等級 {levelData.level}\n您剛解鎖了身分組：<@&{x.role}>\n繼續聊天可解鎖更多等級身份\nʚ・⋯⋯⋯⋯⋯・୨୧・⋯⋯⋯⋯⋯・ɞ",
       "OnError": "發生了錯誤。抱歉為您帶來糟糕的體驗。"
@@ -47,22 +48,45 @@
       }
     },
     "utility": {
-      "Words": {
-        "Preview": "預覽"
+      "Purge": {
+        "MsgTips": "提示：將`訊息顯示`調成**False**來取消發送執行完畢訊息",
+        "Done": "`{0}` 則訊息已刪除。",
+        "Channel": "頻道：{0}"
       },
-      "InfoMessage": {
-        "PurgeMsgTips": "提示：將`訊息顯示`調成False 來取消發送執行完畢訊息",
-        "PurgeDone": "頻道：{}的 `{integer}` 則訊息已刪除。",
-        "BOTINFO": {
-          "title": "一般介紹",
-          "author": "{0}的資訊",
-          "FieldTitleI": "__**一般介紹**__",
-          "FieldTitleII": "__**狀態：**__",
-          "FieldTitleIII": "__**系統介紹**__",
-          "FieldValueI": "**Bot Id：** {0}\n**Bot Tag：** {1}\n**創建於 ：** <t:{2}:F>\n**創建者： [CC_#8844](https://tab-etuc.github.io)**",
-          "FieldValueII": "**用戶：** {0}\n**伺服器：** {1}\n**頻道：** {2}\n**指令數：** {3}",
-          "FieldValueIII": "**已使用 記憶體：**  {0} MB\n**記憶體總數：** {1} GB\n**已上線時間：** {2}\n**Node 版本：** {3}\n**Discord.js 版本：** {4}\n**CPU：** {5}\n**核心數：** {6}\n**速度：** {7} MHz\n**位元：** {8}\n**作業系統：** {9}"
-        }
+      "BotInfo": {
+        "title": "一般介紹",
+        "author": "{0}的資訊",
+        "FieldTitleI": "__**一般介紹**__",
+        "FieldTitleII": "__**狀態：**__",
+        "FieldTitleIII": "__**系統介紹**__",
+        "FieldValueI": "**Bot Id：** {0}\n**Bot Tag：** {1}\n**創建於 ：** <t:{2}:F>\n**創建者： [CC_#8844](https://tab-etuc.github.io)**",
+        "FieldValueII": "**用戶：** {0}\n**伺服器：** {1}\n**頻道：** {2}\n**指令數：** {3}",
+        "FieldValueIII": "**已使用 記憶體：**  {0} MB\n**記憶體總數：** {1} GB\n**已上線時間：** {2}\n**Node 版本：** {3}\n**Discord.js 版本：** {4}\n**CPU：** {5}\n**核心數：** {6}\n**速度：** {7} MHz\n**位元：** {8}\n**作業系統：** {9}"
+      },
+      "EmbedCreater": {
+        "Preview": "預覽",
+        "desc": [
+          "獨立於 Embed 之外的一般訊息",
+          "Embed 的標題",
+          "Embed 的內容",
+          "Embed 標題的超連結",
+          "Embed 的顏色",
+          "Embed 的圖片",
+          "Embed 的縮略圖",
+          "Embed 的頁腳"
+        ],
+        "slct": "Embed 設定選項",
+        "Title": "Embed 創建工具",
+        "Description": "從選擇菜單中調整 ***設定*** Embed 創建工具 將為您創建一則 Embed 訊息\n\n這是一則已完成的 Embed。",
+        "Deleting": "刪除中...",
+        "TipMessage": "請輸入您想顯示的「{0}」",
+        "WrongHex": "請給我一個有效的十六進制代碼（Hex code）。",
+        "WrongImgUrl": "這不是一個可使用的圖像連結。請嘗試重新輸入。"
+      },
+      "Mute": {
+        "Reason": "{0} 使用了 `/mute` 指令。",
+        "OnMute": "<@{0}> 已被禁言： {1}",
+        "OnUnlock": "<@{0}> 已解除禁言！"
       }
     }
   }
