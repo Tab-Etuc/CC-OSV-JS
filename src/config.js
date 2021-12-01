@@ -1,10 +1,10 @@
 require('dotenv').config()
 module.exports = {
-  Test: process.env.Test || false,
+  Test: process.env.Test || false, //Whether testing
   Admins: ['806346991730819121'], //Admins of the bot
   DefaultPrefix: process.env.Prefix || 'C', //Default prefix, Server Admins can change the prefix
   Token: process.env.Token || '', //Discord Bot Token
-  MongoDB: process.env.MONGODB || '',
+  MongoDB: process.env.MONGODB || '', //MongoDB URL
   ClientID: process.env.Discord_ClientID || '', //Discord Client ID
   ClientSecret: process.env.Discord_ClientSecret || '', //Discord Client Secret
   DefaultVolume: 100, //Sets the default volume of the bot, You can change this number anywhere from 1 to 100
