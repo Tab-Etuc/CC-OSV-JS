@@ -147,7 +147,7 @@ module.exports = {
             })
         } catch (e) {
           if (!player.queue.current) player.destroy()
-          return awaitchannel.send('❌ | **您沒有提供選擇**')
+          return awaitchannel.send('**您沒有提供選擇**')
         }
     }
   }
