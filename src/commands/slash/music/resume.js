@@ -22,10 +22,10 @@ module.exports = {
     if (!player)
       return bot.say.slashError(
         interaction,
-        '❌ | **目前沒有播放任何音樂...**'
+        '**目前沒有播放任何音樂...**'
       )
     if (player.playing)
-      return bot.say.slashError(interaction, '❌ | **歌曲播放中！**')
+      return bot.say.slashError(interaction, '**歌曲播放中！**')
     player.pause(false)
     bot.say.slashInfo(interaction, '**⏯ 已重新播放！**')
   }
