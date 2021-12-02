@@ -52,7 +52,9 @@ class Embeds {
     return interaction
       .editReply({
         ephemeral: true,
-        embeds: [new MessageEmbed().setDescription(text).setColor('RED')],
+        embeds: [
+          new MessageEmbed().setDescription('❌ | ' + text).setColor('RED')
+        ],
         allowedMentions: { repliedUser: false }
       })
       .catch(console.error)
