@@ -55,7 +55,7 @@ module.exports = {
         if (!player.queue.current) player.destroy()
         return bot.say.slashError(
           interaction,
-          '❌ | **查無結果。**您可以嘗試重新輸入指令。'
+          '**查無結果。**您可以嘗試重新輸入指令。'
         )
       case 'TRACK_LOADED':
         player.queue.add(res.tracks[0])
