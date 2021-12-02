@@ -22,13 +22,13 @@ module.exports = {
       return bot.say.msgEmbed(
         bot,
         message.channel,
-        '❌ | **目前沒有播放任何音樂...**'
+        '**目前沒有播放任何音樂...**'
       )
     if (!message.member.voice.channel)
       return bot.say.msgEmbed(
         bot,
         message.channel,
-        '❌ | **您必須在語音通道中使用此指令！**'
+        '**您必須在語音通道中使用此指令！**'
       )
     if (
       message.guild.me.voice.channel &&
@@ -37,10 +37,10 @@ module.exports = {
       return bot.say.msgEmbed(
         bot,
         message.channel,
-        '❌ | **您必須和我在相同的語音通道以使用此指令！**'
+        '**您必須和我在相同的語音通道以使用此指令！**'
       )
     if (player.paused)
-      return bot.say.msgEmbed(bot, message.channel, '❌ | **音樂暫停中！**')
+      return bot.say.msgEmbed(bot, message.channel, '**音樂暫停中！**')
     player.pause(true)
     let embed = new MessageEmbed()
       .setAuthor(`已暫停！`, bot.botconfig.IconURL)
