@@ -23,7 +23,7 @@ module.exports = {
       return bot.say.msgEmbed(
         bot,
         message.channel,
-        '❌ | **目前沒有播放任何音樂...**'
+        '**目前沒有播放任何音樂...**'
       )
 
     let song = player.queue.current
