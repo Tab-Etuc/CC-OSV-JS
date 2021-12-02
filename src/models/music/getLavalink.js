@@ -11,7 +11,7 @@
       }
       bot.say.slashError(
         interaction,
-        '❌ | **Lavalink伺服器重新連線中，請稍後再試。**'
+        '**Lavalink伺服器重新連線中，請稍後再試。**'
       )
       resolve(undefined);
     });
