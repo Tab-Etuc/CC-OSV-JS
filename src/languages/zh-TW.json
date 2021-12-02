@@ -35,16 +35,16 @@
         "RemoveSuccess": "✅ | 已從播放列移除編號 **`{Number(args[0])}`** 之歌曲!"
       },
       "ErrorMessage": {
-        "NoCurrentlyPlaying": "❌ | 目前沒有播放任何音樂...",
-        "UserNotInVC": "❌ | 您必須在語音通道中使用此指令！",
-        "NotSameVC": "❌ | 您必須和我在相同的語音通道以使用此指令！",
+        "NoCurrentlyPlaying": "目前沒有播放任何音樂...",
+        "UserNotInVC": "您必須在語音通道中使用此指令！",
+        "NotSameVC": "您必須和我在相同的語音通道以使用此指令！",
         "LoopEnabled": "🔂 `啟用`",
         "LoopDisable": "🔂 `關閉`",
-        "LavalinkNotConnect": "❌ | Lavalink伺服器重新連線中，請稍後再試。",
-        "QueryError": "❌ | 在查詢時出了錯誤 您可以嘗試重新輸入指令。",
-        "PlaylistEmpty": "❌ | 播放列中沒有任何東西可以刪除",
-        "QueueWrongNumber": "❌ | 請輸入一個**數字**介於 `1 - 100`",
-        "RemoveWrongNumber": "❌ | 播放列僅有 {player.queue.length} 首歌曲！"
+        "LavalinkNotConnect": "Lavalink伺服器重新連線中，請稍後再試。",
+        "QueryError": "在查詢時出了錯誤 您可以嘗試重新輸入指令。",
+        "PlaylistEmpty": "播放列中沒有任何東西可以刪除",
+        "QueueWrongNumber": "請輸入一個**數字**介於 `1 - 100`",
+        "RemoveWrongNumber": "播放列僅有 {player.queue.length} 首歌曲！"
       }
     },
     "utility": {
