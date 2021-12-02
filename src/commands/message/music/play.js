@@ -21,7 +21,7 @@ module.exports = {
       return bot.say.msgEmbed(
         bot,
         message.channel,
-        '❌ | **您必須在語音通道中使用此指令！**'
+        '**您必須在語音通道中使用此指令！**'
       )
     if (
       message.guild.me.voice.channel &&
@@ -30,7 +30,7 @@ module.exports = {
       return bot.say.msgEmbed(
         bot,
         message.channel,
-        '❌ | **您必須和我在相同的語音通道以使用此指令！**'
+        '**您必須和我在相同的語音通道以使用此指令！**'
       )
     let SearchString = args.join(' ')
     if (!SearchString)
@@ -46,7 +46,7 @@ module.exports = {
       return bot.say.msgEmbed(
         bot,
         message.channel,
-        '❌ | **Lavalink伺服器重新連線中，請稍後再試。**'
+        '**Lavalink伺服器重新連線中，請稍後再試。**'
       )
     }
     let player = bot.createPlayer(message.channel, message.member.voice.channel)
@@ -71,7 +71,7 @@ module.exports = {
         return bot.say.msgEmbed(
           bot,
           message.channel,
-          '❌ | **查無結果。**您可以嘗試重新輸入指令。'
+          '**查無結果。**您可以嘗試重新輸入指令。'
         )
       case 'TRACK_LOADED':
         player.queue.add(res.tracks[0])
