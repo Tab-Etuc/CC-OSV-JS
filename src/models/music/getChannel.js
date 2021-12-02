@@ -7,7 +7,7 @@
 module.exports = async (bot, interaction) => {
   return new Promise(async resolve => {
     if (!interaction.member.voice.channel) {
-      bot.say.slashError(interaction, '❌ | **您必須先加入一個語音頻道！**')
+      bot.say.slashError(interaction, '**您必須先加入一個語音頻道！**')
       return resolve(false)
     }
     if (
@@ -17,7 +17,7 @@ module.exports = async (bot, interaction) => {
     ) {
       bot.say.slashError(
         interaction,
-        '❌ | **您必須和我處在同一個語音頻道以使用此指令！**'
+        '**您必須和我處在同一個語音頻道以使用此指令！**'
       )
       return resolve(false)
     }
