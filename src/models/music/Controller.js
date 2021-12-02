@@ -9,22 +9,17 @@ module.exports = async (bot, interaction) => {
   let player = bot.manager.get(guild.id)
 
   if (!player)
-    return interaction.reply({
-      embeds: [bot.Embed('音樂已結束，沒有可以控制的播放器。')]
-    })
+    return bot.say.slashError(interaction, '音樂已結束，沒有可以控制的播放器。')
 
   if (property === 'LowVolume') {
     player.setVolume(player.volume - 10)
-    return interaction.reply({
-      embeds: [bot.Embed('成功將音量設定至' + player.volume)]
-    })
+    return bot.say.slashInfo(interaction, '成功將音量設定至' + player.volume)
   }
 
   if (property === 'Replay') {
     if (!player.queue.previous)
-      return interaction.reply({
-        embeds: [bot.ErrorEmbed('沒有找到先前播放的歌曲。')]
-      })
+      return bot.say.slashError(interaction, '沒有找到先前播放的歌曲。')
+
     player.queue.unshift(player.queue.previous)
     player.queue.unshift(player.queue.current)
     player.stop()
@@ -34,9 +29,8 @@ module.exports = async (bot, interaction) => {
   if (property === 'PlayAndPause') {
     if (player.paused) player.pause(false)
     else player.pause(true)
-    return interaction.reply({
-      embeds: [bot.Embed(player.paused ? '已暫停' : '重新播放')]
-    })
+
+    return bot.say.slashInfo(interaction, player.paused ? '已暫停' : '重新播放')
   }
 
   if (property === 'Next') {
@@ -46,9 +40,7 @@ module.exports = async (bot, interaction) => {
 
   if (property === 'HighVolume') {
     player.setVolume(player.volume + 10)
-    return interaction.reply({
-      embeds: [bot.Embed('成功將音量設定至' + player.volume)]
-    })
+    return bot.say.slashInfo(interaction, '成功將音量設定至' + player.volume)
   }
 
   return interaction.reply({
