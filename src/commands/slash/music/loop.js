@@ -20,7 +20,7 @@ module.exports = {
     if (!player)
       return bot.say.slashError(
         interaction,
-        '❌ | **目前沒有播放任何音樂...**'
+        '**目前沒有播放任何音樂...**'
       )
     if (player.trackRepeat) {
       player.setTrackRepeat(false)
