@@ -611,28 +611,6 @@ class CCOSV extends Client {
         .setEmoji('🔊')
     )
   }
-  Embed (text) {
-    let embed = new MessageEmbed().setColor(this.config.embedColor)
-
-    if (text) embed.setDescription(text)
-
-    return embed
-  }
-
-  /**
-   *
-   * @param {string} text
-   * @returns {MessageEmbed}
-   */
-  ErrorEmbed (text) {
-    let embed = new MessageEmbed()
-      .setColor('RED')
-      .setDescription('❌ | ' + text)
-
-    return embed
-  }
-  
-  
 }
 
 module.exports = CCOSV
