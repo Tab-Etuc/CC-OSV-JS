@@ -33,11 +33,11 @@ module.exports = {
     if (!player)
       return bot.say.slashError(
         interaction,
-        '❌ | **目前沒有播放任何音樂...**'
+        '**目前沒有播放任何音樂...**'
       )
 
     if (!player.queue || !player.queue.length || player.queue.length === 0)
-      return bot.say.slashError('❌ | **目前沒有播放任何音樂...**')
+      return bot.say.slashError('**目前沒有播放任何音樂...**')
     let track = await interaction.options.getString('編號', true)
     let rm = new MessageEmbed()
       .setDescription(
