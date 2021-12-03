@@ -28,7 +28,7 @@ module.exports = {
     }
   ],
   async execute (bot, interaction) {
-    let MTBS = await bot.getLanguage(interaction.guildId)
+    const MTBS = await bot.getLanguage(interaction.guildId, 'utility', 'Purge')
 
     const integer = interaction.options.getInteger('數量')
     const BOOLEAN_ = interaction.options.getBoolean('訊息顯示')
@@ -49,15 +49,13 @@ module.exports = {
 
     const embed = bot.say
       .rootEmbed(interaction)
-      .setTitle(MTBS.General.InfoMessage.Done)
-      .setDescription(MTBS.commands.utility.Purge.Done.format(integer))
+      .setTitle(MTBS.DoneTitle)
+      .setDescription(MTBS.Done.format(integer))
       .setTimestamp()
-      .setFooter(
-        MTBS.commands.utility.Purge.Channel.format(interaction.channel.name)
-      )
+      .setFooter(MTBS.Channel.format(interaction.channel.name))
     if (!BOOLEAN_ || BOOLEAN_ == 'yes') {
       await interaction.reply({
-        content: MTBS.commands.utility.Purge.MsgTips,
+        content: MTBS.MsgTips,
         embeds: [embed]
       })
     } else {
