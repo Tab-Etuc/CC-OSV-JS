@@ -8,8 +8,7 @@ module.exports = {
   description: '展示bot資訊',
   category: '實用',
   async execute (bot, interaction) {
-    let MTBS = await bot.getLanguage(interaction.guildId)
-    MTBS = MTBS.commands.utility.BotInfo
+    const MTBS = await bot.getLanguage(interaction.guildId, 'utility', 'BotInfo')
     const uptime = moment
       .duration(bot.uptime)
       .format(' D [天], H [小時], m [分], s [秒]')
