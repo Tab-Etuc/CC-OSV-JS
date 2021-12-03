@@ -11,8 +11,7 @@ module.exports = {
   async execute (bot, interaction) {
     await interaction.deferReply()
 
-    const MTBS_ = await bot.getLanguage(interaction.guildId)
-    const MTBS = MTBS_.commands.utility.EmbedCreater
+    const MTBS = await bot.getLanguage(interaction.guildId, 'utility', 'EmbedCreater')
     try {
       const done = new MessageButton()
         .setLabel('完畢')
@@ -106,7 +105,7 @@ module.exports = {
             } else if (button.customId && button.customId === 'setDone') {
               button.reply({
                 content:
-                  MTBS_.General.InfoMessage.Done + '<a:V_:858154997640331274>',
+                  MTBS.Done,
                 ephemeral: true
               })
 
@@ -404,7 +403,7 @@ module.exports = {
           collector.on('end', async (collected, reason) => {
             if (reason === 'time') {
               const content = new MessageButton()
-                .setLabel(MTBS_.General.InfoMessage.TimeOut)
+                .setLabel(MTBS.TimeOut)
                 .setStyle('DANGER')
                 .setCustomId('timeout|91817623842')
                 .setDisabled()
