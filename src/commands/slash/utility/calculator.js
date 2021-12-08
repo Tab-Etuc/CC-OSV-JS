@@ -9,33 +9,7 @@ module.exports = {
 
     let button = new Array([], [], [], [], [])
     let row = []
-    let text = [
-      'Clear',
-      '(',
-      ')',
-      '/',
-      '⌫',
-      '7',
-      '8',
-      '9',
-      '*',
-      '!',
-      '4',
-      '5',
-      '6',
-      '-',
-      '^',
-      '1',
-      '2',
-      '3',
-      '+',
-      'π',
-      '.',
-      '0',
-      '00',
-      '=',
-      'Delete'
-    ]
+    let text = ['Clear','(',')','/','⌫','7','8','9','*','!','4','5','6','-','^','1','2','3','+','π','.','0','00','=','Delete']
     let current = 0
 
     for (let i = 0; i < text.length; i++) {
@@ -70,7 +44,6 @@ module.exports = {
             componentType: 'BUTTON',
             time: time
           })
-
           collect.on('collect', async x => {
             if (x.user.id !== interaction.user.id) return
 
@@ -107,7 +80,6 @@ module.exports = {
             }
           })
         }
-
         for (let txt of text) {
           let result
 
@@ -120,7 +92,6 @@ module.exports = {
           await msg.edit({ components: [] })
         }, time)
       })
-
     function addRow (btns) {
       let row1 = new MessageActionRow()
       for (let btn of btns) {
@@ -128,7 +99,6 @@ module.exports = {
       }
       return row1
     }
-
     function createButton (label, style = 'SECONDARY') {
       if (label === 'Clear') style = 'DANGER'
       else if (label === 'Delete') style = 'DANGER'
@@ -145,7 +115,6 @@ module.exports = {
         .setCustomId('cal' + label)
       return btn
     }
-
     function mathEval (input) {
       try {
         let res = `${input} = ${math.evaluate(input.replace('π', math.pi))}`

@@ -44,14 +44,14 @@ module.exports = {
     } catch (err) {
       return bot.say.slashError(
         interaction,
-        `:x: | **在搜索時出現了錯誤** ${err.interaction}`
+        `**在搜索時出現了錯誤** ${err.interaction}`
       )
     }
 
     switch (res.loadType) {
       case 'NO_MATCHES':
         if (!player.queue.current) player.destroy()
-        return bot.say.slashError(interaction, ':x: | **查無結果**')
+        return bot.say.slashError(interaction, '**查無結果**')
       case 'TRACK_LOADED':
         player.queue.add(res.tracks[0])
         if (!player.playing && !player.paused && !player.queue.length)

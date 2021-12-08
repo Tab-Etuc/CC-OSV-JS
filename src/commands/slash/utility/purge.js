@@ -31,7 +31,7 @@ module.exports = {
     const MTBS = await bot.getLanguage(interaction.guildId, 'utility', 'Purge')
 
     const integer = interaction.options.getInteger('數量')
-    const BOOLEAN_ = interaction.options.getBoolean('訊息顯示')
+    const BOOLEAN_ = interaction.options.getString('訊息顯示')
 
     if (integer < 1) return
     const hundreds = Math.floor(integer / 100)

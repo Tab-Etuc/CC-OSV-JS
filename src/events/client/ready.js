@@ -43,7 +43,7 @@ module.exports = {
       const status = statuses[Math.floor(Math.random() * statuses.length)]
       bot.user.setPresence({
         activities: [{ name: status.name, type: status.type }],
-        status: statuses.status
+        status: status.status
       })
     }, 60000)
   }

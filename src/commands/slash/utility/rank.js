@@ -73,17 +73,14 @@ module.exports = {
     // context.font = '28px GenJyuuGothicX-Medium';
     // context.fillStyle = '#ffffff';
     // context.fillText('Profile', canvas.width / 2.5, canvas.height / 3.5);
-    let testUser = interaction.guild.members.cache.get(member.id)
-    let testUsers = []
-    testUsers.push(testUser)
 
     context.font = applyText(
       canvas,
-      `${member.nickname ? member.nickname : member.user.username}`
+      `${member.nickname || member.user.username}`
     )
     context.fillStyle = '#ffffff'
     context.fillText(
-      `${member.nickname ? member.nickname : member.user.username}`,
+      `${member.nickname || member.user.username}`,
       canvas.width / 2.84,
       canvas.height / 2.3
     )

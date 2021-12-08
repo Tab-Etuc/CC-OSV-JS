@@ -56,17 +56,14 @@ module.exports = {
               .permissionsFor(message.member)
               .has(cmd.permissions.member)) ||
           (cmd.permissions &&
-            GuildData.DJ &&
             !message.channel
               .permissionsFor(message.member)
-              .has(['ADMINISTRATOR']) &&
-            !message.member.roles.cache.has(GuildData.DJ))
+              .has(['ADMINISTRATOR']))
         )
           return bot.sendError(message.channel, '缺少權限!')
         cmd.run(bot, message, args, GuildData)
-        let guild = await Guilds.findOne({ guildId: message.guild.id })
-        guild.CommandsRan++
-        guild.save()
+        GuildData.CommandsRan++
+        GuildData.save()
       }
 
       // chat level

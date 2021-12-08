@@ -42,7 +42,7 @@ module.exports = {
     try {
       if (res.loadType === 'LOAD_FAILED') {
         if (!player.queue.current) player.destroy()
-        return bot.say.slashError(interaction, `:x: | **在查詢時出了錯誤**`)
+        return bot.say.slashError(interaction, `**在查詢時出了錯誤**`)
       }
     } catch (err) {
       return bot.say.slashError(
