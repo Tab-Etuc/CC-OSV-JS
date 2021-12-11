@@ -8,17 +8,16 @@ module.exports = async (bot, interaction) => {
   let property = interaction.customId.split(':')[2]
   let player = bot.manager.get(guild.id)
 
-  if (!player)
-    return bot.say.slashError(interaction, '音樂已結束，沒有可以控制的播放器。')
+  if (!player) return Error(interaction, '音樂已結束，沒有可以控制的播放器。')
 
   if (property === 'LowVolume') {
     player.setVolume(player.volume - 10)
-    return bot.say.slashInfo(interaction, '成功將音量設定至' + player.volume)
+    return Info(interaction, '成功將音量設定至' + player.volume)
   }
 
   if (property === 'Replay') {
     if (!player.queue.previous)
-      return bot.say.slashError(interaction, '沒有找到先前播放的歌曲。')
+      return Error(interaction, '沒有找到先前播放的歌曲。')
 
     player.queue.unshift(player.queue.previous)
     player.queue.unshift(player.queue.current)
@@ -30,7 +29,7 @@ module.exports = async (bot, interaction) => {
     if (player.paused) player.pause(false)
     else player.pause(true)
 
-    return bot.say.slashInfo(interaction, player.paused ? '已暫停' : '重新播放')
+    return Info(interaction, player.paused ? '已暫停' : '重新播放')
   }
 
   if (property === 'Next') {
@@ -40,11 +39,40 @@ module.exports = async (bot, interaction) => {
 
   if (property === 'HighVolume') {
     player.setVolume(player.volume + 10)
-    return bot.say.slashInfo(interaction, '成功將音量設定至' + player.volume)
+    return Info(interaction, '成功將音量設定至' + player.volume)
   }
 
   return interaction.reply({
     ephemeral: true,
     content: '未知的控制器選項。'
   })
+}
+async function Info (interaction, text) {
+  return interaction
+    .editReply({
+      embeds: [
+        new MessageEmbed()
+          .setDescription(text)
+          .setColor(interaction.guild.me.displayColor || '#00FFFF')
+      ],
+      allowedMentions: { repliedUser: false }
+    })
+    .catch(console.error)
+}
+
+/**
+ * Reply a custom embed
+ * @param {import("discord.js").Interaction } interaction
+ * @param {string} text
+ */
+async function Error (interaction, text) {
+  return interaction
+    .editReply({
+      ephemeral: true,
+      embeds: [
+        new MessageEmbed().setDescription('❌ | ' + text).setColor('RED')
+      ],
+      allowedMentions: { repliedUser: false }
+    })
+    .catch(console.error)
 }
