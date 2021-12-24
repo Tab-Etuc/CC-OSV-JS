@@ -53,11 +53,11 @@ async function ChangeClockDate (bot, ClockDate_Array) {
     channel ? (channel_name = channel.name) : (channel_name = false)
     if (!channel_name) return
 
-    channel_name = channel_name.replace(/📅伍年●|月|日●/g, '')
+    channel_name = channel_name.replace(/📅陸年●|月|日●/g, '')
 
     if (channel_name !== TimeMonth.toString() + TimeDay.toString()) {
       bot.channels.cache.get(ClockDate_Array[i]).edit({
-        name: '📅伍年●' + TimeMonth + '月' + TimeDay + '日●'
+        name: '📅陸年●' + TimeMonth + '月' + TimeDay + '日●'
       })
       bot.logger.log('EVENTS', `Bot: 已更換頻道日期。`)
     }
