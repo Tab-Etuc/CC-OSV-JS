@@ -108,7 +108,6 @@ module.exports = {
             const user = await guild.members.cache.get(interaction.member.id)
             await interaction.deferUpdate()
             return user.send(`你已經贊成過這首歌曲了。`)
-
           }
         }
         if (!msg && msg == null) {
@@ -130,6 +129,7 @@ module.exports = {
           .catch()
         if (msg) {
           msg.count += 1
+          msg.member += interaction.member.id
           msg.save()
         }
       }
