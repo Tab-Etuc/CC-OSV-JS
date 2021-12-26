@@ -101,7 +101,7 @@ module.exports = {
         let count
         let content
         if (msg) {
-          count = msg.count
+          count = msg.count + 1
           content = msg.content
           if (msg.member.includes(interaction.member.id)) {
             const guild = await bot.guilds.fetch(interaction.guild.id)
