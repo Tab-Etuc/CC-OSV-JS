@@ -129,7 +129,7 @@ module.exports = {
           .catch()
         if (msg) {
           msg.count += 1
-          msg.member += interaction.member.id
+          msg.member.push(interaction.member.id)
           msg.save()
         }
       }
