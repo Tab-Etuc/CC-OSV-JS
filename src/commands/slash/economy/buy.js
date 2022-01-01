@@ -22,7 +22,11 @@ module.exports = {
   async execute (bot, interaction) {
     await interaction.deferReply()
 
-    let user = await UserManager.fetchUser(bot, interaction.member.id, interaction.guild.id)
+    let user = await UserManager.fetchUser(
+      bot,
+      interaction.member.id,
+      interaction.guild.id
+    )
     const arg = interaction.options.getString('商品', false)
     const item = itemss.find(
       x =>
