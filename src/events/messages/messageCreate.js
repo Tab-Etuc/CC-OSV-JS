@@ -3,7 +3,6 @@ const Users = require('../../models/mongoDB/Users.js')
 const Guilds = require('../../models/mongoDB/Guilds.js')
 
 const Discord = require('discord.js')
-const { MessageButton, MessageActionRow } = require('discord.js')
 
 module.exports = {
   name: 'messageCreate',
@@ -11,43 +10,6 @@ module.exports = {
   async execute (bot, message) {
     try {
       if (message.author.bot || !message.guild) return //如果是機器人發出的訊息、不在公會裡 就不執行
-      if (message.channelId == '920624702429491261') { // my homework
-        let webhook = await message.channel.fetchWebhooks()
-
-        webhook = webhook.find(x => x.name === 'NQN')
-
-        if (!webhook) {
-          webhook = await message.channel.createWebhook(`NQN`, {
-            avatar: bot.user.displayAvatarURL({ dynamic: true })
-          })
-        }
-
-        await webhook.edit({
-          name: message.member.nickname
-            ? message.member.nickname
-            : message.author.username,
-          avatar: message.author.displayAvatarURL({ dynamic: true })
-        })
-
-        message.delete()
-
-        webhook.send({
-          content: message.content,
-          components: [
-            new MessageActionRow().addComponents(
-              new MessageButton()
-                .setCustomId(`MusicAgree:${message.guildId}`)
-                .setLabel('贊成')
-                .setStyle('SUCCESS')
-            )
-          ]
-        })
-
-        await webhook.edit({
-          name: `NQN`,
-          avatar: bot.user.displayAvatarURL({ dynamic: true })
-        })
-      }
 
       let prefix = bot.config.DefaultPrefix
       let GuildData = await Guilds.findOne({
@@ -186,16 +148,16 @@ module.exports = {
       )
 
       let substringArray = get_substrings_between(message.content, ':', ':')
-      // 如果不是 NQN 模式的處理
+      // 如果不是 NQN 模式的處理。這邊是將 Cl3I => 好喔
       if (!substringArray.length) {
         if (C_msg === message.content) return
 
         let webhook = await message.channel.fetchWebhooks()
 
-        webhook = webhook.find(x => x.name === 'NQN')
+        webhook = webhook.find(x => x.name === 'CL3I')
 
         if (!webhook) {
-          webhook = await message.channel.createWebhook(`NQN`, {
+          webhook = await message.channel.createWebhook(`CL3I`, {
             avatar: bot.user.displayAvatarURL({ dynamic: true })
           })
         }
