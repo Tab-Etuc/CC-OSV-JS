@@ -38,7 +38,7 @@ module.exports = {
       .catch(console.error)
     msg = JSON.parse(msg.req.res.text)
     if (
-      msg[1][0][1][0] != undefined &&
+      msg[1][0][1][0] &&
       msg[1][0][1][0] !=
         message.content
           .slice(GuildDB.prefix.length)
