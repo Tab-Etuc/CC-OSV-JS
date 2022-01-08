@@ -1,7 +1,6 @@
 const Guilds = require('../../models/mongoDB/Guilds.js')
 const Users = require('../../models/mongoDB/Users.js')
 const Prizes = require('../../models/mongoDB/Prizes.js')
-const Homework = require('../../models/mongoDB/test.js')
 
 const Controller = require('../../models/music/Controller')
 
@@ -92,46 +91,6 @@ module.exports = {
     } else if (interaction.isButton()) {
       if (interaction.customId.startsWith('controller')) {
         Controller(bot, interaction)
-      } else if (interaction.customId.startsWith('MusicAgree')) {
-        // my homework.
-        const msg = await Homework.findOne({
-          msgId: interaction.message.id
-        })
-
-        let count
-        let content
-        if (msg) {
-          count = msg.count + 1
-          content = msg.content
-          if (msg.member.includes(interaction.member.id)) {
-            const guild = await bot.guilds.fetch(interaction.guild.id)
-            const user = await guild.members.cache.get(interaction.member.id)
-            await interaction.deferUpdate()
-            return user.send(`你已經贊成過這首歌曲了。`)
-          }
-        }
-        if (!msg && msg == null) {
-          new Homework({
-            msgId: interaction.message.id,
-            content: interaction.message.content,
-            count: 1,
-            member: [interaction.member.id]
-          }).save()
-          count = '1'
-          content = interaction.message.content
-        }
-
-        await interaction
-          .update({
-            content: `\`${count}\`人已贊成！\n${content ||
-              interaction.message.content}`
-          })
-          .catch()
-        if (msg) {
-          msg.count += 1
-          msg.member.push(interaction.member.id)
-          msg.save()
-        }
       }
     }
   }
