@@ -44,23 +44,23 @@ module.exports = {
         if (message.content.indexOf(prefix) !== 0) return
 
         //Executing the codes when we get the command or aliases
-        if (
-          (cmd.permissions &&
-            cmd.permissions.channel &&
-            !message.channel
-              .permissionsFor(bot.user)
-              .has(cmd.permissions.channel)) ||
-          (cmd.permissions &&
-            cmd.permissions.member &&
-            !message.channel
-              .permissionsFor(message.member)
-              .has(cmd.permissions.member)) ||
-          (cmd.permissions &&
-            !message.channel
-              .permissionsFor(message.member)
-              .has(['ADMINISTRATOR']))
-        )
-          return bot.sendError(message.channel, '缺少權限!')
+        // if (
+        //   (cmd.permissions &&
+        //     cmd.permissions.channel &&
+        //     !message.channel
+        //       .permissionsFor(bot.user)
+        //       .has(cmd.permissions.channel)) ||
+        //   (cmd.permissions &&
+        //     cmd.permissions.member &&
+        //     !message.channel
+        //       .permissionsFor(message.member)
+        //       .has(cmd.permissions.member)) ||
+        //   (cmd.permissions &&
+        //     !message.channel
+        //       .permissionsFor(message.member)
+        //       .has(['ADMINISTRATOR']))
+        // )
+        //   return bot.sendError(message.channel, '缺少權限!')
         cmd.run(bot, message, args, GuildData)
         GuildData.CommandsRan++
         GuildData.save()
