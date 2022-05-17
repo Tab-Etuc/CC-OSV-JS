@@ -14,7 +14,7 @@ module.exports = {
     {
       name: '編號',
       value: '[track]',
-      type: 4,
+      type: 3,
       required: true,
       description: '從播放列中移除一首歌'
     }
