@@ -4,7 +4,7 @@ module.exports = {
   usage: '',
   permissions: {
     channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
-    member: []
+    member: [],
   },
   aliases: ['s', 'next'],
   options: [
@@ -13,8 +13,8 @@ module.exports = {
       value: 'song',
       type: 3,
       required: false,
-      description: '您想跳到...位置。'
-    }
+      description: '您想跳到...位置。',
+    },
   ],
 
   /**
@@ -22,27 +22,24 @@ module.exports = {
    * @param {import("discord.js").Message} interaction
    */
 
-  async execute (bot, interaction) {
-    await interaction.deferReply()
-    const channel = await bot.getChannel(bot, interaction)
-    if (!channel) return
+  async execute(bot, interaction) {
+    await interaction.deferReply();
+    const channel = await bot.getChannel(bot, interaction);
+    if (!channel) return;
 
-    const skipTo = await interaction.options.getString('位置', false)
+    const skipTo = await interaction.options.getString('位置', false);
 
-    let player = bot.manager.players.get(interaction.guild.id)
+    let player = bot.manager.players.get(interaction.guild.id);
 
     if (!player)
-      return bot.say.slashError(
-        interaction,
-        '**目前沒有播放任何音樂...**'
-      )
+      return bot.send.slashError(interaction, '**目前沒有播放任何音樂...**');
 
     if (
       skipTo !== null &&
       (isNaN(skipTo) || skipTo < 1 || skipTo > player.queue.length)
     )
-      return bot.say.slashInfo(interaction, '**無效的數字！**')
-    player.stop(skipTo)
-    bot.say.slashInfo(interaction, '**已跳過!**')
-  }
-}
+      return bot.send.slashInfo(interaction, '**無效的數字！**');
+    player.stop(skipTo);
+    bot.send.slashInfo(interaction, '**已跳過!**');
+  },
+};

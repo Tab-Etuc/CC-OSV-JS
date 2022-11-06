@@ -1,7 +1,7 @@
-const { MessageEmbed } = require('discord.js')
-const _ = require('lodash')
-const Pagination = require('../../../models/music/pagination')
-const ProgressBar = require('../../../models/music/ProgressBar')
+const { MessageEmbed } = require('discord.js');
+const _ = require('lodash');
+const Pagination = require('../../../models/music/pagination');
+const ProgressBar = require('../../../models/music/ProgressBar');
 
 module.exports = {
   name: 'queue',
@@ -9,7 +9,7 @@ module.exports = {
   usage: '',
   permissions: {
     channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
-    member: []
+    member: [],
   },
   aliases: ['q'],
 
@@ -28,16 +28,13 @@ module.exports = {
    * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} interaction
    */
-  async execute (bot, interaction) {
-    await interaction.deferReply()
+  async execute(bot, interaction) {
+    await interaction.deferReply();
     try {
-      let player = bot.manager.players.get(interaction.guild.id)
+      let player = bot.manager.players.get(interaction.guild.id);
       if (!player)
-        return bot.say.slashError(
-          interaction,
-          '**目前沒有播放任何音樂...**'
-        )
-      
+        return bot.send.slashError(interaction, '**目前沒有播放任何音樂...**');
+
       if (!player || !player.queue.length || player.queue === 0) {
         let QueueEmbed = new MessageEmbed()
           .setAuthor('目前正在播放', bot.config.IconURL)
@@ -49,37 +46,35 @@ module.exports = {
           .addField(
             '持續時間',
             `${
-              ProgressBar(
-                player.position,
-                player.queue.current.duration,
-                15
-              ).Bar
+              ProgressBar(player.position, player.queue.current.duration, 15)
+                .Bar
             } \`[${bot.ms(player.position, {
-              colonNotation: true
+              colonNotation: true,
             })} / ${bot.ms(player.queue.current.duration, {
-              colonNotation: true
+              colonNotation: true,
             })}]\``
           )
-          .setThumbnail(player.queue.current.displayThumbnail())
-        return interaction.editReply({ embeds: [QueueEmbed] })
+          .setThumbnail(player.queue.current.displayThumbnail());
+        return interaction.editReply({ embeds: [QueueEmbed] });
       }
 
       let Songs = player.queue.map((t, index) => {
-        t.index = index
-        return t
-      })
+        t.index = index;
+        return t;
+      });
 
-      let ChunkedSongs = _.chunk(Songs, 10) //How many songs to show per-page
+      let ChunkedSongs = _.chunk(Songs, 10); //How many songs to show per-page
 
-      let Pages = ChunkedSongs.map(Tracks => {
+      let Pages = ChunkedSongs.map((Tracks) => {
         let SongsDescription = Tracks.map(
-          t =>
-            `\`${t.index + 1}.\` [${t.title}](${
-              t.uri
-            }) \n\`${bot.ms(t.duration, {
-              colonNotation: true
-            })}\` **|** 請求者: ${t.requester}\n`
-        ).join('\n')
+          (t) =>
+            `\`${t.index + 1}.\` [${t.title}](${t.uri}) \n\`${bot.ms(
+              t.duration,
+              {
+                colonNotation: true,
+              }
+            )}\` **|** 請求者: ${t.requester}\n`
+        ).join('\n');
 
         let Embed = new MessageEmbed()
           .setAuthor('播放列', bot.config.IconURL)
@@ -91,7 +86,7 @@ module.exports = {
           .addField(
             '總計長度 \n',
             `\`${bot.ms(player.queue.duration, {
-              colonNotation: true
+              colonNotation: true,
             })}\``,
             true
           )
@@ -99,27 +94,24 @@ module.exports = {
           .addField(
             '當前之歌曲持續時間:',
             `${
-              ProgressBar(
-                player.position,
-                player.queue.current.duration,
-                15
-              ).Bar
+              ProgressBar(player.position, player.queue.current.duration, 15)
+                .Bar
             } \`[${bot.ms(player.position, {
-              colonNotation: true
+              colonNotation: true,
             })} / ${bot.ms(player.queue.current.duration, {
-              colonNotation: true
+              colonNotation: true,
             })}]\``
           )
-          .setThumbnail(player.queue.current.displayThumbnail())
+          .setThumbnail(player.queue.current.displayThumbnail());
 
-        return Embed
-      })
+        return Embed;
+      });
 
       if (!Pages.length || Pages.length === 1)
-        return interaction.editReply({ embeds: [Pages[0]] })
-      else Pagination(interaction, Pages)
+        return interaction.editReply({ embeds: [Pages[0]] });
+      else Pagination(interaction, Pages);
     } catch (error) {
-      bot.logger.sendErrorLog(bot, error, 'error')
+      bot.logger.sendErrorLog(bot, error, 'error');
     }
-  }
-}
+  },
+};

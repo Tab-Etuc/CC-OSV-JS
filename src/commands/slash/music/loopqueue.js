@@ -4,32 +4,29 @@ module.exports = {
   usage: '',
   permissions: {
     channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
-    member: []
+    member: [],
   },
   aliases: ['lq', 'repeatqueue', 'rq'],
   /**
    * @param {import("../base/CC-OSV-Client")} bot
    * @param {import("discord.js").Message} interaction
    */
-  async execute (bot, interaction) {
-    await interaction.deferReply()
+  async execute(bot, interaction) {
+    await interaction.deferReply();
 
-    let player = bot.manager.players.get(interaction.guild.id)
+    let player = bot.manager.players.get(interaction.guild.id);
 
-    const channel = await bot.getChannel(bot, interaction)
-    if (!channel) return
+    const channel = await bot.getChannel(bot, interaction);
+    if (!channel) return;
     if (!player)
-      return bot.say.slashError(
-        interaction,
-        '**目前沒有播放任何音樂...**'
-      )
+      return bot.send.slashError(interaction, '**目前沒有播放任何音樂...**');
 
     if (player.queueRepeat) {
-      player.setQueueRepeat(false)
-      bot.say.slashInfo(interaction, `:repeat: **播放列循環** \`關閉\``)
+      player.setQueueRepeat(false);
+      bot.send.slashInfo(interaction, `:repeat: **播放列循環** \`關閉\``);
     } else {
-      player.setQueueRepeat(true)
-      bot.say.slashInfo(interaction, `:repeat: **播放列循環** \`啟用\``)
+      player.setQueueRepeat(true);
+      bot.send.slashInfo(interaction, `:repeat: **播放列循環** \`啟用\``);
     }
-  }
-}
+  },
+};

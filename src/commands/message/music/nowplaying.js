@@ -1,5 +1,5 @@
-const { MessageEmbed } = require('discord.js')
-const ProgressBar = require('../../../models/music/ProgressBar')
+const { MessageEmbed } = require('discord.js');
+const ProgressBar = require('../../../models/music/ProgressBar');
 
 module.exports = {
   name: 'nowplaying',
@@ -7,7 +7,7 @@ module.exports = {
   usage: '',
   permissions: {
     channel: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS'],
-    member: []
+    member: [],
   },
   aliases: ['np', 'nowplaying', 'now playing'],
   /**
@@ -18,15 +18,15 @@ module.exports = {
    * @param {*} param3
    */
   run: async (bot, message, args, GuildDB) => {
-    let player = await bot.manager.get(message.guild.id)
+    let player = await bot.manager.get(message.guild.id);
     if (!player)
-      return bot.say.msgEmbed(
+      return bot.send.msgEmbed(
         bot,
         message.channel,
         '**目前沒有播放任何音樂...**'
-      )
+      );
 
-    let song = player.queue.current
+    let song = player.queue.current;
     let QueueEmbed = new MessageEmbed()
       .setAuthor('正在播放', bot.config.IconURL)
       .setColor(bot.config.EmbedColor)
@@ -35,15 +35,14 @@ module.exports = {
       .addField(
         '持續時間',
         `${
-          ProgressBar(player.position, player.queue.current.duration, 15)
-            .Bar
+          ProgressBar(player.position, player.queue.current.duration, 15).Bar
         } \`${bot.ms(player.position, {
-          colonNotation: true
+          colonNotation: true,
         })} / ${bot.ms(player.queue.current.duration, {
-          colonNotation: true
+          colonNotation: true,
         })}\``
       )
-      .setThumbnail(player.queue.current.displayThumbnail())
-    return message.channel.send({ embeds: [QueueEmbed] })
-  }
-}
+      .setThumbnail(player.queue.current.displayThumbnail());
+    return message.channel.send({ embeds: [QueueEmbed] });
+  },
+};
