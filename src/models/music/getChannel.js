@@ -5,23 +5,23 @@
  * @returns
  */
 module.exports = async (bot, interaction) => {
-  return new Promise(async (resolve) => {
+  return new Promise(async resolve => {
     if (!interaction.member.voice.channel) {
-      bot.send.slashError(interaction, '**您必須先加入一個語音頻道！**');
-      return resolve(false);
+      bot.say.slashError(interaction, '**您必須先加入一個語音頻道！**')
+      return resolve(false)
     }
     if (
       interaction.guild.me.voice.channel &&
       interaction.member.voice.channel.id !==
         interaction.guild.me.voice.channel.id
     ) {
-      bot.send.slashError(
+      bot.say.slashError(
         interaction,
         '**您必須和我處在同一個語音頻道以使用此指令！**'
-      );
-      return resolve(false);
+      )
+      return resolve(false)
     }
 
-    resolve(interaction.member.voice.channel);
-  });
-};
+    resolve(interaction.member.voice.channel)
+  })
+}
