@@ -1,0 +1,14 @@
+{
+  "imports": {
+    "@base/": "./src/base/",
+    "@deps": "./deps.ts",
+    "@classes/": "./src/classes/",
+    "@utils/": "./src/utils/",
+    "@const/": "./src/constants/",
+    "@plugins/": "./src/plugins/",
+    "@assets/": "./assets/",
+    "@internal/": "./src/internal/",
+    "@interfaces/": "./src/interfaces/",
+    "@languages/": "./src/languages/"
+  }
+}
