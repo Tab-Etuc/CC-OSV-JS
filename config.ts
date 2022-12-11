@@ -1,6 +1,6 @@
-import { config } from "https://deno.land/x/dotenv@v3.2.0/mod.ts";
+import { config } from "https://deno.land/x/dotenv/mod.ts";
 import { discordeno } from "@deps";
-const env = config({ export: true, path: ".env" });
+config({ export: true });
 
 interface Config {
   token: string;
@@ -13,10 +13,10 @@ interface Config {
   statuses: discordeno.StatusUpdate[];
 }
 export const CCOSVConfig: Config = {
-  token: env.discordBotToken,
-  ytApiKey: env.ytApiKey,
-  spotifyToken: env.spotifyToken,
-  mongoDbUrl: env.mongoDbUrl,
+  token: Deno.env.get("discordBotToken")!,
+  ytApiKey: Deno.env.get("ytApiKey")!,
+  spotifyToken: Deno.env.get("spotifyToken")!,
+  mongoDbUrl: Deno.env.get("mongoDbUrl")!,
   description: "A discord bot make with discordeno",
   owners: ["806346991730819121"],
   prefixes: ["B"],
