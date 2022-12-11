@@ -2,7 +2,7 @@ import { config, ddPlugins, discordeno, lavadeno, mongo } from "@deps";
 import { SongInfo } from "@interfaces/music.ts";
 import { setupEventHandlers } from "@base/event/mod.ts";
 import { lavalink } from "@utils/log.ts";
-
+import { customizeInteractionTransformer } from "@typings/discordeno.ts";
 import "@utils/stringFormat.ts";
 
 const bot = discordeno.createBot({
@@ -37,9 +37,9 @@ Bot.guildSelectCollectors = new Map<bigint, SongInfo[]>();
 Bot.musicNode = new lavadeno.Cluster({
   nodes: [{
     id: "main",
-    host: "lava.link",
+    host: "nonssl.freelavalink.ga",
     port: 80,
-    password: "boolookbelow",
+    password: "www.freelavalink.ga",
   }],
 
   sendGatewayPayload: (id: bigint, payload: lavadeno.UpdateVoiceStatus) =>
@@ -64,7 +64,7 @@ Bot.musicNode
       `(Node: ${node.id}) ${reconnect ? "re" : ""}connected to node.`,
     );
   });
-
+customizeInteractionTransformer(Bot);
 function sendGatewayPayload(
   gateway: discordeno.GatewayManager,
   id: bigint,

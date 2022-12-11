@@ -1,7 +1,7 @@
 import { findSlashCommand } from "@classes/command.ts";
 import { discordeno } from "@deps";
 import { BotClient } from "@base/CC-OSV-Client.ts";
-
+import { InteractionWithCustomProps } from "@typings/discordeno.ts";
 export async function executeSlashCommand(
   bot: BotClient,
   interaction: discordeno.Interaction,
@@ -19,7 +19,7 @@ export async function executeSlashCommand(
     );
   }
   try {
-    command.run(bot, interaction);
+    command.run(bot, interaction as InteractionWithCustomProps);
   } catch (error) {
     console.error(error);
     if (error instanceof Error && error.stack) {

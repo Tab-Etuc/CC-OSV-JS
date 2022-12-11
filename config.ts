@@ -44,7 +44,7 @@ export const CCOSVConfig: Config = {
     {
       activities: [
         {
-          name: "由 CC_#8844 編寫",
+          name: "由 Tab_Etuc#8844 編寫",
           type: discordeno.ActivityTypes.Streaming,
           createdAt: Date.now(),
         },

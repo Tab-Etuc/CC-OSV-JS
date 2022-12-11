@@ -1,7 +1,7 @@
 import { config, discordeno, hasGuildPermissions } from "@deps";
 import { send } from "@utils/send.ts";
 import { Bot, BotClient } from "@base/CC-OSV-Client.ts";
-import { InteractionWithCustomProps } from "../typings/discordeno.ts";
+import { InteractionWithCustomProps } from "@typings/discordeno.ts";
 
 export let prefix: string;
 
@@ -51,7 +51,7 @@ export interface CCOSVSlashCommand {
   /** The options for the command, used for both slash and message commands. */
   // options?: ApplicationCommandOption[];
   options?: discordeno.ApplicationCommandOption[];
-  run: (bot: BotClient, data: discordeno.Interaction) => unknown;
+  run: (bot: BotClient, data: InteractionWithCustomProps) => unknown;
   /** Whether or not this slash command should be enabled right now. Defaults to true. */
   enabled?: boolean;
   /** Whether or not this command is still in development and should be setup in the dev server for testing. */
