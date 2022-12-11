@@ -1,6 +1,6 @@
 import { config } from "https://deno.land/x/dotenv@v3.2.0/mod.ts";
 import { discordeno } from "@deps";
-const env = config({ export: true, path: "./.env" });
+const env = config({ export: true, path: ".env" });
 
 interface Config {
   token: string;
