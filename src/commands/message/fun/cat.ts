@@ -1,26 +1,15 @@
-import { discordeno } from "@deps";
-import { BotClient } from "@base/CC-OSV-Client.ts";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
+import { addMsgCommand } from "@classes/command.ts";
 import { send } from "@utils/send.ts";
 
-class Cat extends CCOSVMsgCommand {
-  constructor() {
-    super("cat", "fun", {
-      aliases: ["kitty"],
-      description: "meow meow",
-    });
-  }
-
-  override run(
-    bot: BotClient,
-    message: discordeno.Message,
-    _args: string[],
-  ): void {
+export default addMsgCommand({
+  name: "cat",
+  mod: "fun",
+  description: "meow meow",
+  aliases: ["kitty"],
+  run: (bot, message, _args) => {
     fetch("https://aws.random.cat/meow").then(async (r) => {
       const j = await r.json();
       send(bot, message.channelId, j.file);
     });
   }
-}
-
-addMsgCommand(new Cat());
+});

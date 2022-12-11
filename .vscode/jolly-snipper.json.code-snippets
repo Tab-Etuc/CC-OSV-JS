@@ -1,0 +1,36 @@
+{
+  "Command template": {
+    "scope": "typescript",
+    "prefix": "command",
+    "description": "Create new Jolly command from template",
+    "body": [
+      "import { discordeno.Message } from \"@deps\";",
+      "import { addMsgCommand, CCOSVMsgCommand } from \"@classes/command.ts\";",
+      "import { send } from \"@utils/send.ts\";",
+      "",
+      "class $1 extends CCOSVMsgCommand {",
+      "    constructor() {",
+      "        super(\"$2\", \"$3\")",
+      "    }",
+      "",
+      "    override async run(message: Message, args: string[], bot:  BotWithCache) {",
+      "        return await send(bot, message.channelId, \"Hello world!\");",
+      "    }",
+      "}",
+      "",
+      "addMsgCommand(new $1())"
+    ]
+  },
+  "Plugin Template": {
+    "scope": "typescript",
+    "prefix": "plugin",
+    "description": "Create an empty plugin",
+    "body": [
+      "import { discordeno.config, Message } from \"@deps\";",
+      "",
+      "export async function $1(bot:  $2) {",
+      "    $3",
+      "}"
+    ]
+  }
+}

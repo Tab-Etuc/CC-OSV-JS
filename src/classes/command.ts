@@ -1,39 +1,11 @@
 import { config, discordeno, hasGuildPermissions } from "@deps";
 import { send } from "@utils/send.ts";
 import { Bot, BotClient } from "@base/CC-OSV-Client.ts";
+import { InteractionWithCustomProps } from "../typings/discordeno.ts";
 
 export let prefix: string;
 
 prefix = config.prefixes[0];
-
-interface MsgCommand {
-  name: string;
-  owner?: boolean;
-  mod: string;
-  aliases?: string[];
-  permission?: discordeno.PermissionStrings[];
-  description?: string;
-  requiredArgs?: boolean;
-  usage?: string;
-  run?: (
-    bot: BotClient,
-    message: discordeno.Message,
-    args: string[],
-  ) => void;
-}
-
-interface SlashCommand {
-  name: string;
-  mod: string;
-  type: discordeno.ApplicationCommandTypes;
-  description?: string;
-  nameLocalizations?: discordeno.Localization;
-  descriptionLocalizations?: discordeno.Localization;
-  run?: (
-    Bot: BotClient,
-    interaction: discordeno.Interaction,
-  ) => void;
-}
 
 export async function refreshCommand(): Promise<void> {
   // Message commands
@@ -67,61 +39,68 @@ export const globalSlashCommand = new discordeno.Collection<
   CCOSVSlashCommand
 >();
 
-export class CCOSVMsgCommand implements MsgCommand {
-  public name: string;
-  public description: string;
-  public aliases: string[];
-  public permission?: discordeno.PermissionStrings[];
-  public owner?: boolean;
-  public mod: string;
-  public usage: string;
-  public requiredArgs?: boolean;
-
-  constructor(name: string, mod: string, options?: Partial<MsgCommand>) {
-    this.name = name;
-    this.description = options?.description || "No description found";
-    this.aliases = options?.aliases || ["No aliases found"];
-    this.permission = options?.permission;
-    this.owner = options?.owner;
-    this.mod = mod;
-    this.usage = options?.usage || "";
-    this.requiredArgs = options?.requiredArgs || false;
-    this.run = options?.run || this.run;
-  }
-
-  // deno-lint-ignore no-unused-vars
-  run(bot: BotClient, message: discordeno.Message, args: string[]): void {}
+export interface CCOSVSlashCommand {
+  /** The name of the command, used for both slash and message commands. */
+  name: string;
+  /** The type of command. */
+  type?: discordeno.ApplicationCommandTypes;
+  /** The description of the command*/
+  description: string;
+  nameLocalizations: discordeno.Localization;
+  descriptionLocalizations: discordeno.Localization;
+  /** The options for the command, used for both slash and message commands. */
+  // options?: ApplicationCommandOption[];
+  options?: discordeno.ApplicationCommandOption[];
+  run: (bot: BotClient, data: discordeno.Interaction) => unknown;
+  /** Whether or not this slash command should be enabled right now. Defaults to true. */
+  enabled?: boolean;
+  /** Whether or not this command is still in development and should be setup in the dev server for testing. */
+  dev?: boolean;
+  /** Whether or not this command will take longer than 3s and need to acknowledge to discord. */
+  acknowledge?: boolean;
 }
 
-export class CCOSVSlashCommand implements SlashCommand {
-  public name: string;
-  public mod: string;
-  public type: discordeno.ApplicationCommandTypes;
-  public options: discordeno.ApplicationCommandOption[] = [];
-  public description: string;
-  public nameLocalizations: discordeno.Localization;
-  public descriptionLocalizations: discordeno.Localization;
-
-  constructor(
-    name: string,
-    mod: string,
-    type: discordeno.ApplicationCommandTypes,
-    options: discordeno.ApplicationCommandOption[] = [],
-    otherOptions?: Partial<SlashCommand>,
-  ) {
-    this.name = name;
-    this.mod = mod;
-    this.type = type;
-    this.options = options;
-    this.description = otherOptions?.description || "No description found";
-    this.nameLocalizations = otherOptions?.nameLocalizations || {};
-    this.descriptionLocalizations = otherOptions?.descriptionLocalizations ||
-      {};
-    this.run = otherOptions?.run || this.run;
-  }
-  // deno-lint-ignore no-unused-vars
-  run(bot: BotClient, interaction: discordeno.Interaction): void {}
+export interface CCOSVMsgCommand {
+  name: string;
+  mod: string;
+  description: string;
+  aliases: string[];
+  permission?: discordeno.PermissionStrings[];
+  owner?: boolean;
+  usage?: string;
+  requiredArgs?: boolean;
+  run: (bot: BotClient, message: discordeno.Message, args: string[]) => unknown;
 }
+
+// export class CCOSVSlashCommand implements SlashCommand {
+//   public name: string;
+//   public mod: string;
+//   public type: discordeno.ApplicationCommandTypes;
+//   public options: discordeno.ApplicationCommandOption[] = [];
+//   public description: string;
+//   public nameLocalizations: discordeno.Localization;
+//   public descriptionLocalizations: discordeno.Localization;
+
+//   constructor(
+//     name: string,
+//     mod: string,
+//     type: discordeno.ApplicationCommandTypes,
+//     options: discordeno.ApplicationCommandOption[] = [],
+//     otherOptions?: Partial<SlashCommand>,
+//   ) {
+//     this.name = name;
+//     this.mod = mod;
+//     this.type = type;
+//     this.options = options;
+//     this.description = otherOptions?.description || "No description found";
+//     this.nameLocalizations = otherOptions?.nameLocalizations || {};
+//     this.descriptionLocalizations = otherOptions?.descriptionLocalizations ||
+//       {};
+//     this.run = otherOptions?.run || this.run;
+//   }
+//   // deno-lint-ignore no-unused-vars
+//   run(bot: BotClient, interaction: discordeno.Interaction): void {}
+// }
 
 export function addMsgCommand(cmd: CCOSVMsgCommand): void {
   globalMsgCommand.set(cmd.name, cmd);
@@ -157,28 +136,6 @@ function msgCommandRunner(
   }
 }
 
-function slashCommandRunner(
-  command: CCOSVSlashCommand,
-  bot: BotClient,
-  interaction: discordeno.Interaction,
-): void {
-  try {
-    command.run(bot, interaction);
-  } catch (error) {
-    if (error instanceof Error && error.stack) {
-      bot.helpers.sendInteractionResponse(interaction.id, interaction.token, {
-        type: discordeno.InteractionResponseTypes.ChannelMessageWithSource,
-        data: { content: String(error.stack) },
-      });
-    } else {
-      bot.helpers.sendInteractionResponse(interaction.id, interaction.token, {
-        type: discordeno.InteractionResponseTypes.ChannelMessageWithSource,
-        data: { content: String(error) },
-      });
-    }
-  }
-}
-
 function permissionChecker(
   bot: BotClient,
   command: CCOSVMsgCommand,
@@ -206,8 +163,9 @@ export function findMsgCommand(cmdName: string): CCOSVMsgCommand | undefined {
 }
 
 export function findSlashCommand(
-  cmdName: string,
+  cmdName: string | undefined,
 ): CCOSVSlashCommand | undefined {
+  if (!cmdName) return;
   return globalSlashCommand.get(cmdName);
 }
 
@@ -241,17 +199,5 @@ export function MsgCommandHandler(
     return false;
   }
   msgCommandRunner(command, message, args, bot);
-  return true;
-}
-
-export function SlashCommandHandler(
-  bot: BotClient,
-  interaction: discordeno.Interaction,
-): boolean {
-  const commandName = interaction?.data?.name;
-  if (!commandName) return false;
-  const command = findSlashCommand(commandName);
-  if (!command) return false;
-  slashCommandRunner(command, bot, interaction);
   return true;
 }

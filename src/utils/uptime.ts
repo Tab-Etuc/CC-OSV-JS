@@ -1,4 +1,4 @@
-import { BotUptime } from "@base/events.ts";
+import { BotUptime } from "@base/event/ready.ts";
 
 export function uptime() {
   const up = Date.now() - BotUptime;

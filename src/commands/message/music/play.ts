@@ -1,37 +1,29 @@
 import { config, discordeno, hasGuildPermissions } from "@deps";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
+import { addMsgCommand } from "@classes/command.ts";
 import { send } from "@utils/send.ts";
 import { CCOSVEmbed } from "@classes/embed.ts";
-import { BotClient } from "@base/CC-OSV-Client.ts";
 import { SongInfo } from "@interfaces/music.ts";
 import * as YtAPI from "@internal/ytreqs.ts";
 import * as SpotifyAPI from "@internal/spotify.ts";
 import { playQueueUntilEnd } from "@utils/music.ts";
 import { main } from "@utils/log.ts";
 
-class BotInfo extends CCOSVMsgCommand {
-  private selectSong: discordeno.ActionRow[];
-  constructor() {
-    super("play", "music", {
-      aliases: ["p"],
-      description: "play music",
-    });
-    this.selectSong = [];
-  }
+export default addMsgCommand({
+  name: "play",
+  mod: "music",
+  description: "play music",
+  aliases: ["p"],
+  usage: "[command]",
+  run: async (bot, message, args) => {
+    function msToTime(time: number) {
+      const ms = time % 1e3,
+        secs = (time = (time - ms) / 1e3) % 60,
+        mins = (time = (time - secs) / 60) % 60,
+        hrs = (time - mins) / 60;
+      return (0 !== hrs ? hrs + ":" : "") + mins + ":" + secs;
+    }
+    let selectSong: discordeno.ActionRow[] = [];
 
-  private msToTime(time: number) {
-    const ms = time % 1e3,
-      secs = (time = (time - ms) / 1e3) % 60,
-      mins = (time = (time - secs) / 60) % 60,
-      hrs = (time - mins) / 60;
-    return (0 !== hrs ? hrs + ":" : "") + mins + ":" + secs;
-  }
-
-  override async run(
-    bot: BotClient,
-    message: discordeno.Message,
-    args: string[],
-  ): Promise<void> {
     const msg_ = await bot.helpers.sendMessage(message.channelId, {
       content: ":mag_right: | 搜尋中...",
       messageReference: {
@@ -424,10 +416,10 @@ class BotInfo extends CCOSVMsgCommand {
             selectData[i] = {
               "label": searched.tracks[i].info.title,
               "value": i.toString(),
-              "description": this.msToTime(searched.tracks[i].info.length),
+              "description": msToTime(searched.tracks[i].info.length),
             };
           }
-          this.selectSong = [
+          selectSong = [
             {
               type: 1, // Action Row
               components: [
@@ -454,7 +446,7 @@ class BotInfo extends CCOSVMsgCommand {
           ];
           bot.helpers.deleteMessage(message.channelId, msg_.id);
           bot.helpers.sendMessage(message.channelId, {
-            components: this.selectSong,
+            components: selectSong,
             messageReference: { messageId: message.id, failIfNotExists: true },
           });
           const userSelectData: SongInfo[] = [];
@@ -503,7 +495,5 @@ class BotInfo extends CCOSVMsgCommand {
     } else {
       currQueue.push(...songInfo);
     }
-  }
-}
-
-addMsgCommand(new BotInfo());
+  },
+});

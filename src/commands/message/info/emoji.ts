@@ -1,21 +1,12 @@
-import { discordeno } from "@deps";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
+import { addMsgCommand } from "@classes/command.ts";
 import { send } from "@utils/send.ts";
-import { BotClient } from "@base/CC-OSV-Client.ts";
 
-class Emoji extends CCOSVMsgCommand {
-  constructor() {
-    super("emoji", "info", {
-      aliases: ["e", "emote"],
-      description: "Display emoji as image",
-    });
-  }
-
-  override run(
-    bot: BotClient,
-    message: discordeno.Message,
-    args: string[],
-  ) {
+export default addMsgCommand({
+  name: "emoji",
+  mod: "info",
+  description: "Display emoji as image",
+  aliases: ["e", "emote"],
+  run: (bot, message, args) => {
     const arg = args[0];
     if (!arg) {
       return send(
@@ -38,7 +29,5 @@ class Emoji extends CCOSVMsgCommand {
       animated ? "gif" : "png"
     }`;
     return send(bot, message.channelId, url);
-  }
-}
-
-addMsgCommand(new Emoji());
+  },
+});

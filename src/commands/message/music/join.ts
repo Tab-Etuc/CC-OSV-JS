@@ -1,20 +1,13 @@
-import { discordeno, hasGuildPermissions } from "@deps";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
-import { BotClient } from "@base/CC-OSV-Client.ts";
+import { hasGuildPermissions } from "@deps";
+import { addMsgCommand } from "@classes/command.ts";
 
-class Help extends CCOSVMsgCommand {
-  constructor() {
-    super("join", "music", {
-      description: "join the channel",
-      usage: "[command]",
-    });
-  }
-
-  override async run(
-    bot: BotClient,
-    message: discordeno.Message,
-    _args: string[],
-  ): Promise<void> {
+export default addMsgCommand({
+  name: "join",
+  mod: "music",
+  description: "join the channel",
+  aliases: ["j"],
+  usage: "[command]",
+  run: async (bot, message, _args) => {
     let player = bot.guildPlayers.get(message.guildId!);
 
     if (!player?.connected) {
@@ -66,7 +59,5 @@ class Help extends CCOSVMsgCommand {
     }
     player ??= bot.musicNode.createPlayer(message.guildId!);
     player.connect(memberVoiceData.channelId);
-  }
-}
-
-addMsgCommand(new Help());
+  },
+});

@@ -3,10 +3,9 @@
     "@base/": "./src/base/",
     "@deps": "./deps.ts",
     "@classes/": "./src/classes/",
+    "@typings/": "./src/typings/",
     "@utils/": "./src/utils/",
     "@const/": "./src/constants/",
-    "@plugins/": "./src/plugins/",
-    "@assets/": "./assets/",
     "@internal/": "./src/internal/",
     "@interfaces/": "./src/interfaces/",
     "@languages/": "./src/languages/"

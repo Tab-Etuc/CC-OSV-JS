@@ -1,20 +1,13 @@
-import { discordeno } from "@deps";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
+import { addMsgCommand } from "@classes/command.ts";
 import { CCOSVEmbed } from "@classes/embed.ts";
-import { BotClient } from "@base/CC-OSV-Client.ts";
 
-class BotInfo extends CCOSVMsgCommand {
-  constructor() {
-    super("volume", "music", {
-      aliases: ["p"],
-      description: "set music volume",
-    });
-  }
-  override async run(
-    bot: BotClient,
-    message: discordeno.Message,
-    args: string[],
-  ): Promise<void> {
+export default addMsgCommand({
+  name: "volume",
+  mod: "music",
+  description: "set music volume",
+  aliases: ["v"],
+  usage: "[command]",
+  run: async (bot, message, args) => {
     if (args.length < 1) {
       await bot.helpers.sendMessage(message.channelId, {
         embeds: new CCOSVEmbed()
@@ -46,7 +39,5 @@ class BotInfo extends CCOSVMsgCommand {
       return;
     }
     player.setVolume(+args[0]);
-  }
-}
-
-addMsgCommand(new BotInfo());
+  },
+});

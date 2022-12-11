@@ -39,10 +39,16 @@ function ChangeClockTime(bot: BotClient, ClockTime_Array: string[]) {
     channelName = channel.name!;
     channelName = channelName.replace(/🕠現在時刻：|點/g, "");
     if (channelName !== TimeHour) {
-      discordeno.editChannel(bot, channel.id, {
-        name: "🕠現在時刻：" + TimeHour + "點",
+      bot.rest.runMethod<discordeno.DiscordChannel>(
+        bot.rest,
+        "PATCH",
+        bot.constants.routes.CHANNEL(channel.id),
+        {
+          name: "🕠現在時刻：" + TimeHour + "點",
+        },
+      ).then((channel) => {
+        if (channel.name == "🕠現在時刻：" + TimeHour + "點") main.info("已更換頻道時間");
       });
-      main.info("已更換頻道時間");
     }
   }
 }

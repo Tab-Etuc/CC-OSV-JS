@@ -1,24 +1,16 @@
-import { discordeno } from "@deps";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
+import { addMsgCommand } from "@classes/command.ts";
 import { send } from "@utils/send.ts";
 import { createdAt } from "@utils/snowflake.ts";
 import { CCOSVEmbed } from "@classes/embed.ts";
 import { COLORS } from "@const/colors.ts";
-import { BotClient } from "@base/CC-OSV-Client.ts";
 
-class Snowflake extends CCOSVMsgCommand {
-  constructor() {
-    super("snowflake", "utils", {
-      aliases: ["snow"],
-      description: "Get a creation data from ID",
-    });
-  }
-
-  override run(
-    bot: BotClient,
-    message: discordeno.Message,
-    args: string[],
-  ): void {
+export default addMsgCommand({
+  name: "snowflake",
+  mod: "utils",
+  description: "Get a creation data from ID",
+  aliases: ["snow"],
+  usage: "[command]",
+  run: (bot, message, args) => {
     if (!args[0]) {
       send(bot, message.channelId, "Give me random ID lol");
       return;
@@ -35,7 +27,5 @@ class Snowflake extends CCOSVMsgCommand {
     } catch {
       send(bot, message.channelId, "Invalid ID");
     }
-  }
-}
-
-addMsgCommand(new Snowflake());
+  },
+});

@@ -46,7 +46,6 @@ export async function playQueueUntilEnd(
           send(bot, channelId, em);
           return;
         }
-        // If we have no more songs, and not loop mode, end the queue
         if (player.trackRepeat) {
           await playQueueUntilEnd(bot, channelId, player, guildId, undefined);
           return;

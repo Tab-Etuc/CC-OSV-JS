@@ -1,21 +1,13 @@
-import { discordeno } from "@deps";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
-import { BotClient } from "@base/CC-OSV-Client.ts";
+import { addMsgCommand } from "@classes/command.ts";
 import { CCOSVEmbed } from "@classes/embed.ts";
 
-class Help extends CCOSVMsgCommand {
-  constructor() {
-    super("nowplaying", "music", {
-      description: "loop the current song",
-      usage: "[command]",
-    });
-  }
-
-  override async run(
-    bot: BotClient,
-    message: discordeno.Message,
-    _args: string[],
-  ): Promise<void> {
+export default addMsgCommand({
+  name: "nowplaying",
+  mod: "music",
+  description: "the current song",
+  aliases: ["np"],
+  usage: "[command]",
+  run: async (bot, message, _args) => {
     const player = bot.guildPlayers.get(message.guildId!);
     const current = bot.guildQueues.get(message.guildId!);
     if (!player?.connected || !current) {
@@ -42,7 +34,5 @@ class Help extends CCOSVMsgCommand {
         failIfNotExists: true,
       },
     });
-  }
-}
-
-addMsgCommand(new Help());
+  },
+});

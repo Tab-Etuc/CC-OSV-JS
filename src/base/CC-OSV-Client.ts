@@ -1,6 +1,6 @@
 import { config, ddPlugins, discordeno, lavadeno, mongo } from "@deps";
 import { SongInfo } from "@interfaces/music.ts";
-import { CCOSVEvent } from "@base/events.ts";
+import { setupEventHandlers } from "@base/event/mod.ts";
 import { lavalink } from "@utils/log.ts";
 
 import "@utils/stringFormat.ts";
@@ -11,7 +11,6 @@ const bot = discordeno.createBot({
     discordeno.GatewayIntents.GuildVoiceStates |
     discordeno.GatewayIntents.Guilds |
     discordeno.GatewayIntents.MessageContent,
-  events: CCOSVEvent,
 });
 
 ddPlugins.enableHelpersPlugin(bot);
@@ -30,6 +29,7 @@ export interface BotClient
 export const Bot = bot as BotClient;
 export const MongoDB = new mongo.MongoClient();
 
+setupEventHandlers();
 Bot.guildPlayers = new Map<bigint, lavadeno.Player>();
 Bot.guildCurrentTrack = new Map<bigint, SongInfo>();
 Bot.guildQueues = new Map<bigint, SongInfo[]>();
@@ -37,9 +37,9 @@ Bot.guildSelectCollectors = new Map<bigint, SongInfo[]>();
 Bot.musicNode = new lavadeno.Cluster({
   nodes: [{
     id: "main",
-    host: "lavalink.oops.wtf",
-    port: 2000,
-    password: "www.freelavalink.ga",
+    host: "lava.link",
+    port: 80,
+    password: "boolookbelow",
   }],
 
   sendGatewayPayload: (id: bigint, payload: lavadeno.UpdateVoiceStatus) =>

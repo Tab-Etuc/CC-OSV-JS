@@ -1,35 +1,24 @@
-import { discordeno } from "@deps";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
+import { addMsgCommand } from "@classes/command.ts";
 import { send } from "@utils/send.ts";
 import { Reddit } from "@classes/reddit.ts";
 import { main } from "@utils/log.ts";
-import { BotClient } from "@base/CC-OSV-Client.ts";
 
-class Meme extends CCOSVMsgCommand {
-  private readonly subredditMeme: string[];
-
-  constructor() {
-    super("meme", "reddit", {
-      description: "Get random memes",
-    });
-    this.subredditMeme = ["dankmemes", "meme", "memes"];
-  }
-
-  override async run(
-    bot: BotClient,
-    message: discordeno.Message,
-    _: string[],
-  ): Promise<void> {
+export default addMsgCommand({
+  name: "meme",
+  mod: "reddit",
+  description: "Get random memes",
+  aliases: [],
+  usage: "[command]",
+  run: async (bot, message, _args) => {
+    const subredditMeme = ["dankmemes", "meme", "memes"];
     try {
-      const subPick = this
-        .subredditMeme[Math.floor(Math.random() * this.subredditMeme.length)];
+      const subPick =
+        subredditMeme[Math.floor(Math.random() * subredditMeme.length)];
       const reddit = new Reddit(subPick, "hot");
       const e = await reddit.toEmbed(true);
       send(bot, message.channelId, e);
     } catch (e) {
       main.error(e);
     }
-  }
-}
-
-addMsgCommand(new Meme());
+  },
+});

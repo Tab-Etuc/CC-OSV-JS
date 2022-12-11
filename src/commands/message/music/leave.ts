@@ -1,20 +1,12 @@
-import { discordeno } from "@deps";
-import { addMsgCommand, CCOSVMsgCommand } from "@classes/command.ts";
-import { BotClient } from "@base/CC-OSV-Client.ts";
+import { addMsgCommand } from "@classes/command.ts";
 
-class Help extends CCOSVMsgCommand {
-  constructor() {
-    super("leave", "music", {
-      description: "leave the channel",
-      usage: "[command]",
-    });
-  }
-
-  override async run(
-    bot: BotClient,
-    message: discordeno.Message,
-    _args: string[],
-  ): Promise<void> {
+export default addMsgCommand({
+  name: "leave",
+  mod: "music",
+  description: "leave the channel",
+  aliases: ["l"],
+  usage: "[command]",
+  run: async (bot, message, _args) => {
     const player = bot.guildPlayers.get(message.guildId!);
 
     if (!player?.connected) {
@@ -40,7 +32,5 @@ class Help extends CCOSVMsgCommand {
         failIfNotExists: true,
       },
     });
-  }
-}
-
-addMsgCommand(new Help());
+  },
+});
