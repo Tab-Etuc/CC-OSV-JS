@@ -46,8 +46,8 @@ export interface CCOSVSlashCommand {
   type?: discordeno.ApplicationCommandTypes;
   /** The description of the command*/
   description: string;
-  nameLocalizations: discordeno.Localization;
-  descriptionLocalizations: discordeno.Localization;
+  nameLocalizations?: discordeno.Localization;
+  descriptionLocalizations?: discordeno.Localization;
   /** The options for the command, used for both slash and message commands. */
   // options?: ApplicationCommandOption[];
   options?: discordeno.ApplicationCommandOption[];
@@ -111,8 +111,8 @@ export function addSlashCommand(cmd: CCOSVSlashCommand): void {
 
   const d = {
     name: cmd.name,
-    nameLocalizations: cmd.nameLocalizations,
-    descriptionLocalizations: cmd.descriptionLocalizations,
+    nameLocalizations: cmd?.nameLocalizations ?? undefined,
+    descriptionLocalizations: cmd.descriptionLocalizations ?? undefined,
     description: cmd?.description ?? "Empty description",
     options: cmd?.options ?? [],
   };

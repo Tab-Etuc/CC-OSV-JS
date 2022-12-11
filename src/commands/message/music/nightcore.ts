@@ -21,13 +21,14 @@ export default addMsgCommand({
       });
       return;
     }
-    player.filters.timescale = player.filters.timescale?.rate !== 1.0
-      ? { rate: 1.09, pitch: 1.125, speed: 1 }
-      : { rate: 1, pitch: 1, speed: 1 };
+    player.filters.timescale = player.filters.timescale?.rate == 1.09
+      ? { rate: 1, pitch: 1, speed: 1 }
+      : { rate: 1.09, pitch: 1.125, speed: 1 };
+    player.setFilters();
     await bot.helpers.sendMessage(message.channelId, {
       content: `${
-        player.filters.timescale?.pitch === 1 ? "Enabled" : "Disabled"
-      } **nightcore**!`,
+        player.filters.timescale?.pitch === 1 ? "Disabled" : "Enabled"
+      } **nightcore**!（請等待約５秒左右）`,
       messageReference: {
         messageId: message.id,
         channelId: message.channelId,
@@ -35,7 +36,5 @@ export default addMsgCommand({
         failIfNotExists: true,
       },
     });
-
-    player.setFilters();
   },
 });

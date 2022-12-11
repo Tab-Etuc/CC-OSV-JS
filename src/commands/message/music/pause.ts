@@ -1,10 +1,10 @@
 import { addMsgCommand } from "@classes/command.ts";
 
 export default addMsgCommand({
-  name: "skip",
+  name: "pause",
   mod: "music",
-  description: "skip music",
-  aliases: ["s"],
+  description: "pause music",
+  aliases: ["p"],
   usage: "[command]",
   run: async (bot, message, _args) => {
     const player = bot.guildPlayers.get(message.guildId!);
@@ -35,5 +35,14 @@ export default addMsgCommand({
     }
 
     player.pause(true);
+    await bot.helpers.sendMessage(message.channelId, {
+      content: "**音樂已暫停！**",
+      messageReference: {
+        messageId: message.id,
+        channelId: message.channelId,
+        guildId: message.guildId,
+        failIfNotExists: true,
+      },
+    });
   },
 });

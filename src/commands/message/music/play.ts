@@ -459,7 +459,6 @@ export default addMsgCommand({
             } as SongInfo);
           }
           bot.guildSelectCollectors.set(message.guildId!, userSelectData);
-
           return;
         } catch (err) {
           main.error(err);

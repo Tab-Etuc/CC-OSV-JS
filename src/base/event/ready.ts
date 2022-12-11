@@ -30,8 +30,8 @@ export function setReadyEvent() {
         Bot.guilds.reduce((a, g) => a + g.memberCount, 0),
       );
     }
-    setInterval(() => {
-      Bot.helpers.editBotStatus(status);
+    setInterval(async () => {
+      await Bot.helpers.editBotStatus(status);
     }, 6e4); // 60s = 60000ms :D
     refreshCommand();
   };

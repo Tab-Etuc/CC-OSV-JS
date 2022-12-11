@@ -10,9 +10,9 @@ export default addMsgCommand({
   run: async (bot, message, _args) => {
     let player = bot.guildPlayers.get(message.guildId!);
 
-    if (!player?.connected) {
+    if (player?.connected) {
       await bot.helpers.sendMessage(message.channelId, {
-        content: "**目前沒有播放任何音樂...**",
+        content: "**已連接至語音頻道...**",
         messageReference: {
           messageId: message.id,
           channelId: message.channelId,

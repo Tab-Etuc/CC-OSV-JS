@@ -11,7 +11,7 @@ export default addMsgCommand({
 
     if (!player?.connected) {
       await bot.helpers.sendMessage(message.channelId, {
-        content: "**目前沒有播放任何音樂...**",
+        content: "**機器人不在頻道之中...**",
         messageReference: {
           messageId: message.id,
           channelId: message.channelId,

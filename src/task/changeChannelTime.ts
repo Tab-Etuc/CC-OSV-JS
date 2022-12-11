@@ -16,10 +16,10 @@ export function ChangeTime(bot: BotClient) {
         const ClockTime_Array = server.ClockTime;
         const ClockDate_Array = server.ClockDate;
         ClockTime_Array &&
-          ChangeClockTime(bot, ClockTime_Array);
+          await ChangeClockTime(bot, ClockTime_Array);
 
         ClockDate_Array &&
-          ChangeClockDate(bot, ClockDate_Array);
+          await ChangeClockDate(bot, ClockDate_Array);
       });
     } catch (err) {
       main.error(err);
@@ -27,7 +27,7 @@ export function ChangeTime(bot: BotClient) {
   }, 3e4); // 30s = 30000ms :D
 }
 
-function ChangeClockTime(bot: BotClient, ClockTime_Array: string[]) {
+async function ChangeClockTime(bot: BotClient, ClockTime_Array: string[]) {
   let channelName = "";
   const TimeHour = time()
     .tz("Asia/Taipei")
@@ -39,7 +39,7 @@ function ChangeClockTime(bot: BotClient, ClockTime_Array: string[]) {
     channelName = channel.name!;
     channelName = channelName.replace(/🕠現在時刻：|點/g, "");
     if (channelName !== TimeHour) {
-      bot.rest.runMethod<discordeno.DiscordChannel>(
+      await bot.rest.runMethod<discordeno.DiscordChannel>(
         bot.rest,
         "PATCH",
         bot.constants.routes.CHANNEL(channel.id),
@@ -52,7 +52,7 @@ function ChangeClockTime(bot: BotClient, ClockTime_Array: string[]) {
     }
   }
 }
-function ChangeClockDate(bot: BotClient, ClockDate_Array: string[]) {
+async function ChangeClockDate(bot: BotClient, ClockDate_Array: string[]) {
   let channelName = "";
   const Time = time()
     .tz("Asia/Taipei")
@@ -66,10 +66,18 @@ function ChangeClockDate(bot: BotClient, ClockDate_Array: string[]) {
     channelName = channelName.replace(/📅貳年●|月|日●/g, "");
 
     if (channelName !== TimeMonth.toString() + TimeDate.toString()) {
-      discordeno.editChannel(bot, channel.id, {
-        name: "📅貳年●" + TimeMonth + "月" + TimeDate + "日●",
+      await bot.rest.runMethod<discordeno.DiscordChannel>(
+        bot.rest,
+        "PATCH",
+        bot.constants.routes.CHANNEL(channel.id),
+        {
+          name: "📅貳年●" + TimeMonth + "月" + TimeDate + "日●",
+        },
+      ).then((channel) => {
+        if (channel.name == "📅貳年●" + TimeMonth + "月" + TimeDate + "日●") {
+          main.info("已更換頻道日期");
+        }
       });
-      main.info("已更換頻道日期");
     }
   }
 }

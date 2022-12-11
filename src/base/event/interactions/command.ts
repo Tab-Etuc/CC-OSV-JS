@@ -8,7 +8,7 @@ export async function executeSlashCommand(
 ) {
   const command = findSlashCommand(interaction?.data?.name);
   if (!command) return;
-  if (interaction.guildId) {
+  if (command.acknowledge) {
     await bot.helpers.sendInteractionResponse(
       interaction.id,
       interaction.token,

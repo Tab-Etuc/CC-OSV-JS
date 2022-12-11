@@ -12,7 +12,10 @@ export async function playQueueUntilEnd(
   guildId: bigint,
   deleteMsg: discordeno.Message | undefined,
 ) {
-  deleteMsg && bot.helpers.deleteMessage(deleteMsg.channelId, deleteMsg.id);
+  deleteMsg &&
+    bot.helpers.deleteMessage(deleteMsg.channelId, deleteMsg.id).catch((err) =>
+      console.log(err)
+    );
   const queue = bot.guildQueues.get(guildId);
   if (!queue || queue.length === 0) {
     const em = new CCOSVEmbed()

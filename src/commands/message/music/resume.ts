@@ -35,5 +35,14 @@ export default addMsgCommand({
     }
 
     player.pause(false);
+    await bot.helpers.sendMessage(message.channelId, {
+      content: "**音樂已恢復播放**",
+      messageReference: {
+        messageId: message.id,
+        channelId: message.channelId,
+        guildId: message.guildId,
+        failIfNotExists: true,
+      },
+    });
   },
 });

@@ -85,7 +85,6 @@ export default addSlashCommand({
     }
 
     const query = String(interaction.data!.options![0]!.value!);
-    console.log(query);
     let didPreload = false;
 
     const songInfo: SongInfo[] = [];
@@ -370,7 +369,8 @@ export default addSlashCommand({
         // Query terms - look them up
         const searched = await bot.musicNode.rest.loadTracks(
           `ytsearch:${query}`,
-        ).catch();
+        ).catch((err) => console.log(err));
+        if (!searched) return;
         try {
           const selectData: discordeno.SelectOption[] = [];
           for (let i = 0; i < 5; i++) {
@@ -406,9 +406,8 @@ export default addSlashCommand({
             },
           ];
 
-          await interaction.reply({
-            type: 4,
-            data: { components: selectSong },
+          await interaction.editReply({
+            components: selectSong,
           });
           const userSelectData: SongInfo[] = [];
           for (const i in selectData) {
@@ -420,7 +419,6 @@ export default addSlashCommand({
             } as SongInfo);
           }
           bot.guildSelectCollectors.set(interaction.guildId!, userSelectData);
-
           return;
         } catch (err) {
           main.error(err);
