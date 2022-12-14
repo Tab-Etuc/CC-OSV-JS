@@ -37,9 +37,9 @@ Bot.guildSelectCollectors = new Map<bigint, SongInfo[]>();
 Bot.musicNode = new lavadeno.Cluster({
   nodes: [{
     id: "main",
-    host: "nonssl.freelavalink.ga",
-    port: 80,
-    password: "www.freelavalink.ga",
+    host: "lavalink4africa.islantay.tk",
+    port: 8880,
+    password: "AmeliaWatsonisTheBest**!",
   }],
 
   sendGatewayPayload: (id: bigint, payload: lavadeno.UpdateVoiceStatus) =>
