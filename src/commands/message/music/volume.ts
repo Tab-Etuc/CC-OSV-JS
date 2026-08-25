@@ -1,43 +1,18 @@
 import { addMsgCommand } from "@classes/command.ts";
-import { CCOSVEmbed } from "@classes/embed.ts";
+import { setMusicVolume } from "@services/musicCommands.ts";
+import { runMessageGuildAction } from "@services/commandAdapters.ts";
 
 export default addMsgCommand({
   name: "volume",
   mod: "music",
-  description: "set music volume",
+  description: "調整音量",
   aliases: ["v"],
-  usage: "[command]",
-  run: async (bot, message, args) => {
-    if (args.length < 1) {
-      await bot.helpers.sendMessage(message.channelId, {
-        embeds: new CCOSVEmbed()
-          .setDesc(":x: You didn't enter a volume")
-          .build(),
-        messageReference: {
-          messageId: message.id,
-          channelId: message.channelId,
-          guildId: message.guildId,
-          failIfNotExists: true,
-        },
-      });
-
-      return;
-    }
-    const player = bot.guildPlayers.get(message.guildId!);
-    if (!player?.connected) {
-      await bot.helpers.sendMessage(message.channelId, {
-        embeds: new CCOSVEmbed()
-          .setDesc(":x: A player for this guild doesn't exist.")
-          .build(),
-        messageReference: {
-          messageId: message.id,
-          channelId: message.channelId,
-          guildId: message.guildId,
-          failIfNotExists: true,
-        },
-      });
-      return;
-    }
-    player.setVolume(+args[0]);
-  },
+  requiredArgs: true,
+  usage: "<0-1000>",
+  run: (bot, message, args) =>
+    runMessageGuildAction(
+      bot,
+      message,
+      (bot, guildId) => setMusicVolume(bot, guildId, args[0] ?? ""),
+    ),
 });

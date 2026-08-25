@@ -1,6 +1,6 @@
 export interface SongInfo {
-  track: string; // track for lavalink
-  title: string; // song title
-  link: string; // youtube link to the song
-  queued: bigint; // id of who queued the song
+  track: string; // Lavalink 播放用的編碼
+  title: string; // 歌曲標題
+  link: string; // 歌曲網址
+  queued: bigint; // 加入佇列的使用者 ID
 }

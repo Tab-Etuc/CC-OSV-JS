@@ -1,20 +1,25 @@
 import { addSlashCommand } from "@classes/command.ts";
+import { setMusicLoop } from "@services/musicCommands.ts";
+import { runSlashGuildAction, slashOption } from "@services/commandAdapters.ts";
 
 export default addSlashCommand({
   name: "loop",
-  description: "loop the current song",
+  description: "切換單曲或整個佇列循環",
   nameLocalizations: { "zh-TW": "循環播放" },
-  descriptionLocalizations: { "zh-TW": "重複播放當前歌曲" },
-  acknowledge: false,
-  run: async (bot, interaction) => {
-    const player = bot.guildPlayers.get(interaction.guildId!);
-
-    if (!player?.connected) {
-      return await interaction.reply("**目前沒有播放任何音樂...**");
-    }
-
-    player.setTrackRepeat(!player.trackRepeat);
-    const trackRepeat = player.trackRepeat ? "啟用" : "關閉";
-    await interaction.reply(`循環模式已${trackRepeat}`);
-  },
+  descriptionLocalizations: { "zh-TW": "重複播放目前歌曲" },
+  options: [{
+    name: "mode",
+    type: 3,
+    required: false,
+    description: "off、track 或 queue",
+    nameLocalizations: { "zh-TW": "模式" },
+    descriptionLocalizations: { "zh-TW": "關閉、單曲或整個佇列" },
+  }],
+  run: (bot, interaction) =>
+    runSlashGuildAction(
+      bot,
+      interaction,
+      (bot, guildId) =>
+        setMusicLoop(bot, guildId, slashOption(interaction, "mode")),
+    ),
 });

@@ -2,75 +2,75 @@ import { BotClient } from "@base/CC-OSV-Client.ts";
 import { discordeno, lavadeno } from "@deps";
 import { CCOSVEmbed } from "@classes/embed.ts";
 import { send } from "@utils/send.ts";
-import * as YtAPI from "@internal/ytreqs.ts";
-import { lavalink } from "@utils/log.ts";
 
+/** 播放目前佇列的第一首歌曲，歌曲結束後自動銜接下一首。 */
 export async function playQueueUntilEnd(
   bot: BotClient,
   channelId: bigint,
   player: lavadeno.Player,
   guildId: bigint,
   deleteMsg: discordeno.Message | undefined,
-) {
-  deleteMsg &&
-    bot.helpers.deleteMessage(deleteMsg.channelId, deleteMsg.id).catch((err) =>
-      console.log(err)
+): Promise<void> {
+  if (deleteMsg) {
+    await bot.helpers.deleteMessage(deleteMsg.channelId, deleteMsg.id).catch(
+      () => undefined,
     );
+  }
+
   const queue = bot.guildQueues.get(guildId);
-  if (!queue || queue.length === 0) {
-    const em = new CCOSVEmbed()
-      .setDesc(":x: Something went wrong...")
-      .build();
-    send(bot, channelId, em);
+  const current = queue?.[0];
+  if (!current) {
+    bot.guildCurrentTrack.delete(guildId);
     return;
   }
 
   try {
-    const connection = await player.play(queue[0].track);
+    await player.play(current.track);
+    bot.guildCurrentTrack.set(guildId, current);
+    const history = bot.guildHistory.get(guildId) ?? [];
+    if (history.at(-1)?.track !== current.track) {
+      history.push(current);
+      if (history.length > 25) history.shift();
+      bot.guildHistory.set(guildId, history);
+    }
+    await send(
+      bot,
+      channelId,
+      new CCOSVEmbed().setDesc(`正在播放：[${current.title}](${current.link})`)
+        .build(),
+    );
 
-    const link = YtAPI.getVideoId(queue[0].link) || queue[0].link;
-    const em = new CCOSVEmbed()
-      .setDesc(
-        `<a:loading:1034440004098863104>  [Now Playing: ${
-          queue[0].title
-        }](https://www.youtube.com/watch?v=${link}}) [<@${queue[0].queued}>]`,
-      )
-      .build();
-    send(bot, channelId, em);
-    bot.guildCurrentTrack.set(guildId, queue[0]);
-
-    connection
-      .once("trackEnd", async () => {
-        const queue = bot.guildQueues.get(guildId);
-        if (!queue) {
-          const em = new CCOSVEmbed()
-            .setDesc(":x: Something went wrong...")
-            .build();
-          send(bot, channelId, em);
-          return;
-        }
-        if (player.trackRepeat) {
-          await playQueueUntilEnd(bot, channelId, player, guildId, undefined);
-          return;
-        } else {
-          queue.shift();
-        }
-        if (queue.length < 1) {
-          const em = new CCOSVEmbed()
-            .setDesc(":white_check_mark: Finished the queue!")
-            .build();
-          send(bot, channelId, em);
-
-          player.disconnect();
-          bot.guildQueues.delete(guildId);
-        } else {
-          // Recursively play until we're done
-          await playQueueUntilEnd(bot, channelId, player, guildId, undefined);
-        }
-      });
-  } catch (err) {
-    lavalink.error("Player failed to play (abrupt stop?): " + err);
-    player.disconnect();
-    bot.musicNode.destroyPlayer(guildId);
+    player.once("trackEnd", async () => {
+      const activeQueue = bot.guildQueues.get(guildId);
+      if (!activeQueue || activeQueue[0] !== current) return;
+      if (player.trackRepeat) {
+        await playQueueUntilEnd(bot, channelId, player, guildId, undefined);
+        return;
+      }
+      if (player.queueRepeat) {
+        const repeated = activeQueue.shift();
+        if (repeated) activeQueue.push(repeated);
+        await playQueueUntilEnd(bot, channelId, player, guildId, undefined);
+        return;
+      }
+      activeQueue.shift();
+      if (activeQueue.length === 0) {
+        bot.guildQueues.delete(guildId);
+        bot.guildCurrentTrack.delete(guildId);
+        player.disconnect();
+        await send(bot, channelId, "播放佇列已結束。");
+        return;
+      }
+      await playQueueUntilEnd(bot, channelId, player, guildId, undefined);
+    });
+  } catch (error) {
+    bot.guildCurrentTrack.delete(guildId);
+    await send(bot, channelId, "播放歌曲時發生錯誤，已略過此歌曲。").catch(() =>
+      undefined
+    );
+    queue.shift();
+    if (queue.length === 0) bot.guildQueues.delete(guildId);
+    else await playQueueUntilEnd(bot, channelId, player, guildId, undefined);
+    console.error(error);
   }
 }

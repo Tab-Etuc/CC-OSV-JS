@@ -3,7 +3,6 @@ export * from "./src/clusternode.ts";
 export * from "./src/player.ts";
 export * from "./src/node.ts";
 export * from "./src/rest.ts";
-export * from "./src/routeplanner.ts";
 export * from "./src/connection.ts";
 
 export * from "./src/util/functions.ts";

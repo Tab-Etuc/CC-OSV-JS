@@ -3,55 +3,59 @@ import { OverflowError } from "@const/errors.ts";
 import { EMBED } from "@const/globalLimit.ts";
 import { COLORS } from "@const/colors.ts";
 import { CCOSVMsgCommand, prefix } from "@classes/command.ts";
+import { stripEmoji } from "@utils/text.ts";
 
-const hexToDecimal = (hex: string) => parseInt(hex, 16);
+const hexToDecimal = (hex: string): number => parseInt(hex, 16);
 
-export class CCOSVEmbed implements discordeno.DiscordEmbed {
-  public title?: string | undefined;
-  public description?: string | undefined;
-  public image?: discordeno.DiscordEmbedImage | undefined;
-  public author?: discordeno.DiscordEmbedAuthor | undefined;
-  public fields?: discordeno.DiscordEmbedField[] | undefined;
-  public thumbnail?: discordeno.DiscordEmbedThumbnail | undefined;
-  public url?: string | undefined;
-  public footer?: discordeno.DiscordEmbedFooter | undefined;
+/** 統一建立 Discord Embed，並在輸出前套用長度限制與文字清理。 */
+export class CCOSVEmbed
+  implements discordeno.Camelize<discordeno.DiscordEmbed> {
+  public title?: string;
+  public description?: string;
+  public image?: discordeno.EmbedImage;
+  public author?: discordeno.EmbedAuthor;
+  public fields: discordeno.EmbedField[] = [];
+  public thumbnail?: discordeno.EmbedThumbnail;
+  public url?: string;
+  public footer?: discordeno.EmbedFooter;
   public color: number;
-  public timestamp: string;
+  public timestamp?: string;
 
   constructor() {
-    this.timestamp = new Date().toISOString();
-    this.fields = [];
     this.color = COLORS.RANDOM;
-    return this;
   }
 
-  build(): discordeno.Embed[] {
+  build(): discordeno.Camelize<discordeno.DiscordEmbed>[] {
     return [this.toJSON()];
   }
 
   setTitle(name: string): this {
-    if (name.length > EMBED.TITLE) {
-      throw new OverflowError("Title", EMBED.TITLE);
+    const safeName = stripEmoji(name);
+    if (safeName.length > EMBED.TITLE) {
+      throw new OverflowError("標題", EMBED.TITLE);
     }
-    this.title = name;
+    this.title = safeName;
     return this;
   }
 
-  setFooter(name: string, iconURL?: string): this {
-    this.footer = { text: name, icon_url: iconURL };
+  setFooter(name: string, iconUrl?: string): this {
+    this.footer = iconUrl
+      ? { text: stripEmoji(name), iconUrl }
+      : { text: stripEmoji(name) };
     return this;
   }
 
   setDesc(desc: string): this {
-    if (desc.length > EMBED.DESCRIPTION) {
-      throw new OverflowError("Description", EMBED.DESCRIPTION);
+    const safeDesc = stripEmoji(desc);
+    if (safeDesc.length > EMBED.DESCRIPTION) {
+      throw new OverflowError("描述", EMBED.DESCRIPTION);
     }
-    this.description = desc;
+    this.description = safeDesc;
     return this;
   }
 
   setImg(url: string): this {
-    this.image = { url: url };
+    this.image = { url };
     return this;
   }
 
@@ -60,36 +64,47 @@ export class CCOSVEmbed implements discordeno.DiscordEmbed {
     return this;
   }
 
-  setAuthor(name: string, iconURL?: string, url?: string): this {
-    this.author = { name: name, icon_url: iconURL, url: url };
+  setAuthor(name: string, iconUrl?: string, url?: string): this {
+    this.author = {
+      name: stripEmoji(name),
+      ...(iconUrl ? { iconUrl } : {}),
+      ...(url ? { url } : {}),
+    };
     return this;
   }
 
   setColor(color: COLORS | string): this {
-    if (color == COLORS.RANDOM) {
-      color = Math.floor(Math.random() * 16777214);
+    if (color === COLORS.RANDOM) {
+      this.color = Math.floor(Math.random() * 0xffffff);
+      return this;
     }
-    if (typeof color == "string") {
-      color = hexToDecimal(color.replace("#", ""));
+    const decimal = typeof color === "string"
+      ? hexToDecimal(color.replace("#", ""))
+      : color;
+    if (!Number.isInteger(decimal) || decimal < 0 || decimal > 0xffffff) {
+      throw new RangeError("Embed 顏色必須是有效的十六進位顏色");
     }
-    this.color = color;
+    this.color = decimal;
     return this;
   }
 
   addField(name: string, value: string, inline?: boolean): this {
-    if (name.length > EMBED.FIELD_NAME) {
-      throw new OverflowError("Field name", EMBED.FIELD_NAME);
-    } else if (value.length > EMBED.FIELD_VALUE) {
-      throw new OverflowError("Field value", EMBED.FIELD_VALUE);
+    const safeName = stripEmoji(name);
+    const safeValue = stripEmoji(value);
+    if (safeName.length > EMBED.FIELD_NAME) {
+      throw new OverflowError("欄位名稱", EMBED.FIELD_NAME);
     }
-    this.fields!.push({ name: name, value: value, inline: inline });
+    if (safeValue.length > EMBED.FIELD_VALUE) {
+      throw new OverflowError("欄位內容", EMBED.FIELD_VALUE);
+    }
+    if (this.fields.length >= EMBED.FIELDS) {
+      throw new OverflowError("欄位數量", EMBED.FIELDS);
+    }
+    this.fields.push({ name: safeName, value: safeValue, inline });
     return this;
   }
 
-  addFields(fields: discordeno.DiscordEmbedField[]): this {
-    if (fields.length > EMBED.FIELDS) {
-      throw new OverflowError("Fields", EMBED.FIELDS);
-    }
+  addFields(fields: discordeno.EmbedField[]): this {
     for (const field of fields) {
       this.addField(field.name, field.value, field.inline);
     }
@@ -97,58 +112,46 @@ export class CCOSVEmbed implements discordeno.DiscordEmbed {
   }
 
   setThumb(url: string): this {
-    this.thumbnail = { url: url };
+    this.thumbnail = { url };
     return this;
   }
 
   setTime(date: number | Date): this {
-    if (typeof date == "number") {
-      date = new Date(date);
-    }
-    this.timestamp = date.toISOString();
+    this.timestamp = (date instanceof Date ? date : new Date(date))
+      .toISOString();
     return this;
   }
 
-  toJSON(): discordeno.Embed {
+  toJSON(): discordeno.Camelize<discordeno.DiscordEmbed> {
     return {
       title: this.title,
       description: this.description,
       image: this.image,
       thumbnail: this.thumbnail,
-      timestamp: Date.parse(this.timestamp) || undefined,
+      timestamp: this.timestamp,
       type: "rich",
-      author: {
-        name: this.author?.name as string,
-        // for some reasons, discordeno.Embed wants iconUrl and not icon_url
-        iconUrl: this.author?.icon_url,
-      },
-      color: this.color == COLORS.RANDOM
-        ? Math.floor(Math.random() * 16777214)
-        : this.color,
+      author: this.author,
+      color: this.color,
       url: this.url,
       footer: this.footer,
       fields: this.fields,
     };
   }
 
-  command(command: CCOSVMsgCommand): discordeno.Embed[] {
-    function bool(boo: boolean | undefined): string {
-      return boo ? "Yes" : "No";
-    }
+  command(
+    command: CCOSVMsgCommand,
+  ): discordeno.Camelize<discordeno.DiscordEmbed>[] {
     return this
-      .setTitle(`Command: ${command.name}`)
+      .setTitle(`指令：${command.name}`)
       .setDesc(command.description)
       .addField(
-        "Aliases",
-        !command.aliases.length ? "No aliases" : command.aliases.join(", "),
+        "別名",
+        command.aliases.length ? command.aliases.join(", ") : "無",
       )
-      .addField("Usage", `${prefix + command.name} ${command.usage}`, true)
-      .addField("Is owner?", bool(command.owner), true)
+      .addField("用法", `${prefix}${command.name} ${command.usage ?? ""}`, true)
       .addField(
-        "Permissions required",
-        command.permission
-          ? command.permission.join(", ")
-          : "No permission required",
+        "要求權限",
+        command.permission?.join(", ") ?? "無",
         true,
       )
       .build();

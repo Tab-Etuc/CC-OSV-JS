@@ -99,7 +99,5 @@ export function logger({
 }
 
 export const main = logger({ name: "Main" });
-export const debug = logger({ name: "Debug" });
-export const api = logger({ name: "API" });
 export const lavalink = logger({ name: "LavaLink" });
 export const database = logger({ name: "Database" });

@@ -5,12 +5,23 @@ export async function avatarURL(
   bot: BotClient,
   user: bigint | discordeno.User,
 ): Promise<string> {
-  const u = typeof user == "bigint"
-    ? bot.users.get(user) || await bot.helpers.getUser(user)
+  const userId = typeof user === "bigint" ? user : user.id;
+  const value = typeof user === "bigint"
+    ? bot.users.get(user) ??
+      (await bot.helpers.getUser(user) as unknown as
+        | discordeno.User
+        | undefined)
     : user;
-  if (!u) throw new Error("Cannot find that user");
-  return bot.helpers.getAvatarURL(u.id, u.discriminator, {
-    avatar: u.avatar,
-    format: "png",
-  });
+  if (!value) {
+    return `https://cdn.discordapp.com/embed/avatars/${
+      Number(userId % 5n)
+    }.png`;
+  }
+  const avatar = value.avatar?.toString();
+  if (avatar) {
+    return `https://cdn.discordapp.com/avatars/${value.id}/${avatar}.png?size=256`;
+  }
+  return `https://cdn.discordapp.com/embed/avatars/${
+    Number(value.id % 5n)
+  }.png`;
 }

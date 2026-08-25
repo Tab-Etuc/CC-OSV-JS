@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, "codex/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Deno verify
+    runs-on: ubuntu-latest
+    env:
+      DENO_NO_UPDATE_CHECK: "1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          cache: true
+
+      - name: Format check
+        run: deno fmt --check src config.ts deps.ts deno.json tests lavadeno
+
+      - name: Lint
+        run: deno lint src config.ts deps.ts tests lavadeno
+
+      - name: Type check
+        run: deno check --allow-import src/index.ts tests/*.ts
+
+      - name: Test with coverage gate
+        run: deno task coverage
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deno-coverage
+          path: coverage/lcov.info
+          if-no-files-found: ignore

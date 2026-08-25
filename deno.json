@@ -1,12 +1,29 @@
 {
   "tasks": {
-    "run": "DEV=0 deno run -A --allow-env --unstable src/index.ts",
-    "prod": "deno run -A --unstable src/index.ts",
-    "watch": "deno run --watch -A --unstablesrc/index.ts",
-    "check": "deno cache --check --unstable src/index.ts"
+    "run": "deno run --env-file=.env --allow-env --allow-net --allow-read src/index.ts",
+    "watch": "deno run --watch --env-file=.env --allow-env --allow-net --allow-read src/index.ts",
+    "fmt": "deno fmt src config.ts deps.ts deno.json tests lavadeno",
+    "lint": "deno lint src config.ts deps.ts tests lavadeno",
+    "check": "deno check --allow-import src/index.ts tests/*.ts",
+    "test": "deno test --env-file=.env.test --allow-env --allow-read --allow-write=coverage",
+    "coverage": "deno test --env-file=.env.test --allow-env --allow-read --allow-write=coverage --coverage=coverage && deno coverage --lcov --output=coverage/lcov.info --threshold=60 coverage"
   },
   "compilerOptions": {
-    "noImplicitAny": true
+    "strict": true,
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true
   },
-  "importMap": "importMap.json"
+  "imports": {
+    "@discordeno/bot": "npm:@discordeno/bot@21.0.0",
+    "@db/mongo": "jsr:@db/mongo@0.34.0",
+    "@std/fmt/colors": "jsr:@std/fmt@1.0.10/colors",
+    "@base/": "./src/base/",
+    "@deps": "./deps.ts",
+    "@classes/": "./src/classes/",
+    "@utils/": "./src/utils/",
+    "@const/": "./src/constants/",
+    "@internal/": "./src/internal/",
+    "@interfaces/": "./src/interfaces/",
+    "@services/": "./src/services/"
+  }
 }

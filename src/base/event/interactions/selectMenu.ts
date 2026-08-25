@@ -1,73 +1,45 @@
 import { discordeno } from "@deps";
 import { BotClient } from "@base/CC-OSV-Client.ts";
-import { CCOSVEmbed } from "@classes/embed.ts";
-import { playQueueUntilEnd } from "@utils/music.ts";
+import { enqueueMusic } from "@services/music.ts";
 
 export async function executeSelectMenu(
   bot: BotClient,
   interaction: discordeno.Interaction,
-) {
-  if (!interaction.data) return;
-  if (interaction.data.customId!.includes("-select_song")) {
-    bot.helpers.deleteMessage(
-      interaction.channelId as bigint,
-      interaction.message?.id as bigint,
-    );
-    const guildId = BigInt(
-      interaction.data.customId!.replace("-select_song", ""),
-    );
-    let player = bot.guildPlayers.get(guildId);
-    if (!player) {
-      // Player doesn't exist - make a new one
+): Promise<void> {
+  const customId = interaction.data?.customId;
+  const value = interaction.data?.values?.[0];
+  if (
+    !customId || value === undefined || !customId.startsWith("music-select:")
+  ) return;
 
-      // BUG !!!! need to fix " throw new Error("No available nodes."); " ((還沒連接到node時
-      player = bot.musicNode.createPlayer(guildId);
-
-      // Set the player, will be used to skip & stop current queue
-      bot.guildPlayers.set(guildId, player);
-    }
-
-    const Selected = bot.guildSelectCollectors.get(guildId);
-    if (!Selected) return;
-
-    await bot.helpers.sendInteractionResponse(
-      interaction.id,
-      interaction.token,
-      {
-        type: discordeno.InteractionResponseTypes
-          .DeferredUpdateMessage,
-      },
-    );
-
-    const currQueue = bot.guildQueues.get(guildId);
-    const position = Number(interaction.data.values![0]);
-
-    if (!currQueue) {
-      bot.guildQueues.set(guildId, Array(Selected[position]));
-
-      // Begin playing
-      await playQueueUntilEnd(
-        bot,
-        interaction.channelId!,
-        player,
-        guildId,
-        undefined,
-      );
-    } else {
-      currQueue.push(...Array(Selected[position]));
-      bot.helpers.sendMessage(BigInt(interaction.channelId!), {
-        content: "",
-        embeds: new CCOSVEmbed()
-          .setDesc(
-            `:white_check_mark: Added ${Selected[position].title} to queue [<@${
-              interaction.member!.id
-            }>]`,
-          )
-          .build(),
-      });
-    }
+  const [, guildText, userText] = customId.split(":");
+  const guildId = BigInt(guildText ?? "0");
+  const userId = BigInt(userText ?? "0");
+  const selectedUser = interaction.member?.id ?? interaction.user?.id;
+  if (selectedUser !== userId) {
+    await interaction.respond("這個歌曲選單不是給你使用的。");
+    return;
   }
-  await Promise.allSettled([
-    // SETUP-DD-TEMP: Insert any functions you wish to run when a user clicks a button.
-  ]).catch(console.log);
+
+  const songs = bot.guildSelectCollectors.get(customId);
+  const position = Number(value);
+  const song = songs?.[position];
+  const player = bot.guildPlayers.get(guildId);
+  if (!songs || !song || !player || !interaction.channelId) {
+    bot.guildSelectCollectors.delete(customId);
+    await interaction.respond("歌曲選擇已失效，請重新搜尋。");
+    return;
+  }
+
+  bot.guildSelectCollectors.delete(customId);
+  await interaction.deferEdit();
+  await enqueueMusic(bot, guildId, interaction.channelId, [song], player);
+  await bot.helpers.editMessage(
+    interaction.channelId,
+    interaction.message?.id ?? 0n,
+    {
+      content: `已加入歌曲：${song.title}`,
+      components: [],
+    },
+  );
 }

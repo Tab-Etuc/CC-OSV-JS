@@ -10,41 +10,38 @@ import { avatarURL } from "@utils/avatarURL.ts";
 export default addMsgCommand({
   name: "help",
   mod: "utils",
-  description: "Show list of avaliable commands",
+  description: "顯示可用指令",
   aliases: ["h"],
-  usage: "[command]",
+  usage: "[指令名稱]",
   run: async (bot, message, args) => {
-    const BLACKLIST_COMMAND = ["help", "eval", "unwarnall", "setlevel"];
-    if (args[0]?.length > 0) {
-      const cmd = findMsgCommand(args[0]);
-      if (!cmd) {
-        return send(
-          bot,
-          message.channelId,
-          "Cannot find that command",
-        ) as unknown as void;
+    const blacklist = new Set(["help", "eval", "unwarnall", "setlevel"]);
+    if (args[0]) {
+      const command = findMsgCommand(args[0]);
+      if (!command) {
+        await send(bot, message.channelId, "找不到此指令。");
+        return;
       }
-      const cmdE = new CCOSVEmbed().command(cmd);
-      send(bot, message.channelId, cmdE);
+      await send(bot, message.channelId, new CCOSVEmbed().command(command));
       return;
     }
-    const avatar = await avatarURL(bot, bot.id);
-    const em = new CCOSVEmbed().setTitle("Help command").setThumb(avatar);
+
+    const embed = new CCOSVEmbed()
+      .setTitle("指令列表")
+      .setThumb(await avatarURL(bot, bot.id));
     const categories = new Set(
-      globalMsgCommand.filter((e) => !BLACKLIST_COMMAND.includes(e.name))
-        .map(
-          (e) => e.mod,
-        ),
+      [...globalMsgCommand.values()]
+        .filter((command) => !blacklist.has(command.name))
+        .map((command) => command.mod),
     );
-    for (const name of categories) {
-      em.addField(
-        `★ ${name.toUpperCase()}`,
-        globalMsgCommand.filter((m) =>
-          m.mod == name && !BLACKLIST_COMMAND.includes(m.name)
+    for (const category of categories) {
+      const names = [...globalMsgCommand.values()]
+        .filter((command) =>
+          command.mod === category && !blacklist.has(command.name)
         )
-          .map((_, m) => `\`${m}\``).join(", "),
-      );
+        .map((command) => command.name)
+        .join(", ");
+      embed.addField(category.toUpperCase(), names || "無");
     }
-    send(bot, message.channelId, em.build());
+    await send(bot, message.channelId, embed.build());
   },
 });

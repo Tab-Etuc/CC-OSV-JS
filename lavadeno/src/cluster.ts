@@ -45,7 +45,9 @@ export class Cluster extends EventEmitter<ClusterEvents> {
   }
 
   get rest(): REST {
-    return this.idealNodes[0].rest;
+    const node = this.idealNodes[0];
+    if (!node) throw new Error("沒有可用的 Lavalink 節點。");
+    return node.rest;
   }
 
   get players() {

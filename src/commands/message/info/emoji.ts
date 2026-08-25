@@ -4,30 +4,21 @@ import { send } from "@utils/send.ts";
 export default addMsgCommand({
   name: "emoji",
   mod: "info",
-  description: "Display emoji as image",
+  description: "將 Discord 自訂 emoji 轉成圖片網址",
   aliases: ["e", "emote"],
-  run: (bot, message, args) => {
-    const arg = args[0];
-    if (!arg) {
-      return send(
-        bot,
-        message.channelId,
-        "Please use `;emoji <Discord Emoji>`",
-      );
+  requiredArgs: true,
+  usage: "<Discord emoji>",
+  run: async (bot, message, args) => {
+    const match = /^(<a?):([\w+\-~]+):(\d+)>$/.exec(args[0] ?? "");
+    if (!match) {
+      await send(bot, message.channelId, "請提供有效的 Discord 自訂 emoji。");
+      return;
     }
-    if (!arg.startsWith("<")) {
-      return send(bot, message.channelId, "Only Discord Emojis can input");
-    }
-    let animated = false;
-    if (arg.startsWith("<a:")) {
-      animated = true;
-    }
-    const a = arg.replace(animated ? "<a:" : "<:", "");
-    const c = a.replace(">", "");
-    const [_name, id] = c.split(":");
-    const url = `https://cdn.discordapp.com/emojis/${id}.${
-      animated ? "gif" : "png"
-    }`;
-    return send(bot, message.channelId, url);
+    const extension = match[1] === "<a" ? "gif" : "png";
+    await send(
+      bot,
+      message.channelId,
+      `https://cdn.discordapp.com/emojis/${match[3]}.${extension}?size=256`,
+    );
   },
 });

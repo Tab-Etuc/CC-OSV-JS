@@ -1,19 +1,30 @@
-import { Bot, BotClient } from "@base/CC-OSV-Client.ts";
+import { Bot, BotClient, MongoDBReady } from "@base/CC-OSV-Client.ts";
+import { discordeno } from "@deps";
 import { checkGuildData } from "@base/database.ts";
 import { MsgCommandHandler } from "@classes/command.ts";
 import { chatLevelSystem } from "@utils/chatLevelSystem.ts";
+import { cacheMessage } from "@utils/cache.ts";
+import { main } from "@utils/log.ts";
 
-export function setMessageCreateEvent() {
-  Bot.events.messageCreate = async function (bot, message) {
-    if (message.isFromBot) {
-      return;
+export function setMessageCreateEvent(): void {
+  Bot.events.messageCreate = async (rawMessage) => {
+    const message = rawMessage as unknown as discordeno.Message;
+    if (message.author.bot) return;
+
+    cacheMessage(Bot, message);
+    if (message.guildId && MongoDBReady) {
+      try {
+        await checkGuildData(message.guildId, message.author.id);
+        await chatLevelSystem(Bot, message);
+      } catch (error) {
+        main.error("訊息資料處理失敗：", error);
+      }
     }
-    checkGuildData(message.guildId!, message.authorId);
-    chatLevelSystem(bot as BotClient, message);
-    MsgCommandHandler(bot as BotClient, message);
 
-    await Promise.allSettled([
-      // SETUP-DD-TEMP: Add any functions you want to run on every message here. For example, automoderation filters.
-    ]).catch(console.log);
+    try {
+      await MsgCommandHandler(Bot as BotClient, message);
+    } catch (error) {
+      main.error("訊息指令執行失敗：", error);
+    }
   };
 }

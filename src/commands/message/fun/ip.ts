@@ -1,26 +1,60 @@
 import { addMsgCommand } from "@classes/command.ts";
 import { send } from "@utils/send.ts";
 import { CCOSVEmbed } from "@classes/embed.ts";
-import { isIP } from "https://deno.land/x/isIP@1.0.0/mod.ts";
+
+function isValidIp(value: string): boolean {
+  const ipv4 = value.split(".");
+  if (ipv4.length === 4 && ipv4.every((part) => /^\d{1,3}$/.test(part))) {
+    return ipv4.every((part) => Number(part) <= 255);
+  }
+  return value.includes(":") && /^[0-9a-f:]+$/i.test(value);
+}
+
+interface IpInfo {
+  ip?: string;
+  city?: string;
+  region?: string;
+  country?: string;
+  loc?: string;
+  timezone?: string;
+  postal?: string;
+  error?: boolean;
+}
 
 export default addMsgCommand({
   name: "ip",
   mod: "fun",
-  description: "Get some information about specific IP",
+  description: "查詢 IP 資訊",
   usage: "<IP>",
   aliases: ["ipinfo"],
+  requiredArgs: true,
   run: async (bot, message, args) => {
-    if (!args[0]) return send(bot, message.channelId, "Give me the IP.");
-    if (isIP(args[0]) == 0) {
-      return send(bot, message.channelId, "That's not an IP");
+    const ip = args[0];
+    if (!ip || !isValidIp(ip)) {
+      await send(bot, message.channelId, "請提供有效的 IP 位址。");
+      return;
     }
-    const jj = await fetch(`https://ipinfo.io/${args[0]}/geo`);
-    const info = await jj.json();
-    const e = new CCOSVEmbed()
-      .setTitle(`IP: ${info.ip}`)
+    const response = await fetch(
+      `https://ipinfo.io/${encodeURIComponent(ip)}/geo`,
+    );
+    if (!response.ok) {
+      await send(bot, message.channelId, "IP 資訊服務目前無法使用。");
+      return;
+    }
+    const info = await response.json() as IpInfo;
+    if (info.error || !info.ip) {
+      await send(bot, message.channelId, "找不到此 IP 的資訊。");
+      return;
+    }
+    const embed = new CCOSVEmbed()
+      .setTitle(`IP：${info.ip}`)
       .setDesc(
-        `City: ${info.city}\nRegion: ${info.region}\nCountry: ${info.country}\nLocation: ${info.loc}\nTimezone: ${info.timezone}\nPostal: ${info.postal}`,
+        `城市：${info.city ?? "未知"}\n地區：${info.region ?? "未知"}\n國家：${
+          info.country ?? "未知"
+        }\n位置：${info.loc ?? "未知"}\n時區：${
+          info.timezone ?? "未知"
+        }\n郵遞區號：${info.postal ?? "未知"}`,
       );
-    send(bot, message.channelId, e.build());
+    await send(bot, message.channelId, embed.build());
   },
 });

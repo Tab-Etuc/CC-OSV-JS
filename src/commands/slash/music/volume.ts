@@ -1,34 +1,24 @@
 import { addSlashCommand } from "@classes/command.ts";
-import { CCOSVEmbed } from "@classes/embed.ts";
+import { setMusicVolume } from "@services/musicCommands.ts";
+import { runSlashGuildAction, slashOption } from "@services/commandAdapters.ts";
 
 export default addSlashCommand({
   name: "volume",
-  description: "set music volume",
-  nameLocalizations: { "zh-TW": "音量" },
-  descriptionLocalizations: { "zh-TW": "調整音樂播放音量" },
-  options: [
-    {
-      name: "調整大小",
-      type: 4,
-      required: true,
-      description: "您欲調整之音量大小(100以上有機率爆音)",
-    },
-  ],
-  acknowledge: false,
-  run: async (bot, interaction) => {
-    const player = bot.guildPlayers.get(interaction.guildId!);
-    if (!player?.connected) {
-      return await interaction.reply({
-        type: 4,
-        data: {
-          embeds: new CCOSVEmbed()
-            .setDesc(":x: A player for this guild doesn't exist.")
-            .build(),
-        },
-      });
-    }
-    const arg = Number(interaction.data!.options![0]!.value!);
-    player.setVolume(+arg);
-    await interaction.reply(`**已調整音量至**${arg}`);
-  },
+  description: "調整音量",
+  nameLocalizations: { "zh-TW": "調整音量" },
+  descriptionLocalizations: { "zh-TW": "將音量調整為 0 到 1000" },
+  options: [{
+    name: "value",
+    type: 4,
+    required: true,
+    description: "音量數值",
+    nameLocalizations: { "zh-TW": "數值" },
+  }],
+  run: (bot, interaction) =>
+    runSlashGuildAction(
+      bot,
+      interaction,
+      (bot, guildId) =>
+        setMusicVolume(bot, guildId, slashOption(interaction, "value")),
+    ),
 });

@@ -19,8 +19,10 @@ export class Reddit {
 
   private async fetch(): Promise<RootObject> {
     if (!this.result) {
-      this.result = await fetch(this.url).then((r) => {
-        if (r.status != 200) {
+      this.result = await fetch(this.url, {
+        headers: { "User-Agent": "CC-OSV-JS/2.0" },
+      }).then((r) => {
+        if (!r.ok) {
           throw new Error(String(r.status) + ` ${this.subreddit}`);
         }
         return r.json();
@@ -30,8 +32,9 @@ export class Reddit {
   }
 
   public static isMedia(v: string) {
+    const value = v.toLowerCase().split("?")[0] ?? "";
     function ends(str: string): boolean {
-      return v.endsWith(str);
+      return value.endsWith(str);
     }
     return ends(".jpg") || ends(".png") || ends(".jpeg") || ends(".webp") ||
       ends(".gif");
@@ -39,25 +42,14 @@ export class Reddit {
 
   async toData(media_only?: boolean, sfw_only?: boolean): Promise<Data2> {
     const r = await this.fetch();
-    let random: number = Math.floor(Math.random() * r.data.children.length);
-    if (!media_only) {
-      return r.data.children[random].data;
-    } else if (sfw_only) {
-      const filtered = r.data.children.filter((v) => {
-        return !v.data.over_18;
-      });
-      if (filtered.length < 1) {
-        throw new EmptyError("The data is full of nsfw.");
-      }
+    let candidates = r.data.children;
+    if (sfw_only) candidates = candidates.filter((item) => !item.data.over_18);
+    if (media_only) {
+      candidates = candidates.filter((item) => Reddit.isMedia(item.data.url));
     }
-    const filtered = r.data.children.filter((v) => {
-      return Reddit.isMedia(v.data.url);
-    });
-    if (filtered.length < 1) {
-      throw new EmptyError("There are no media sadly :(");
-    }
-    random = Math.floor(Math.random() * filtered.length);
-    return filtered[random].data;
+    if (candidates.length < 1) throw new EmptyError("找不到符合條件的貼文。");
+    const random = Math.floor(Math.random() * candidates.length);
+    return candidates[random]!.data;
   }
 
   private toRealUTC(reddit_utc: number): number {
@@ -68,7 +60,7 @@ export class Reddit {
   async toEmbed(
     media_only?: boolean,
     sfw_only?: boolean,
-  ): Promise<discordeno.Embed[]> {
+  ): Promise<discordeno.Camelize<discordeno.DiscordEmbed>[]> {
     const data = await this.toData(media_only, sfw_only);
     const realUTC = this.toRealUTC(data.created_utc);
     const e = new CCOSVEmbed()

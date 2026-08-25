@@ -1,27 +1,16 @@
 import { addMsgCommand } from "@classes/command.ts";
+import { skipCurrentMusic } from "@services/musicCommands.ts";
+import { runMessageGuildAction } from "@services/commandAdapters.ts";
 
 export default addMsgCommand({
   name: "skip",
   mod: "music",
-  description: "skip music",
+  description: "跳過目前歌曲",
   aliases: ["s"],
-  usage: "[command]",
-  run: async (bot, message, _args) => {
-    const player = bot.guildPlayers.get(message.guildId!);
-
-    if (!player) {
-      await bot.helpers.sendMessage(message.channelId, {
-        content: "**目前沒有播放任何音樂...**",
-        messageReference: {
-          messageId: message.id,
-          channelId: message.channelId,
-          guildId: message.guildId,
-          failIfNotExists: true,
-        },
-      });
-      return;
-    }
-
-    player.stop();
-  },
+  run: (bot, message) =>
+    runMessageGuildAction(
+      bot,
+      message,
+      (bot, guildId) => skipCurrentMusic(bot, guildId),
+    ),
 });

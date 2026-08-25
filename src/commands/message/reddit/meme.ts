@@ -14,11 +14,12 @@ export default addMsgCommand({
     try {
       const subPick =
         subredditMeme[Math.floor(Math.random() * subredditMeme.length)];
-      const reddit = new Reddit(subPick, "hot");
+      const reddit = new Reddit(subPick!, "hot");
       const e = await reddit.toEmbed(true);
-      send(bot, message.channelId, e);
+      await send(bot, message.channelId, e);
     } catch (e) {
       main.error(e);
+      await send(bot, message.channelId, "目前無法取得 Reddit 貼文。");
     }
   },
 });

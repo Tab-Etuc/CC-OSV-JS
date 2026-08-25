@@ -1,83 +1,71 @@
-import { time } from "../../time.ts/mod.ts";
 import { MongoDB } from "@base/CC-OSV-Client.ts";
 import { BotClient } from "@base/CC-OSV-Client.ts";
-import { discordeno } from "../../deps.ts";
+import { discordeno } from "@deps";
 import { main } from "@utils/log.ts";
-export function ChangeTime(bot: BotClient) {
-  setInterval(async () => {
+
+const timeFormatter = new Intl.DateTimeFormat("zh-TW", {
+  timeZone: "Asia/Taipei",
+  hour: "2-digit",
+  hour12: false,
+});
+const dateFormatter = new Intl.DateTimeFormat("zh-TW", {
+  timeZone: "Asia/Taipei",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+function getTimeName(): string {
+  const hour =
+    timeFormatter.formatToParts(new Date()).find((part) => part.type === "hour")
+      ?.value ?? "00";
+  return `現在時間：${Number(hour)}點`;
+}
+
+function getDateName(): string {
+  const parts = dateFormatter.formatToParts(new Date());
+  const month = parts.find((part) => part.type === "month")?.value ?? "01";
+  const day = parts.find((part) => part.type === "day")?.value ?? "01";
+  return `日期：${Number(month)}月${Number(day)}日`;
+}
+
+async function updateChannels(bot: BotClient, ids: string[], name: string) {
+  await Promise.all(ids.map(async (id) => {
+    const channelId = BigInt(id);
+    const channel = bot.channels.get(channelId) ??
+      await bot.helpers.getChannel(channelId);
+    const current = channel as unknown as discordeno.Channel | undefined;
+    if (!current || current.name === name) return;
+    await bot.helpers.editChannel(current.id, { name });
+    bot.channels.set(current.id, { ...current, name });
+  }));
+}
+
+/** 每 30 秒更新已設定的時間與日期頻道，並避免前一次工作尚未完成時重入。 */
+export function ChangeTime(bot: BotClient): void {
+  let running = false;
+  const tick = async () => {
+    if (running) return;
+    running = true;
     try {
-      const db = MongoDB.database("Beta"),
-        Guilds = db.collection("Guilds");
-      const GuildsData = await Guilds.find().toArray();
-      const servers = GuildsData.map((g) => g._id);
-      servers.forEach(async (a) => {
-        const server = await Guilds.findOne({ _id: a });
-        if (!server) return;
-        const ClockTime_Array = server.ClockTime;
-        const ClockDate_Array = server.ClockDate;
-        ClockTime_Array &&
-          await ChangeClockTime(bot, ClockTime_Array);
-
-        ClockDate_Array &&
-          await ChangeClockDate(bot, ClockDate_Array);
-      });
-    } catch (err) {
-      main.error(err);
-    }
-  }, 3e4); // 30s = 30000ms :D
-}
-
-async function ChangeClockTime(bot: BotClient, ClockTime_Array: string[]) {
-  let channelName = "";
-  const TimeHour = time()
-    .tz("Asia/Taipei")
-    .getHour();
-
-  for (const i in ClockTime_Array) {
-    const channel = bot.channels.get(BigInt(ClockTime_Array[i]));
-    if (!channel) return;
-    channelName = channel.name!;
-    channelName = channelName.replace(/🕠現在時刻：|點/g, "");
-    if (channelName !== TimeHour) {
-      await bot.rest.runMethod<discordeno.DiscordChannel>(
-        bot.rest,
-        "PATCH",
-        bot.constants.routes.CHANNEL(channel.id),
-        {
-          name: "🕠現在時刻：" + TimeHour + "點",
-        },
-      ).then((channel) => {
-        if (channel.name == "🕠現在時刻：" + TimeHour + "點") main.info("已更換頻道時間");
-      });
-    }
-  }
-}
-async function ChangeClockDate(bot: BotClient, ClockDate_Array: string[]) {
-  let channelName = "";
-  const Time = time()
-    .tz("Asia/Taipei")
-    .getDate();
-  const TimeMonth = Time[1];
-  const TimeDate = Time[2];
-  for (const i in ClockDate_Array) {
-    const channel = bot.channels.get(BigInt(ClockDate_Array[i]));
-    if (!channel) return;
-    channelName = channel.name!;
-    channelName = channelName.replace(/📅貳年●|月|日●/g, "");
-
-    if (channelName !== TimeMonth.toString() + TimeDate.toString()) {
-      await bot.rest.runMethod<discordeno.DiscordChannel>(
-        bot.rest,
-        "PATCH",
-        bot.constants.routes.CHANNEL(channel.id),
-        {
-          name: "📅貳年●" + TimeMonth + "月" + TimeDate + "日●",
-        },
-      ).then((channel) => {
-        if (channel.name == "📅貳年●" + TimeMonth + "月" + TimeDate + "日●") {
-          main.info("已更換頻道日期");
+      const guilds = MongoDB.database("Beta").collection("Guilds");
+      const records = await guilds.find().toArray();
+      await Promise.all(records.map(async (record) => {
+        const clockTime = record.ClockTime ?? record.ChannelClockTime;
+        const clockDate = record.ClockDate ?? record.ChannelClockDate;
+        if (Array.isArray(clockTime)) {
+          await updateChannels(bot, clockTime, getTimeName());
         }
-      });
+        if (Array.isArray(clockDate)) {
+          await updateChannels(bot, clockDate, getDateName());
+        }
+      }));
+    } catch (error) {
+      main.error("更新時間頻道失敗：", error);
+    } finally {
+      running = false;
     }
-  }
+  };
+
+  void tick();
+  setInterval(tick, 30_000);
 }

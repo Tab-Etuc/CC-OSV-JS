@@ -130,11 +130,16 @@ export class Connection<N extends Node = Node> {
         { headers },
       );
     } catch (e) {
-      this.node.emit("error", e);
+      const error = e instanceof Error ? e : new Error(String(e));
+      this.node.emit("error", error);
       if (this.node.state === NodeState.Reconnecting) {
-        throw e;
+        throw error;
       } else {
-        return this._onclose({ code: -1, reason: e.message, type: "close" });
+        return this._onclose({
+          code: -1,
+          reason: error.message,
+          type: "close",
+        });
       }
     }
 
@@ -162,6 +167,7 @@ export class Connection<N extends Node = Node> {
     for (const { payload, resolve, reject } of this.queue) {
       await this._send(payload).then(resolve).catch(reject);
     }
+    this.queue.length = 0;
   }
 
   async configureResuming() {
@@ -183,7 +189,7 @@ export class Connection<N extends Node = Node> {
     try {
       await this.connect();
     } catch (e) {
-      this.node.emit("error", e);
+      this.node.emit("error", e instanceof Error ? e : new Error(String(e)));
       return false;
     }
 
@@ -240,7 +246,7 @@ export class Connection<N extends Node = Node> {
     try {
       payload = JSON.parse(data);
     } catch (e) {
-      this.node.emit("error", e);
+      this.node.emit("error", e instanceof Error ? e : new Error(String(e)));
       return;
     }
 

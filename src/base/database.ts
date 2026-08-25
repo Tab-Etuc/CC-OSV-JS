@@ -1,34 +1,52 @@
-import { MongoDB } from "@base/CC-OSV-Client.ts";
+import { MongoDB, MongoDBReady } from "@base/CC-OSV-Client.ts";
 
-export async function checkGuildData(guildId: BigInt, authorId: BigInt) {
-  const db = MongoDB.database("Beta"),
-    Guilds = db.collection("Guilds"),
-    Users = db.collection("Users"),
-    GuildData = await Guilds.findOne({
-      _id: guildId?.toString(),
-    }),
-    UserData = await Users.findOne({
-      _id: authorId.toString(),
-    });
+function userKey(guildId: bigint, userId: bigint): string {
+  return `${guildId}:${userId}`;
+}
 
-  GuildData || await Guilds.insertOne({
-    _id: guildId?.toString(),
-    ButtonRole: [],
-    ChannelClockTime: [],
-    ChannelClockDate: [],
-    levelPrizes: [],
-    CommandRan: 0,
-    SongsPlayed: 0,
-  });
-  UserData || await Users.insertOne({
-    _id: authorId.toString(),
-    GuildId: guildId?.toString(),
-    Xp: 0,
-    Level: 1,
-    CoinsInWallet: 500,
-    CoinsInBank: 20000,
-    bankSpace: 200000,
-    items: [],
-    interest: 1,
-  });
+/** 以 upsert 建立伺服器與使用者初始資料，避免重複訊息同時建立重複文件。 */
+export async function checkGuildData(
+  guildId: bigint,
+  userId: bigint,
+): Promise<void> {
+  if (!MongoDBReady) return;
+  const db = MongoDB.database("Beta");
+  const guilds = db.collection("Guilds");
+  const users = db.collection("Users");
+
+  await guilds.updateOne(
+    { _id: guildId.toString() },
+    {
+      $setOnInsert: {
+        _id: guildId.toString(),
+        ButtonRole: [],
+        ClockTime: [],
+        ClockDate: [],
+        levelPrizes: [],
+        CommandRan: 0,
+        SongsPlayed: 0,
+      },
+    },
+    { upsert: true },
+  );
+
+  await users.updateOne(
+    { _id: userKey(guildId, userId) },
+    {
+      $setOnInsert: {
+        _id: userKey(guildId, userId),
+        GuildId: guildId.toString(),
+        UserId: userId.toString(),
+        Xp: 0,
+        Level: 1,
+        CoinsInWallet: 500,
+        CoinsInBank: 20000,
+        bankSpace: 200000,
+        items: [],
+        interest: 1,
+        dailyClaimedAt: 0,
+      },
+    },
+    { upsert: true },
+  );
 }
